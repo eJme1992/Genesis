@@ -1,0 +1,21 @@
+.fondo_form{
+	background-color: #fff;
+	padding: 1em;
+}
+
+.padding_1em{
+	padding: 1em;
+}
+
+.badgePer{
+	/* background-color: ; */
+	color: #525ad0;
+	border-radius: 20px;
+	padding: 0px;
+	font-size: 16px;
+}
+
+.button_del_model{
+	font-size: 12px;
+	background-color: #E9E9E9;
+}
