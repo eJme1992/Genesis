@@ -170,7 +170,7 @@
 		});
 	});
 
-	// busqueda de provincias
+	// busqueda de distritos
 	$('#prov').change(function(event) {
 		$.get("../dist/"+event.target.value+"",function(response, dep){
 			$("#dist").empty();

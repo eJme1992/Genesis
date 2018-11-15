@@ -21,8 +21,8 @@
 							<input type="text" class="form-control text-capitalize" name="name" placeholder="Nombre...." id="name_marca" pattern="[A-Z a-z]+" data-validation-pattern-message="debe ingresar solo letras de la a-z" required="">
 						</div>
 						<div class="form-group">
-							<label for="">Material | <span>Actualmente (<strong id="material_id"></strong>)</span></label>
-							<select class="form-control" name="material_id" required="">
+							<label for="">Material </label>
+							<select class="form-control" name="material_id" required="" id="material_id">
 								<option value="">seleccione</option>
 								@foreach($materiales as $mat)
 								<option value="{{ $mat->id }}">{{ $mat->name }}</option>

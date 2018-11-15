@@ -12,9 +12,9 @@ class MotivoViajeSeeder extends Seeder
     public function run()
     {
         $status = array(
-	        array('id' => '1','nombre' => 'Salida'),
-	        array('id' => '2','nombre' => 'Traslado'),
-	        array('id' => '3','nombre' => 'Llegada')
+	        array('id' => '1','nombre' => 'SALIDA'),
+	        array('id' => '2','nombre' => 'TRASLADO'),
+	        array('id' => '3','nombre' => 'LLEGADA')
 	    );
       //insert manual a una base de datos con array
       \DB::table('motivo_viajes')->insert($status);

@@ -58,7 +58,7 @@
 		    	$("#name_marca").val(res.name);
 		    	$("#observacion_marca").val(res.observacion);
 		    	$("#precio_marca_edit").val(res.precio);
-		    	$("#material_id").html("<span>"+res.material.name+"</span>");
+		    	$("#material_id").val(res.material_id).attr("selected",true);
 		  	});
 
 		  	$("#re").fadeOut('slow/400/fast');

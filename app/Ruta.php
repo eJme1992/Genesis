@@ -18,4 +18,22 @@ class Ruta extends Model
     public function direccion(){
     	return $this->belongsTo("App\Direccion", "direccion_id");
     }
+
+    public static function storeSave($request){
+    	$ruta = new Ruta($request->all());
+    	$ruta->fecha = date("d-m-Y");
+
+    	if ($ruta->save()) {
+    		return redirect("rutas")->with([
+                'flash_message' => 'Ruta agregada correctamente.',
+                'flash_class' => 'alert-success'
+            ]);
+    	}else{
+    		return redirect("rutas")->with([
+                'flash_message' => 'Ha ocurrido un error.',
+                'flash_class' => 'alert-danger',
+                'flash_important' => true
+            ]);
+    	}
+    }
 }

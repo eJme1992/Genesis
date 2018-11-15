@@ -139,4 +139,24 @@ class Asignacion extends Model
         }   
     }
 
+    public static function saveAsigRutasStore($request){
+        $ruta = new Ruta($request->all());
+        $ruta->fecha = date("d-m-Y");
+        
+        if ($ruta->save()) {
+            $vr = new VendedorRuta();
+            $vr->ruta_id = $ruta->id;
+            $vr->user_id = $request->user_id;
+            $vr->fecha = date("d-m-Y");
+            $vr->save();
+
+            return redirect("asignacionesRutas")->with([
+                'flash_message' => 'Ruta asignada correctamente.',
+                'flash_class' => 'alert-success'
+            ]);
+
+        }
+
+
+    }
 }

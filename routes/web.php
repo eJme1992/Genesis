@@ -68,6 +68,16 @@ Route::group(['middleware' => 'auth'], function() { //middleware auth
 	Route::resource('asignaciones','AsignacionController');
 	Route::get('marcasAll/{id}', 'AsignacionController@marcasAll');
 	Route::get('modelosAll/{coleccion}/{marca}', 'AsignacionController@modelosAll');
+	Route::get('asignacionesRutas', 'AsignacionController@rutasIndex')->name("indexrutas");
+	Route::get('asigRutaCreate', 'AsignacionController@asigRutaCreate')->name("asigRutaCreate");
+	Route::post('asignacionesRutasStore', 'AsignacionController@asigRutasStore')->name("asignacion_rutas.store");
+
+	// rutas
+	Route::resource('rutas','RutasController');
+
+	// direcciones
+	Route::resource('direcciones','DireccionController');
+	Route::get('edit_dir/{id}','DireccionController@edit');
 
 	// ventas
 	Route::resource('ventas','VentasController');

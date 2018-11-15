@@ -132,28 +132,17 @@
               </ul>
             </li>
 
-          <!-- <li class="treeview">
-            <a href="#">
-              <i class="fa fa-modx"></i>
-              <span>Modelos</span>
-              <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="{{ route('modelos.index') }}"><i class="fa fa-circle-o"></i>Ver Modelos</a></li>
-            </ul>
-          </li>  -->
-
-            <!-- <li class="treeview">
+            <li class="treeview">
               <a href="#">
-                <i class="fa fa-pencil"></i>
-                <span>Productos</span>
+                <i class="fa fa-arrows-h"></i>
+                <span>Rutas</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('productos.index') }}"><i class="fa fa-circle-o"></i>Ver Productos</a></li>
-                <li><a href="{{ route('productos.create') }}"><i class="fa fa-circle-o"></i>Agregar Productos</a></li>
+                <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
+                <!-- <li><a href="{{ route('rutas.index') }}"><i class="fa fa-circle-o"></i>Rutas</a></li> -->
               </ul>
-            </li> -->
+            </li>
 
             <li class="treeview">
               <a href="#">
@@ -162,7 +151,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('asignaciones.index') }}"><i class="fa fa-circle-o"></i>Ver Asignaciones</a></li>
+                <li><a href="{{ route('asignaciones.index') }}"><i class="fa fa-circle-o"></i>Modelos</a></li>
+                <li><a href="{{ route('indexrutas') }}"><i class="fa fa-circle-o"></i>Rutas</a></li>
               </ul>
             </li>
 
