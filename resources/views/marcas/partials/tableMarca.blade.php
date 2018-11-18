@@ -1,9 +1,9 @@
 <div class="col-sm-12 col-xs-12">
-	<div class="box box-success box-solid">
+	<div class="box box-danger box-solid">
   		<div class="box-header with-border">
 	        <h3 class="box-title"><i class="fa fa-empire"></i> Marcas</h3>
 	        <span class="pull-right">
-				<button type="button" data-toggle="modal" data-target="#modal_marca" aria-expanded="false" aria-controls="modal_marca" class="btn btn-success">
+				<button type="button" data-toggle="modal" data-target="#modal_marca" aria-expanded="false" aria-controls="modal_marca" class="btn btn-danger">
 					<i class="fa fa-plus" aria-hidden="true"></i> Nueva marca
 				</button>
 			</span>
@@ -13,7 +13,7 @@
 					<i class="fa fa-refresh fa-pulse fa-fw fa-2x text-success"></i>
 				</span>
 			<table class="table data-table table-bordered table-hover table-condensed">
-				<thead class="label-success">
+				<thead class="label-danger">
 					<tr>
 						<th class="text-center">Codigo</th>
 						<th class="text-center">Nombre</th>

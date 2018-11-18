@@ -24,7 +24,7 @@
 	  <div class="row">
 	  	<div class="col-md-3 col-sm-6 col-xs-12">
 	      <div class="info-box">
-	        <span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
+	        <span class="info-box-icon bg-red"><i class="fa fa-user"></i></span>
 	        
 	        <div class="info-box-content">
 	          <span class="info-box-text">Direcciones</span>
@@ -38,20 +38,17 @@
 
 	<div class="row">
   		<div class="col-md-12">
-    		<div class="box box-success box-solid">
+    		<div class="box box-danger box-solid">
 	      		<div class="box-header with-border">
-	      			<span id="re" style="display:none;" class="text-center">
-						<i class="fa fa-refresh fa-pulse fa-fw fa-2x text-success"></i>
-					</span>
 			        <span class="pull-right">
-						<a href="{{ route('direcciones.create') }}" class="btn btn-success">
-							<i class="fa fa-plus" aria-hidden="true"></i> Nueva direccion
-						</a>
+						<button type="button" data-toggle="modal" data-target="#modal_create" aria-expanded="false" aria-controls="modal_create" class="btn btn-danger btn-sm">
+								<i class="fa fa-plus" aria-hidden="true"></i>	Nueva direccion
+						</button>
 					</span>
 			    </div>
       			<div class="box-body">
 					<table class="table data-table table-bordered table-hover">
-						<thead class="label-success">
+						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Departamento</th>
 								<th class="text-center">Provincia</th>
@@ -99,6 +96,7 @@
 		</div>
 	</div>
 	@include('direcciones.modals.modal_edit')
+	@include('direcciones.modals.modal_create')
 @endsection
 @section("script")
 <script>
@@ -108,14 +106,15 @@
 		  	var ruta = "edit_dir/"+btn_dir.value;
 
 		    $("#re").fadeIn('slow/400/fast');
+		    $(".dep .prov .dist").val("");
 		  	
 		  	$.get(ruta, function(res){
 			    action = '{{ route("direcciones.update",":res.id") }}'; 
 			    action = action.replace(':res.id', res.id);
 		    	$("#form_edit_dir").attr("action", action);
-		    	$("#dep").val(res.departamento_id).attr("selected",true);
-		    	$("#prov").val(res.provincia_id).attr("selected",true);
-		    	$("#dist").val(res.distrito_id).attr("selected",true);
+		    	$(".dep").val(res.departamento_id).attr("selected",true);
+		    	$(".prov").val(res.provincia_id).attr("selected",true);
+		    	$(".dist").val(res.distrito_id).attr("selected",true);
 		    	$("#detalle").val(res.detalle);
 		    	$("#tipo").val(res.tipo).attr("selected",true);
 		  	});
@@ -124,22 +123,22 @@
 	}
 
 	// busqueda de provincias
-	$('#dep').change(function(event) {
+	$('.dep').change(function(event) {
 		$.get("prov/"+event.target.value+"",function(response, dep){
-			$("#prov").empty();
-			$("#dist").empty();
+			$(".prov").empty();
+			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
-					$("#prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
+					$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
 			}
 		});
 	});
 
 	// busqueda de distritos
-	$('#prov').change(function(event) {
+	$('.prov').change(function(event) {
 		$.get("dist/"+event.target.value+"",function(response, dep){
-			$("#dist").empty();
+			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
-					$("#dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
+					$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
 			}
 		});
 	});

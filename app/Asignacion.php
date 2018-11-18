@@ -140,23 +140,58 @@ class Asignacion extends Model
     }
 
     public static function saveAsigRutasStore($request){
-        $ruta = new Ruta($request->all());
-        $ruta->fecha = date("d-m-Y");
-        
-        if ($ruta->save()) {
-            $vr = new VendedorRuta();
-            $vr->ruta_id = $ruta->id;
-            $vr->user_id = $request->user_id;
-            $vr->fecha = date("d-m-Y");
-            $vr->save();
-
+        $query = Ruta::where("motivo_viaje_id", $request->motivo_viaje_id)
+                        ->where("direccion_id", $request->direccion_id)->first();
+        if ($query) {
             return redirect("asignacionesRutas")->with([
-                'flash_message' => 'Ruta asignada correctamente.',
-                'flash_class' => 'alert-success'
+                'flash_message' => 'Ruta ya existente, veirifique.',
+                'flash_class' => 'alert-danger'
             ]);
+        }else{           
+            $ruta = new Ruta($request->all());
+            $ruta->fecha = date("d-m-Y");
+            
+            if ($ruta->save()) {
+                $vr = new VendedorRuta();
+                $vr->ruta_id = $ruta->id;
+                $vr->user_id = $request->user_id;
+                $vr->fecha = date("d-m-Y");
+                $vr->save();
 
+                return redirect("asignacionesRutas")->with([
+                    'flash_message' => 'Ruta asignada correctamente.',
+                    'flash_class' => 'alert-success'
+                ]);
+
+            }
         }
 
+    }
+
+    public static function saveRutasUpdate($request, $id){
+        $query = Ruta::where("motivo_viaje_id", $request->motivo_viaje_id)
+                        ->where("direccion_id", $request->direccion_id)->first();
+        if ($query) {
+            return redirect("asignacionesRutas")->with([
+                'flash_message' => 'Ruta ya existente, veirifique.',
+                'flash_class' => 'alert-danger'
+            ]);
+        }else{           
+            $ruta = Ruta::findOrFail($id);
+            $ruta->fill($request->all());
+            
+            if ($ruta->save()) {
+                $vr = VendedorRuta::where("ruta_id", $id)->first();
+                $vr->user_id = $request->user_id;
+                $vr->save();
+
+                return redirect("asignacionesRutas")->with([
+                    'flash_message' => 'Ruta actualizada correctamente.',
+                    'flash_class' => 'alert-success'
+                ]);
+
+            }
+        }
 
     }
 }

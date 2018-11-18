@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title','Marcas - '.config('app.name'))
-
+@section('header','Marcas')
+@section('breadcrumb')
+	<ol class="breadcrumb">
+	  <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
+	  <li class="active"> Marcas </li>
+	</ol>
+@endsection
 @section('content')
 
 	@include('partials.flash')

@@ -11,15 +11,15 @@
 @section('content')
 	<section>
     <a class="btn btn-flat btn-default" href="{{ route('users.index') }}"><i class="fa fa-reply" aria-hidden="true"></i> Volver</a>
-    <a class="btn btn-flat btn-success" href="{{ route('users.edit',[$user->id]) }}"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</a>
+    <a class="btn btn-flat btn-warning" href="{{ route('users.edit',[$user->id]) }}"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</a>
     @if(Auth::user()->usuario <> "admin")
     <button class="btn btn-flat btn-danger" data-toggle="modal" data-target="#delModal"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
     @endif
 	</section>
 
-	<section class="perfil">
+	<section class="box box-danger box-solid padding_1em">
 		<div class="row">
-    	<div class="col-md-12">
+    	<div class="col-md-12 ">
     		<h2 class="page-header text-capitalize" style="margin-top:0!important">
           <i class="fa fa-user" aria-hidden="true"></i>
           {{ $user->usuario }}

@@ -1,6 +1,12 @@
 @extends('layouts.app')
-@section('title','Coleccion - '.config('app.name'))
-
+@section('title','Crear Coleccion - '.config('app.name'))
+@section('header','Crear Coleccion')
+@section('breadcrumb')
+	<ol class="breadcrumb">
+	  <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
+	  <li class="active"> Crear Coleccion </li>
+	</ol>
+@endsection
 @section('content')
 
 	@include('partials.flash')

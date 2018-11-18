@@ -1,5 +1,5 @@
 <div class="form-group col-sm-2 text-left">
-	<a href="{{ route("colecciones.ver") }}" class="btn btn-primary btn-lg">
+	<a href="{{ route('colecciones.ver') }}" class="btn btn-danger btn-lg">
 		<i class="fa fa-arrow-right"></i> Listado de colecciones
 	</a>
 </div>

@@ -1,9 +1,9 @@
 <div class="col-md-12">
-	<div class="box box-success box-solid">
+	<div class="box box-danger box-solid">
   		<div class="box-header with-border">
 	        <h3 class="box-title"><i class="fa fa-empire"></i> Consultas y Modelos</h3>
 	        <span class="pull-right">
-				<a href="{{ route('colecciones.index') }}" class="btn btn-success">
+				<a href="{{ route('colecciones.index') }}" class="btn btn-danger">
 					<i class="fa fa-plus" aria-hidden="true"></i> Nueva Coleccion
 				</a>
 			</span>
@@ -13,7 +13,7 @@
 				<i class="fa fa-refresh fa-pulse fa-fw fa-2x text-success"></i>
 			</span>
 			<table class="table data-table table-bordered table-hover" style="font-size: smaller;">
-				<thead class="label-success">
+				<thead class="label-danger">
 					<tr>
 						<th class="text-center">Cod Coleccion</th>
 						<th class="text-center">Coleccion</th>

@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title','Proveedores - '.config('app.name'))
-
+@section('header','Proveedores')
+@section('breadcrumb')
+	<ol class="breadcrumb">
+	  <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
+	  <li class="active"> Proveedores </li>
+	</ol>
+@endsection
 @section('content')
 
 	@include('partials.flash')

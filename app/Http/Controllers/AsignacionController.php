@@ -88,14 +88,51 @@ class AsignacionController extends Controller
         //
     }
 
+    public function editAsigRuta($id)
+    {
+        $data = VendedorRuta::with("ruta.motivo_viaje", "ruta.direccion", "user")->findOrFail($id);
+
+        return response()->json($data);
+    }
+
     public function update(Request $request, $id)
     {
         //
     }
 
+    public function asigRutasUpdate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'user_id' => 'required',
+            'direccion_id' => 'required',
+            'motivo_viaje_id' => 'required|in:1,2,3',
+        ]);
+
+        return Asignacion::saveRutasUpdate($request, $id); 
+    }
+
     public function destroy($id)
     {
         //
+    }
+
+    public function asigRutasDestroy($id)
+    {
+        $dir = VendedorRuta::find($id);
+
+        $bu = new BitacoraUser;
+        $bu->fecha = date("d/m/Y");
+        $bu->hora = date("H:i:s");
+        $bu->movimiento = "Asignacion de vendedor - ruta eliminada (".$dir->user->name.", ".$dir->ruta->direccion->detalle.")";
+        $bu->user_id = \Auth::user()->id;
+        $bu->save();
+
+        VendedorRuta::destroy($id);
+
+        return redirect('asignacionesRutas')->with([
+                'flash_class'   => 'alert-success',
+                'flash_message' => 'Asignacion ruta - vendedor eliminada con exito.'
+        ]);
     }
 
     public function marcasAll($id)

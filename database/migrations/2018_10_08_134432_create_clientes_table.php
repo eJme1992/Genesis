@@ -21,6 +21,8 @@ class CreateClientesTable extends Migration
             $table->string('identificacion')->nullable();
             $table->string('ruc')->nullable();
             $table->string('sexo')->nullable();
+            $table->string('correo')->nullable();
+            $table->string('telefono')->nullable();
             $table->timestamps();
         });
     }

@@ -28,14 +28,14 @@
 
 	<div class="row">
   	<div class="col-md-12">
-    	<div class="box box-danger">
+    	<div class="box box-danger box-solid">
 	      <div class="box-header with-border">
 	        <h3 class="box-title"><i class="fa fa-users"></i> Roles del sistema</h3>
 	        <span class="pull-right"></span>
 	      </div>
       	<div class="box-body">
 					<table class="table data-table table-bordered table-hover">
-						<thead class="label-success">
+						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Rol (Perfil)</th>
 								<th class="text-center">Usuarios con este rol</th>

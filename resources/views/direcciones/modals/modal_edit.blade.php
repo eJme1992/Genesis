@@ -5,15 +5,20 @@
 				{{ method_field('PATCH') }}
 				{{ csrf_field() }}
 				<div class="panel panel-warning">
-					<buttton class="close" type="button" data-dismiss="modal">&times;</buttton>
 					<div class="panel-heading text-center">
-						<h3><i class="fa fa-plus"></i> Editar Direccion</h3>
+					<buttton class="close" type="button" data-dismiss="modal">&times;</buttton>
+						<h3>
+							<i class="fa fa-edit"></i> Editar Direccion
+							<span id="re" style="display:none;" class="text-center">
+								<i class="fa fa-refresh fa-pulse text-success"></i>
+							</span>
+						</h3>
 					</div>
 					<div class="modal-body text-left">
 
 							<div class="form-group col-sm-12">
 								<label for="">Departamento </label>
-								<select class="form-control" name="departamento_id" required="" id="dep">
+								<select class="form-control dep" name="departamento_id" required="">
 									<option value="">seleccione</option>
 									@foreach($departamentos as $d)
 									<option value="{{ $d->id }}">{{ $d->departamento }}</option>
@@ -23,7 +28,7 @@
 
 							<div class="form-group col-sm-12">
 								<label for="">Provincia </label>
-								<select class="form-control" name="provincia_id" required="" id="prov">
+								<select class="form-control prov" name="provincia_id" required="">
 									<option value="">seleccione</option>
 									@foreach($provincias as $d)
 									<option value="{{ $d->id }}">{{ $d->provincia }}</option>
@@ -33,7 +38,7 @@
 
 							<div class="form-group col-sm-12">
 								<label for="">Distrito </label>
-								<select class="form-control" name="distrito_id" id="dist">
+								<select class="form-control dist" name="distrito_id">
 									<option value="">seleccione</option>
 									@foreach($distritos as $d)
 									<option value="{{ $d->id }}">{{ $d->distrito }}</option>
@@ -57,7 +62,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="form-group text-right">
-						<input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
+						<input type="button" class="btn btn-danger cerrar" data-dismiss="modal" value="Cerrar">
 						<button type="submit" class="btn btn-success btn_edit_marca">
 							<i class="fa fa-save"></i> Actualizar
 						</button>

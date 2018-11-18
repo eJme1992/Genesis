@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('title',config('app.name'))</title>
-    <!-- Tell the browser to be responsive to screen width -->
+
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    
     <!-- Icon 16x16 -->
-    <link rel="icon" type="image/png" sizes="240x240" href="{{asset('img/logo.png')}}">
+    <link rel="icon" type="image/png" sizes="240x240" href="{{asset('img/genesis2.png')}}">
+    
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/font-awesome.css')}}">
+
     <!-- Theme style -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/AdminLTE.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">
@@ -19,8 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.css')}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.css')}}">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
+
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/ep.css')}}">
 
@@ -38,6 +41,9 @@
 			  padding: 20px;
 			  margin: 10px 25px;
 			}
+      body, html, div, section, label, span, h1, h2, h3, h4, table, tr, td, select, input, textarea, option{
+        font-family: calibri light, calibri, arial;
+      }
 	  </style>
   </head>
   <body class="hold-transition skin-green sidebar-mini">
@@ -47,10 +53,10 @@
         <a href="{{route('dashboard')}}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini">
-            D.G
+            <img class="img-responsive" src="{{ asset('img/genesis2.png') }}" alt="Logo" style="height:40px">
           </span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>Dist. Genesis</b></span>
+          <span class="logo-lg"><b>Distribuidora G.</b></span>
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
@@ -111,9 +117,9 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>Ver usuarios</a></li>
-                <li><a href="{{ route('users.roles') }}"><i class="fa fa-circle-o"></i>Ver roles (perfiles)</a></li>
-                <li><a href="{{ route('users.create') }}"><i class="fa fa-circle-o"></i>Agregar usuario</a></li>
+                <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>Usuarios</a></li>
+                <li><a href="{{ route('users.roles') }}"><i class="fa fa-circle-o"></i>Roles (perfiles)</a></li>
+                <!-- <li><a href="{{ route('users.create') }}"><i class="fa fa-circle-o"></i>Agregar usuario</a></li> -->
                 <li><a href="{{ route('actividad') }}"><i class="fa fa-circle-o"></i>Actividad</a></li>
               </ul>
             </li>
@@ -126,6 +132,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('proveedores.index') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
+                <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
                 <li><a href="{{ route('marcas.index') }}"><i class="fa fa-circle-o"></i>Marcas</a></li>
                 <li><a href="{{ route('colecciones.index') }}"><i class="fa fa-circle-o"></i>Colecciones</a></li>
                 <li><a href="{{ route('productos.index') }}"><i class="fa fa-circle-o"></i>Consultas y Modelos</a></li>
@@ -140,7 +147,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
-                <!-- <li><a href="{{ route('rutas.index') }}"><i class="fa fa-circle-o"></i>Rutas</a></li> -->
+                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
               </ul>
             </li>
 

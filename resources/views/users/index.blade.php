@@ -32,16 +32,16 @@
 
 	<div class="row">
   	<div class="col-md-12">
-    	<div class="box box-danger">
+    	<div class="box box-danger box-solid">
 	      <div class="box-header with-border">
 	        <h3 class="box-title"><i class="fa fa-users"></i> Usuarios</h3>
 	        <span class="pull-right">
-						<a href="{{ route('users.create') }}" class="btn btn-flat btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo usuario</a>
+						<a href="{{ route('users.create') }}" class="btn btn-flat btn-danger"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo usuario</a>
 					</span>
 	      </div>
       	<div class="box-body">
 					<table class="table data-table table-bordered table-hover table-condensed">
-						<thead class="label-success">
+						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Nombre y apellido</th>
 								<th class="text-center">Usuario</th>

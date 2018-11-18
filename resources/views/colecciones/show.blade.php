@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title','Añadir Modelos - '.config('app.name'))
-
+@section('header','Añadir modelos')
+@section('breadcrumb')
+    <ol class="breadcrumb">
+      <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
+      <li class="active"> Añadir modelos </li>
+    </ol>
+@endsection
 @section('content')
 @include('partials.flash')
 
@@ -65,7 +71,7 @@
         </div>
       </div>
       <span>
-        <a href="{{ route('colecciones.ver') }}" class="btn btn-primary text-left"><i class="fa fa-arrow-left"></i> Atras</a>
+        <a href="{{ route('colecciones.ver') }}" class="btn btn-default text-left"><i class="fa fa-arrow-left"></i> Atras</a>
         <span id="reloadpage" style="display:none;" class="text-center">
             <i class="fa fa-spinner fa-pulse fa-fw text-primary"></i>
         </span>

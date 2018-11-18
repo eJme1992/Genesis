@@ -1,88 +1,99 @@
 @extends('layouts.app')
-@section('title','Asignacion - '.config('app.name'))
+@section('title','Asignacion de modelos - '.config('app.name'))
+@section('header','Asignacion de modelos')
+@section('breadcrumb')
+	<ol class="breadcrumb">
+	  <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
+	  <li class="active"> Asignacion de modelos </li>
+	</ol>
+@endsection
 @section('content')
 		<!-- Formulario -->
 		<div class="row">
-			<div class="col-sm-12 fondo_form">
-				<form class="" action="{{ route('asignaciones.store') }}" method="POST" enctype="multipart/form-data">
-					{{ method_field( 'POST' ) }}
-					{{ csrf_field() }}
+			<div class="col-sm-12">
+				<div class="box box-danger box-solid">
+					<div class="box-body">
+						<form class="" action="{{ route('asignaciones.store') }}" method="POST" enctype="multipart/form-data">
+							{{ method_field( 'POST' ) }}
+							{{ csrf_field() }}
 
-					<div class="col-sm-12">
-						<h3 class="label-success padding_1em"><i class="fa fa-user"></i> <i class="fa fa-arrow-left"></i>
-						 	Nueva Asignacion
-						</h3>
+							<div class="col-sm-12">
+								<h3 class="label-danger padding_1em"><i class="fa fa-user"></i> <i class="fa fa-arrow-left"></i>
+								 	Nueva Asignacion
+								</h3>
+							</div>
+
+							<div class="form-group col-sm-3">
+								<label for="">Vendedor (usuario) </label>
+								<select class="form-control" name="user_id" required="">
+									@foreach($users as $user)
+									<option value="{{ $user->id }}">{{ $user->name }}</option>
+									@endforeach
+								</select>
+							</div>
+
+							<div class="form-group col-sm-3">
+								<label for="">Coleccion </label>
+								<select class="form-control" name="coleccion" id="coleccion" required="">
+									<option>Seleccione..</option>
+									@foreach($colecciones as $c)
+									<option value="{{ $c->id }}">{{ $c->name }}</option>
+									@endforeach
+								</select>
+							</div>
+
+							<div class="form-group col-sm-3">
+								<label for="">Marcas </label>
+								<select class="form-control" name="marcas" id="marcas" required="">
+								</select>
+							</div>
+
+							<div class="form-group col-sm-3">
+								<label>-</label><br>
+								<button class="btn btn-primary btn_sm" type="button" id="btn_cargar_modelos">
+									 Cargar modelos
+								</button>
+							<hr>
+							</div>
+							<section id="mostrar_modelos" style="display: none;">
+								<div class="form-group col-sm-8">
+									<table class="table table-bordered table-striped">
+										<thead class="label-danger">
+											<tr>
+												<td>Nombre</td>
+												<td>Monturas disponibles</td>
+												<td>Precio Monturas</td>
+												<td>Asignacion (monturas)</td>
+											</tr>
+										</thead>
+										<tbody id="data_modelos"></tbody>
+									</table>
+								</div>
+							</section>
+
+							@if (count($errors) > 0)
+							<div class="col-sm-12">	
+					          <div class="alert alert-danger alert-important">
+					          	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						          <ul>
+						            @foreach($errors->all() as $error)
+						              <li>{{$error}}</li>
+						            @endforeach
+						          </ul>  
+					          </div>
+					        </div> 
+					        @endif
+
+							<div class="form-group text-right col-sm-12">
+					        	<em class="pull-left"><i class="fa fa-info-circle"></i> Seleccione solo las monturas de los modelos que desea asignar</em>
+					        	<a class="btn btn-flat btn-default" href="{{route('asignaciones.index')}}"><i class="fa fa-reply"></i> Atras</a>
+								<button class="btn btn-success" type="submit">
+									<i class="fa fa-save"></i> Guardar
+								</button>
+							</div>
+						</form>
 					</div>
-
-					<div class="form-group col-sm-3">
-						<label for="">Vendedor (usuario) </label>
-						<select class="form-control" name="user_id" required="">
-							@foreach($users as $user)
-							<option value="{{ $user->id }}">{{ $user->name }}</option>
-							@endforeach
-						</select>
-					</div>
-
-					<div class="form-group col-sm-3">
-						<label for="">Coleccion </label>
-						<select class="form-control" name="coleccion" id="coleccion" required="">
-							<option>Seleccione..</option>
-							@foreach($colecciones as $c)
-							<option value="{{ $c->id }}">{{ $c->name }}</option>
-							@endforeach
-						</select>
-					</div>
-
-					<div class="form-group col-sm-3">
-						<label for="">Marcas </label>
-						<select class="form-control" name="marcas" id="marcas" required="">
-						</select>
-					</div>
-
-					<div class="form-group col-sm-3">
-						<label>-</label><br>
-						<button class="btn btn-primary btn_sm" type="button" id="btn_cargar_modelos">
-							 Cargar modelos
-						</button>
-					<hr>
-					</div>
-					<section id="mostrar_modelos" style="display: none;">
-						<div class="form-group col-sm-8">
-							<table class="table table-bordered table-striped">
-								<thead>
-									<tr>
-										<td>Nombre</td>
-										<td>Monturas disponibles</td>
-										<td>Precio Monturas</td>
-										<td>Asignacion (monturas)</td>
-									</tr>
-								</thead>
-								<tbody id="data_modelos"></tbody>
-							</table>
-						</div>
-					</section>
-
-					@if (count($errors) > 0)
-					<div class="col-sm-12">	
-			          <div class="alert alert-danger alert-important">
-			          	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				          <ul>
-				            @foreach($errors->all() as $error)
-				              <li>{{$error}}</li>
-				            @endforeach
-				          </ul>  
-			          </div>
-			        </div> 
-			        @endif
-
-					<div class="form-group text-right col-sm-12">
-			        	<em class="pull-left"><i class="fa fa-info-circle"></i> Seleccione solo las monturas de los modelos que desea asignar</em>
-			        	<a class="btn btn-flat btn-default" href="{{route('asignaciones.index')}}"><i class="fa fa-reply"></i> Atras</a>
-						<button class="btn btn-success" type="submit">
-							<i class="fa fa-save"></i> Guardar
-						</button>
-					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 @endsection
