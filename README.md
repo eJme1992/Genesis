@@ -1,2 +1,0 @@
-# Genesis
-Genesis desarrollo 
