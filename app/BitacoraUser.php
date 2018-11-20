@@ -13,4 +13,13 @@ class BitacoraUser extends Model
     public function user(){
     	return $this->belongsTo("App\User", "user_id");
     }
+
+    public static function saveBitacora($mov){
+    	$bu = new BitacoraUser;
+        $bu->fecha = date("d/m/Y");
+        $bu->hora = date("h:m a");
+        $bu->movimiento = $mov;
+        $bu->user_id = \Auth::user()->id;
+        return $bu->save();
+    }
 }

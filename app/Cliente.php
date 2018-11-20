@@ -13,12 +13,7 @@ class Cliente extends Model
     	$cliente = new Cliente($request->all());
 
     	if ($cliente->save()) {
-    		$bu = new BitacoraUser;
-            $bu->fecha = date("d/m/Y");
-            $bu->hora = date("h:m a");
-            $bu->movimiento = "Creacion de cliente ".$cliente->name."";
-            $bu->user_id = \Auth::user()->id;
-            $bu->save();
+    		BitacoraUser::saveBitacora($mov = "Creacion de cliente ".$cliente->name."");
     		return redirect("clientes")->with([
                 'flash_message' => 'Cliente agregado correctamente.',
                 'flash_class' => 'alert-success'
@@ -36,12 +31,7 @@ class Cliente extends Model
     	$cliente->fill($request->all());
 
     	if ($cliente->save()) {
-    		$bu = new BitacoraUser;
-            $bu->fecha = date("d/m/Y");
-            $bu->hora = date("h:m a");
-            $bu->movimiento = "Actualizacion de cliente ".$cliente->name."";
-            $bu->user_id = \Auth::user()->id;
-            $bu->save();
+    		BitacoraUser::saveBitacora($mov = "Actualizacion de cliente ".$cliente->name."");
     		return redirect("clientes")->with([
                 'flash_message' => 'Cliente actualizado correctamente.',
                 'flash_class' => 'alert-success'
