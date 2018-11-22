@@ -34,6 +34,7 @@ class Asignacion extends Model
                           ->where("status_id",  1)
                           ->get()->groupBy("name");
         $data = array();
+        $model = array();
 
         if ($modelos->count() > 0) {
 
@@ -50,27 +51,33 @@ class Asignacion extends Model
         			}else{
         				$precio_montura = $mod->precio_montura;
         			}
+
+                    $data [] = "<tr>
+                            <input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'>
+                            <input type='hidden' value='".$name."' id='name_".$id."' name='name[]'>
+                            <td>".$name."</td>
+                            <td>".$montura."</td>
+                            <td>".$precio_montura."</td>
+                            <td>
+                                <select class='form-control' name='monturas[]' id='monturas_".$id."'>
+                                <option value=''>...</option>
+                                ".Asignacion::Monturas($montura)."
+                                </select>
+                            </td>
+                        </tr>"; 
         		}
-        		
-        		$data [] = "<tr>
-        					<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'>
-        					<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'>
-							<td>".$name."</td>
-							<td>".$montura."</td>
-							<td>".$precio_montura."</td>
-							<td>
-								<select class='form-control' name='monturas[]' id='monturas_".$id."'>
-								<option value=''>...</option>
-								".Asignacion::Monturas($montura)."
-								</select>
-							</td>
-						</tr>";	
-        	}
+
+                $model [] = $name;
+            }
         }else{
-        	$data [] = "<tr><td colspan='4'>No posee modelos asociados</td></tr>";
+            $data [] = "<tr><td colspan='4'>No posee modelos asociados</td></tr>";
+            $model [] = "";
         }                  
 
-        return response()->json($data);
+        return response()->json([
+            "data" => $data, 
+            "model" => str_replace(",", " | ", join(",", $model)) 
+        ]);
     }
 
     // recorrer las monturas disponibles para asignar
@@ -104,20 +111,20 @@ class Asignacion extends Model
                     // no hacemos nada
                 }else{
 
-                	// obtenemos los respectivos modelos para almacenar 
-                    $modelo = Modelo::where("name", $request->name[$i])->get();
+                	// // obtenemos los respectivos modelos para almacenar 
+                 //    $modelo = Modelo::where("name", $request->name[$i])->get();
 
-                    // contamos de nuevo el resultado de todos los modelos
-                    for ($m=0; $m < count($modelo); $m++) { 
+                 //    // contamos de nuevo el resultado de todos los modelos
+                 //    for ($m=0; $m < count($modelo); $m++) { 
 
                     	// instanciamos y guardamos
                         $asignacion = new Asignacion;
-                        $asignacion->modelo_id = $modelo[$m]->id;   
+                        $asignacion->modelo_id = $request->modelo_id[$i];   
                         $asignacion->user_id = $request->user_id;   
                         $asignacion->monturas = $request->monturas[$i];   
                         $asignacion->fecha = date("d-m-Y");
 
-                        $mod = Modelo::findOrFail($modelo[$m]->id);
+                        $mod = Modelo::findOrFail($request->modelo_id[$i]);
                         
                         if (($mod->montura - $request->monturas[$i])  == 0) {
                             $mod->status_id = 2;
@@ -128,7 +135,7 @@ class Asignacion extends Model
                         $mod->montura = $mod->montura - $request->monturas[$i];
                         $mod->save();
                         $asignacion->save();
-                    }  
+                    // }  
                 }
             }
 

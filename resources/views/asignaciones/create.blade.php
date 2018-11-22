@@ -57,6 +57,10 @@
 							</div>
 							<section id="mostrar_modelos" style="display: none;">
 								<div class="form-group col-sm-8">
+									<div class="list-group-item text-capitalize">
+										<b>Modelos:</b> 
+										<strong id="name_modelos"></strong>
+									</div>
 									<table class="table table-bordered table-striped">
 										<thead class="label-danger">
 											<tr>
@@ -125,9 +129,11 @@
 
 		if ($("#coleccion").val() && $("#marcas").val()) {
 			$.get("../modelosAll/"+$("#coleccion").val()+"/"+$("#marcas").val()+"",function(response, dep){
-					console.log(response)
+					// alert(response.model);
 					$("#data_modelos").empty();
-					$("#data_modelos").append(response);
+					$("#name_modelos").empty();
+					$("#data_modelos").append(response.data);
+					$("#name_modelos").append(response.model);
 					$("#mostrar_modelos").fadeIn(400);
 			});
 		}else{
