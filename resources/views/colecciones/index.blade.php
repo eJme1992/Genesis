@@ -445,9 +445,13 @@
 					cont = 0;
 				})
 				.fail(function(data) {
-					btn.text("Guardar Modelos");
+					msj = data.responseText; 
+					separador = ",";
+					msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
+					msj2 = msj.replace(/\,/gi,"\n\n");
+					btn.text("Guardar");
 					btn.removeClass("disabled");
-					alert("error! intente de nuevo");
+					alert(msj2.toUpperCase());
 				})
 				.always(function() {
 					console.log("complete");
