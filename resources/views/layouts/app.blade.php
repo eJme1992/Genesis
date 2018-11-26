@@ -21,8 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.css')}}">
-
-    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}">
 
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/ep.css')}}">
@@ -208,8 +207,7 @@
     <script type="text/javascript" src="{{asset('js/app.min.js')}}"></script>
     
     <!-- Data table -->
-    <script type="text/javascript" src="{{asset('plugins/datatables/datatables.js')}}"></script>
-
+    <script type="text/javascript" src="{{ asset('plugins/datatables/datatables.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script>
 
     <!-- fileinput -->
