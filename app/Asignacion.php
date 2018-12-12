@@ -84,8 +84,12 @@ class Asignacion extends Model
     public static function Monturas($montura){
 
     	$mon = array();
-    	for ($i=1; $i < $montura + 1; $i++) { 
-    		$mon [] = "<option value=".$i.">".$i."</option>";
+    	for ($i=1; $i < $montura + 1; $i++) {
+            if ($i == $montura) {
+                $mon [] = "<option value=".$i." selected>".$i."</option>";
+            }else{
+                $mon [] = "<option value=".$i.">".$i."</option>";
+            } 
     	}
 
     	return join(",",$mon);

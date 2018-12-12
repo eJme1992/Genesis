@@ -58,7 +58,6 @@
 							<section id="mostrar_modelos" style="display: none;">
 								<div class="form-group col-sm-8">
 									<div class="list-group-item text-capitalize">
-										<b>Modelos:</b> 
 										<strong id="name_modelos"></strong>
 									</div>
 									<table class="table table-bordered table-striped">
