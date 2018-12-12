@@ -14,6 +14,7 @@ use App\Ruta;
 use App\MotivoViaje;
 use App\Direccion;
 use App\VendedorRuta;
+use App\Departamento;
 
 class AsignacionController extends Controller
 {
@@ -31,7 +32,8 @@ class AsignacionController extends Controller
             "motivo" => MotivoViaje::all(),
             "direcciones" => Direccion::all(),
             "asignacionesrutas" => VendedorRuta::all(),
-            "users" => User::where("status", "activo")->get()
+            "users" => User::where("status", "activo")->get(),
+            "departamentos" => Departamento::all()
         ]);
     }
 

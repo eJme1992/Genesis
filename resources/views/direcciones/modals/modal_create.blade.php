@@ -1,5 +1,6 @@
-<form class="" action="{{ route('direcciones.store') }}" method="POST" enctype="multipart/form-data">
+<form class="form_create_direccion" action="{{ route('direcciones.store') }}" method="POST" enctype="multipart/form-data">
 {{ csrf_field() }}
+<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 	<div class="modal fade" tabindex="-1" role="dialog" id="modal_create">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -33,7 +34,7 @@
 
 							<div class="form-group col-sm-12">
 								<label for="">Detalle </label>
-								<input type="text" class="form-control text-uppercase" name="detalle" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" placeholder="Especifique un detalle">
+								<input type="text" class="form-control text-uppercase" name="detalle" placeholder="Especifique un detalle">
 							</div>
 
 							<div class="form-group col-sm-12">
@@ -47,7 +48,7 @@
 					<div class="modal-footer">
 						<div class="form-group text-right">
 							<input type="button" class="btn btn-danger cerrar" data-dismiss="modal" value="Cerrar">
-							<button type="submit" class="btn btn-success">
+							<button type="submit" class="btn btn-success btn_create_direccion">
 								<i class="fa fa-save"></i> Guardar
 							</button>
 						</div>

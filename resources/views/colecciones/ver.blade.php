@@ -33,7 +33,7 @@
 				<tbody class="text-center">
 					@foreach($colecciones as $d)
 						<tr>
-							<td>{{ $d->codigo }}</td>
+							<td>000{{ $d->id }}</td>
 							<td>{{ $d->name }}</td>
 							<td>{{ $d->fecha_coleccion }}</td>
 							<td>{{ $d->cmCount() }}</td>

@@ -105,24 +105,100 @@
 		</div>
 	</div>
 	@include("asignaciones.modals.create_asignacion_ruta")
+	@include('direcciones.modals.modal_create')
 	
 @endsection
 @section("script")
 <script>
 
 	// cargar direcciones
-	function MostrarAsigRuta(btn_ar){
-		  	var ruta = "editAsigRuta/"+btn_ar.value;
+	function allDir(){
+	  	var ruta = '{{ route("allDireccion") }}';
 
-		  	$.get(ruta, function(res){
-			    action = '{{ route("asignacion_rutas.update",":res.id") }}'; 
-			    action = action.replace(':res.id', res.id);
-		    	$("#form_edit_asig_ruta").attr("action", action);
-
-		    	$("#user_id").val(res.user_id).attr("selected",true);
-		    	$("#motivo_viaje_id").val(res.ruta.motivo_viaje.id).attr("selected",true);
-		    	$("#direccion_id").val(res.ruta.direccion.id).attr("selected",true);
-		  	});
+	  	$.get(ruta, function(response, dir){
+	  		$("#dir_asig").empty();
+	  		for (i = 0; i<response.length; i++) {
+	  			var dist = "";
+	  			if (response[i].distrito.distrito != null) { dist = response[i].distrito.distrito}else{dist = "";}
+				$("#dir_asig").append("<option value='"+response[i].id+"'> "+
+									response[i].departamento.departamento+' | '+
+									response[i].provincia.provincia+' | '+
+									dist+' | '+
+									response[i].detalle+
+								"</option>");
+			}
+	  	});
 	}
+
+	// cargar asig - ruta
+	function MostrarAsigRuta(btn_ar){
+	  	var ruta = "editAsigRuta/"+btn_ar.value;
+
+	  	$.get(ruta, function(res){
+		    action = '{{ route("asignacion_rutas.update",":res.id") }}'; 
+		    action = action.replace(':res.id', res.id);
+	    	$("#form_edit_asig_ruta").attr("action", action);
+
+	    	$("#user_id").val(res.user_id).attr("selected",true);
+	    	$("#motivo_viaje_id").val(res.ruta.motivo_viaje.id).attr("selected",true);
+	    	$("#direccion_id").val(res.ruta.direccion.id).attr("selected",true);
+	  	});
+	}
+
+	// busqueda de provincias
+	$('.dep').change(function(event) {
+		$.get("prov/"+event.target.value+"",function(response, dep){
+			$(".prov").empty();
+			$(".dist").empty();
+			for (i = 0; i<response.length; i++) {
+					$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
+			}
+		});
+	});
+
+	// busqueda de distritos
+	$('.prov').change(function(event) {
+		$.get("dist/"+event.target.value+"",function(response, dep){
+			$(".dist").empty();
+			for (i = 0; i<response.length; i++) {
+					$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
+			}
+		});
+	});
+
+	$(".form_create_direccion").on('submit', function(e) {
+		e.preventDefault();
+		btn = $(".btn_create_direccion");
+		btn.text("Espere...").attr("disabled", 'disabled');
+		token = $("#token").val();
+
+		var form = $(this);
+
+		$.ajax({
+			url: '{{ route("direcciones.store") }}',
+			headers: {'X-CSRF-TOKEN': token},
+			type: 'POST',
+			dataType: 'JSON',
+			data: form.serialize(),
+		})
+		.done(function(data) {
+			alert("Agregada con exito");
+			$("#modal_create").modal('toggle');
+			btn.text("Guardar").removeAttr("disabled", 'disabled');
+			allDir();
+		})
+		.fail(function(data) {
+			btn.text("Guardar").removeAttr("disabled", 'disabled');
+			msj = data.responseText; 
+			separador = ",";
+			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
+			msj2 = msj.replace(/\,/gi,"\n\n");
+			alert(msj2.toUpperCase());
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
 </script>
 @endsection

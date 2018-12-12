@@ -15,7 +15,7 @@
     	<div class="panel panel-default">
         <div class="panel-heading">
           <h3>
-            <span style="padding: 0.4em; color:#525ad0; border-bottom: solid 1px #525ad0; border-radius:1em;">Codigo {{ $coleccion->codigo }}</span>
+            <span style="padding: 0.4em; color:#525ad0; border-bottom: solid 1px #525ad0; border-radius:1em;">Codigo 000{{ $coleccion->id }}</span>
           </h3>
         </div>
         <div class="panel-body" style="margin-left: 0.5em;">

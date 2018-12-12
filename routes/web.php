@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function() { //middleware auth
 
 	// direcciones
 	Route::get('edit_dir/{id}','DireccionController@edit');
+	Route::get('allDireccion','DireccionController@all')->name("allDireccion");
 
 	// colecciones
 	Route::get('bus_col/{id}', 'ColeccionController@busCol');

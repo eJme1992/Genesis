@@ -48,7 +48,7 @@
 							
 							<div class="form-group col-sm-12">
 								<label for="">Detalle </label>
-								<input type="text" name="detalle" id="detalle" class="form-control text-uppercase" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" placeholder="Especifique un detalle">
+								<input type="text" name="detalle" id="detalle" class="form-control text-uppercase"  placeholder="Especifique un detalle">
 							</div>
 
 							<div class="form-group col-sm-12">

@@ -30,10 +30,14 @@ class Direccion extends Model
         if ($request->tipo == 00){ $dir->tipo = "ORIGEN"; } else{ $dir->tipo = "DESTINO"; };
 
         if ($dir->save()) {
-            return redirect("direcciones")->with([
-                'flash_message' => 'Direccion agregada correctamente.',
-                'flash_class' => 'alert-success'
-            ]);
+            if($request->ajax()) {
+                return response()->json($dir);
+            }else{
+                return redirect("direcciones")->with([
+                    'flash_message' => 'Direccion agregada correctamente.',
+                    'flash_class' => 'alert-success'
+                ]);
+            }
         }else{
             return redirect("direcciones")->with([
                 'flash_message' => 'Ha ocurrido un error.',

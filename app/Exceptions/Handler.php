@@ -44,6 +44,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+
+             return redirect("/")->with([
+                'flash_message' => 'Su sesion ha expirado.',
+                'flash_class' => 'alert-danger',
+                'flash_important' => true
+            ]);
+
+         }
+         
         return parent::render($request, $exception);
     }
 

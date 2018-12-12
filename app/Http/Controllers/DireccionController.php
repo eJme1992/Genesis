@@ -11,6 +11,12 @@ use App\BitacoraUser;
 
 class DireccionController extends Controller
 {   
+    public function all()
+    {
+        $data = Direccion::with("departamento", "provincia", "distrito")->orderBy("id", "DESC")->get();
+        return response()->json($data);
+    }
+
     public function index()
     {
         return view("direcciones.index",[
