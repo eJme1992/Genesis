@@ -71,7 +71,13 @@
 		    	$("#sm").fadeOut(400, "linear");
 		    	$("#btn_añadir_modelo").fadeOut(400, "linear");
 		    	$("#btn_save_mod").fadeOut(400, "linear");
-				alert("ya ha sido llenada esta marca");
+				$.alert({
+			        title: 'Alerta!',
+			        content: "Ya ha sido llenada esta marca",
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red'
+			    });
 
 			}else{
 
@@ -243,7 +249,13 @@
 				msj2 = msj.replace(/\,/gi,"\n\n");
 				btn.text("Guardar");
 				btn.removeClass("disabled");
-				alert(msj2.toUpperCase());
+				$.alert({
+			        title: 'Alerta!',
+			        content: msj2.toUpperCase(),
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red'
+			    });
 			})
 			.always(function() {
 				console.log("complete");
@@ -279,9 +291,15 @@
 				separador = ",";
 				msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
 				msj2 = msj.replace(/\,/gi,"\n");
-				alert(msj2.toUpperCase());
 				btn.text("Guardar");
 				btn.removeClass("disabled");
+				$.alert({
+			        title: 'Alerta!',
+			        content: msj2.toUpperCase(),
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red'
+			    });
 			})
 			.always(function() {
 				console.log("complete");
@@ -325,10 +343,18 @@
 				msj = data.responseText; 
 				separador = ",";
 				msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-				msj2 = msj.replace(/\,/gi,"\n\n");
+				msj2 = msj.replace(/\,/gi,"<br>");
 				btn.text("Guardar");
 				btn.removeClass("disabled");
-				alert(msj2.toUpperCase());
+				$.alert({
+			        title: 'Alerta!',
+			        content: msj2.toUpperCase(),
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red',
+			        boxWidth: '30%',
+    				useBootstrap: false,
+			    });
 			})
 			.always(function() {
 				console.log("complete");
@@ -357,7 +383,13 @@
 			});
 
 			if(err > 0){
-					alert("No pueden haber 2 marcas iguales")
+					$.alert({
+				        title: 'Alerta!',
+				        content: "No pueden haber 2 marcas iguales",
+				        icon: 'fa fa-warning',
+				        theme: 'modern',
+				        type: 'red'
+				    });
 					return false;
 			}else{
 				var btn = $("#btn_save_mar");
@@ -386,7 +418,13 @@
 				.fail(function(data) {
 					btn.text("Guardar marcas");
 					btn.removeClass("disabled");
-					alert("error! intente de nuevo");
+					$.alert({
+				        title: 'Error!',
+				        content: "Intente de nuevo!",
+				        icon: 'fa fa-warning',
+				        theme: 'modern',
+				        type: 'red'
+				    });
 				})
 				.always(function() {
 					console.log("complete");
@@ -415,7 +453,13 @@
 			});
 
 			if(err > 0){
-					alert("No pueden haber nombres iguales en los modelos")
+					$.alert({
+				        title: 'Alerta!',
+				        content: "No pueden haber nombres iguales en los modelos",
+				        icon: 'fa fa-warning',
+				        theme: 'modern',
+				        type: 'red'
+				    });
 					return false;
 			}else{
 
@@ -451,7 +495,13 @@
 					msj2 = msj.replace(/\,/gi,"\n\n");
 					btn.text("Guardar");
 					btn.removeClass("disabled");
-					alert(msj2.toUpperCase());
+					$.alert({
+				        title: 'Alerta!',
+				        content: msj2.toUpperCase(),
+				        icon: 'fa fa-warning',
+				        theme: 'modern',
+				        type: 'red'
+				    });
 				})
 				.always(function() {
 					console.log("complete");

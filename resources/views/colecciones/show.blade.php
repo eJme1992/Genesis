@@ -364,7 +364,13 @@
             });
 
             if(err > 0){
-                    alert("No pueden haber nombres iguales en los modelos")
+                    $.alert({
+                        title: 'Alerta!',
+                        content: "No pueden nombres iguales en los modelos",
+                        icon: 'fa fa-warning',
+                        theme: 'modern',
+                        type: 'red'
+                    });
                     return false;
             }else{
 
@@ -392,7 +398,13 @@
                 .fail(function(data) {
                     btn.text("Guardar Modelos");
                     btn.removeClass("disabled");
-                    alert("error! Nombre de modelo ya esta en uso");
+                    $.alert({
+                        title: 'Alerta!',
+                        content: "Nombre de modelo ya esta en uso",
+                        icon: 'fa fa-warning',
+                        theme: 'modern',
+                        type: 'red'
+                    });
                 })
                 .always(function() {
                     console.log("complete");
@@ -430,7 +442,13 @@
                 .fail(function(data) {
                     btn.text("Eliminar Modelos");
                     btn.removeClass("disabled");
-                    alert("error! intente de nuevo");
+                    $.alert({
+                        title: 'Alerta!',
+                        content: "Intente de nuevo",
+                        icon: 'fa fa-warning',
+                        theme: 'modern',
+                        type: 'red'
+                    });
                 })
                 .always(function() {
                     console.log("complete");
@@ -467,7 +485,13 @@
                 .fail(function(data) {
                     btn.text("Actualizar Modelos");
                     btn.removeClass("disabled");
-                    alert("error! intente de nuevo");
+                    $.alert({
+                        title: 'Alerta!',
+                        content: "Intente de nuevo",
+                        icon: 'fa fa-warning',
+                        theme: 'modern',
+                        type: 'red'
+                    });
                 })
                 .always(function() {
                     console.log("complete");
@@ -496,14 +520,26 @@
     				$("#cm").modal('toggle');
     			    btn.text("Guardar");
     			    btn.removeClass("disabled");
-              alert("Marca Añadida a la coleccion");
     			    cargarMarcas();
-              cargarMarcasEnModal();
+                    cargarMarcasEnModal();
+                    $.alert({
+                        title: 'Listo!',
+                        content: "Marca añadida a la coleccion",
+                        icon: 'fa fa-check',
+                        theme: 'modern',
+                        type: 'green'
+                    });
     			})
     			.fail(function(data) {
     				btn.text("Guardar");
     				btn.removeClass("disabled");
-    				alert("error! no hay marcas disponibles");
+                    $.alert({
+                        title: 'Alerta!',
+                        content: "No hay marcas disponibles",
+                        icon: 'fa fa-warning',
+                        theme: 'modern',
+                        type: 'red'
+                    });
     			})
     			.always(function() {
     				console.log("complete");

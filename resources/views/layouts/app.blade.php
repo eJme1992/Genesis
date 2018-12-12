@@ -30,7 +30,10 @@
     <link rel="stylesheet" href="{{ asset('plugins/fileinput/css/fileinput.min.css') }}">
 
     <!-- Datepicker Files -->
-    <link rel="stylesheet" href="{{asset('plugins/jquery_datepicker/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{ asset('plugins/jquery_datepicker/jquery-ui.css') }}">
+
+    <!-- confirm - jquery -->
+    <link rel="stylesheet" href="{{ asset('plugins/confirm/jquery-confirm.min.css') }}">
 
   	<style type="text/css">
 	    .perfil{
@@ -199,16 +202,19 @@
         <strong>Copyright &copy; 2016 - {{ date('Y') }}</strong> All rights reserved.
       </footer>
     </div><!-- .wrapper -->
+
     <!-- jQuery 2.1.4 -->
-    <script type="text/javascript" src="{{asset('js/jQuery-2.1.4.min.js')}}"></script>
+    <script src="{{asset('js/jQuery-2.1.4.min.js')}}"></script>
+
     <!-- Bootstrap 3.3.5 -->
-    <script type="text/javascript" src="{{asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+
     <!-- AdminLTE App -->
-    <script type="text/javascript" src="{{asset('js/app.min.js')}}"></script>
+    <script src="{{asset('js/app.min.js')}}"></script>
     
     <!-- Data table -->
-    <script type="text/javascript" src="{{ asset('plugins/datatables/datatables.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script>
 
     <!-- fileinput -->
     <script src="{{ asset('plugins/fileinput/js/fileinput.min.js') }}"></script>
@@ -222,6 +228,9 @@
 
     <!-- datapicker -->
     <script src="{{ asset('plugins/jquery_datepicker/jquery-ui.js') }}"></script>
+
+    <!-- confirm - jquery -->
+    <script src="{{ asset('plugins/confirm/jquery-confirm.min.js') }}"></script>
 
     <script type="text/javascript">
 

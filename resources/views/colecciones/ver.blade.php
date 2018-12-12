@@ -10,6 +10,20 @@
 @section('content')
 @include('partials.flash')
 <div class="row">
+  	<div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="fa fa-table"></i></span>
+        
+        <div class="info-box-content">
+          <span class="info-box-text">Colecciones</span>
+          <span class="info-box-number">{{ count($colecciones) }}</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+</div><!--row-->
+<div class="row">
 <div class="col-sm-12 col-xs-12">
 	<div class="box box-danger box-solid">
   		<div class="box-header with-border">

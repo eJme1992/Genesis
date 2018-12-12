@@ -118,8 +118,8 @@
 	  	$.get(ruta, function(response, dir){
 	  		$("#dir_asig").empty();
 	  		for (i = 0; i<response.length; i++) {
-	  			var dist = "";
-	  			if (response[i].distrito.distrito != null) { dist = response[i].distrito.distrito}else{dist = "";}
+	  			var dist = [];
+	  			if (response[i].distrito != null) {dist = response[i].distrito.distrito}else{dist = "<cite>sin distrito</cite>";}
 				$("#dir_asig").append("<option value='"+response[i].id+"'> "+
 									response[i].departamento.departamento+' | '+
 									response[i].provincia.provincia+' | '+
@@ -166,6 +166,7 @@
 		});
 	});
 
+	// guardar direccion
 	$(".form_create_direccion").on('submit', function(e) {
 		e.preventDefault();
 		btn = $(".btn_create_direccion");
@@ -182,10 +183,16 @@
 			data: form.serialize(),
 		})
 		.done(function(data) {
-			alert("Agregada con exito");
+			allDir();
+			$.alert({
+		        title: 'Listo!',
+		        content: "Agregado con exito",
+		        icon: 'fa fa-check',
+		        theme: 'modern',
+		        type: 'green'
+		    });
 			$("#modal_create").modal('toggle');
 			btn.text("Guardar").removeAttr("disabled", 'disabled');
-			allDir();
 		})
 		.fail(function(data) {
 			btn.text("Guardar").removeAttr("disabled", 'disabled');
@@ -193,7 +200,13 @@
 			separador = ",";
 			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
 			msj2 = msj.replace(/\,/gi,"\n\n");
-			alert(msj2.toUpperCase());
+			$.alert({
+		        title: 'Alerta!',
+		        content: msj2.toUpperCase(),
+		        icon: 'fa fa-warning',
+		        theme: 'modern',
+		        type: 'red'
+		    });
 		})
 		.always(function() {
 			console.log("complete");

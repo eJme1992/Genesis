@@ -114,7 +114,13 @@
 				}
 				$("#data_modelos").empty();
 			}else{
-				alert("No posee marcas asociadas");
+				$.alert({
+			        title: 'Alerta!',
+			        content: "No posee marcas asociadas",
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red'
+			    });
 				$("#data_modelos").empty();
 			}
 		});
@@ -137,7 +143,13 @@
 					$("#mostrar_modelos").fadeIn(400);
 			});
 		}else{
-			alert("Nada para mostrar, debe llenar todos los campos");
+			$.alert({
+		        title: 'Alerta!',
+		        content: "Nada para mostrar, debe llenar todos los campos",
+		        icon: 'fa fa-warning',
+		        theme: 'modern',
+		        type: 'red'
+		    });
 		}
 	});
 
