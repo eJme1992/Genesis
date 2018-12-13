@@ -55,7 +55,7 @@ class Asignacion extends Model
                     $data [] = "<tr>
                             <input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'>
                             <input type='hidden' value='".$name."' id='name_".$id."' name='name[]'>
-                            <td>".$name."</td>
+                            <td>".$name.' - ['.$id.']'."</td>
                             <td>".$montura."</td>
                             <td>".$precio_montura."</td>
                             <td>

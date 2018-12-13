@@ -63,7 +63,7 @@
 									<table class="table table-bordered table-striped">
 										<thead class="label-danger">
 											<tr>
-												<td>Nombre</td>
+												<td>Nombre - [Codigo]</td>
 												<td>Monturas disponibles</td>
 												<td>Precio Monturas</td>
 												<td>Asignacion (monturas)</td>

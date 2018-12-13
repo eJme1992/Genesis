@@ -40,7 +40,7 @@
 						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Vendedor (Usuario)</th>
-								<th class="text-center">Producto (Modelos)</th>
+								<th class="text-center">Modelo - [Codigo]</th>
 								<th class="text-center">Monturas</th>
 								<th class="text-center">Fecha asignacion</th>
 								<th class="text-center">Acciones</th>
@@ -50,7 +50,7 @@
 							@foreach($asignaciones as $d)
 								<tr>
 									<td class="text-capitalize">{{ $d->user->name }} {{ $d->user->ape }}</td>
-									<td>{{ $d->modelo->name }}</td>
+									<td>{{ $d->modelo->name.' - ['.$d->modelo->id.']' }}</td>
 									<td>{{ $d->monturas }}</td>
 									<td>{{ $d->fecha }}</td>
 									<td>...</td>
