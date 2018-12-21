@@ -59,6 +59,12 @@ class ColeccionController extends Controller
         //
     }
 
+    // public function cargarSectionAñadirMarca($contador)
+    // {
+    //     $data = Coleccion::cargarSectionAñadirMarca($contador);
+    //     return response()->json($data);
+    // }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -70,7 +76,9 @@ class ColeccionController extends Controller
 
         $this->validate($request, [
             'marca_id' => 'required',
-            'rueda' => 'required'
+            'rueda' => 'required',
+            'precio_almacen' => 'required|between:1,99.99|min:1|max:999999999999',
+            'precio_venta_establecido' => 'required|between:1,99.99|min:1|max:999999999999',
         ]);
 
         $coleccion = Coleccion::findOrFail($request->id_coleccion);
@@ -80,7 +88,9 @@ class ColeccionController extends Controller
               $registro = ColeccionMarca::create([
                   'marca_id' => $request->marca_id[$i],
                   'coleccion_id' => $request->id_coleccion,
-                  'rueda' => $request->rueda[$i]
+                  'rueda' => $request->rueda[$i],
+                  'precio_almacen' => $request->precio_almacen[$i],
+                  'precio_venta_establecido' => $request->precio_venta_establecido[$i],
               ]);
 
         }

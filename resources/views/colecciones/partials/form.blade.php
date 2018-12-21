@@ -49,13 +49,6 @@
 						</div>
 					</section>
 
-					<div id="msj_col" style="display: none;" class="col-sm-12">
-						<div class="alert alert-success">
-					      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					      <strong class="text-center">Coleccion creada exitosamente!... proceda con las marcas</strong>
-					  	</div>
-					</div>
-
 					{{-- seccion de marcas --}}
 					<form id="form_mc" action="{{ route('colecciones.store') }}" method="POST">
 					<input type="hidden" name="id_coleccion" id="id_col">
@@ -72,8 +65,8 @@
 
 						<section id="section_marca">
 
-							<div class="div_total_marcas">
-								<div class='form-group col-sm-5'>
+							<div id="div_total_marcas">
+								<div class='form-group col-sm-4'>
 									<label>Marcas</label>
 									<select name='marca_id[]' class='form-control s_m' required='' id="s_m_0">
 										<option value=''>Seleccione</option>
@@ -83,7 +76,7 @@
 									</select>
 								</div>
 
-								<div class='form-group col-sm-3'>
+								<div class='form-group col-sm-2'>
 									<label>Ruedas</label>
 									<select name='rueda[]' class='form-control ru' required=''>
 										@for($r = 1; $r < 21; $r++)
@@ -91,11 +84,21 @@
 										@endfor
 									</select>
 								</div>
+
+								<div class='form-group col-sm-2'>
+									<label>Precio de almacen</label>
+									<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen[]' class='form-control pa' required=''>
+								</div>
+
+								<div class='form-group col-sm-2'>
+									<label>Precio de venta establecido</label>
+									<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido[]' class='form-control pve' required=''>
+								</div>
 							</div>
 
 						</section>
 
-						<div class="form-group col-sm-2 text-left" style="padding: 0.4em;">
+						<div class="form-group col-sm-1 text-left" style="padding: 0.4em;">
 							<br>
 							<button class="btn btn-primary" type="button" id="btn_añadir_marca">
 								<i class="fa fa-plus"></i>
@@ -105,19 +108,12 @@
 
 						<div class="form-group col-sm-12 text-right">
 							<button class="btn btn-danger" type="submit" id="btn_save_mar">
-								<i class="fa fa-save"></i> Guardar Marcas
+								<i class="fa fa-save"></i> Añadir marcas
 							</button>
 						</div>
 
 					</section>
 					</form>
-
-					<div id="msj_mar" style="display: none;" class="col-sm-12">
-						<div class="alert alert-success">
-					      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					      <strong class="text-center">Marcas añadidas a la coleccion... ingresar modelos</strong>
-					  	</div>
-					</div>
 
 					{{-- seccion de modelos --}}
 					<section id="section_modelos" style="display:none">

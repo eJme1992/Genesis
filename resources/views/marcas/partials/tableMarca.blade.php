@@ -18,7 +18,6 @@
 						<th class="text-center">Codigo</th>
 						<th class="text-center">Nombre</th>
 						<th class="text-center">Material</th>
-						<th class="text-center">Precio</th>
 						<th class="text-center">Observacion</th>
 						<th class="text-center">Asociadas a</th>
 						<th class="text-center">Fecha de creacion</th>
@@ -31,7 +30,6 @@
 							<td class="text-capitalize">{{$d->codigo}}</td>
 							<td class="text-capitalize">{{$d->name}}</td>
 							<td class="text-capitalize">{{$d->material->name}}</td>
-							<td class="text-capitalize">{{$d->precio}}</td>
 							<td class="text-capitalize">{{$d->observacion}}</td>
 							<td class="text-capitalize">
 								@foreach($d->colecciones as $col)

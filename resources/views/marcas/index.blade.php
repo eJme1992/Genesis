@@ -63,7 +63,6 @@
 		    	$("#id_marca").val(res.id);
 		    	$("#name_marca").val(res.name);
 		    	$("#observacion_marca").val(res.observacion);
-		    	$("#precio_marca_edit").val(res.precio);
 		    	$("#material_id").val(res.material_id).attr("selected",true);
 		  	});
 

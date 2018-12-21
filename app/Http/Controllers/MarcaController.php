@@ -52,8 +52,7 @@ class MarcaController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'material_id' => 'required',
-            'precio' => 'required|numeric',
+            'material_id' => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)->where("material_id", $request->material_id)->count();
@@ -194,8 +193,7 @@ class MarcaController extends Controller
         
         $this->validate($request, [
             'name' => 'required',
-            'material_id' => 'required',
-            'precio' => 'required|numeric',
+            'material_id' => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)
@@ -269,8 +267,7 @@ class MarcaController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
-            'material_id' => 'required',
-            'precio' => 'required|numeric'
+            'material_id' => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)->where("material_id", $request->material_id)->count();

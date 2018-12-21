@@ -28,6 +28,18 @@
             <span class="text-capitalize list-group-item">
               <div class="row">
                 @if($marcas->marca->name)
+                @if($marcas->precio_almacen)
+                <div class="col-sm-12">
+                    <i class="fa fa-arrow-right"></i>
+                    <span>
+                        <strong data-toggle="tooltip" data-placement="top" title="Precio de almacen">[PA]</strong> 
+                        {{ $marcas->precio_almacen }} SL
+                    </span> | 
+                    <span>
+                        <strong data-toggle="tooltip" data-placement="top" title="Precio de venta establecido">[PVE]</strong> {{ $marcas->precio_venta_establecido }} SL
+                    </span>
+                </div>
+                @endif
                 <div class="col-sm-8">
                   <i class="fa fa-arrow-right"></i>  {{ $marcas->marca->name }} | ({{ $marcas->marca->material->name }})
                 </div>

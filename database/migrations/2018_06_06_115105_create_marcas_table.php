@@ -17,7 +17,6 @@ class CreateMarcasTable extends Migration
             $table->increments('id');
             $table->string('codigo');
             $table->string('name');
-            $table->decimal('precio', 12,2)->nullable();
             $table->integer('material_id')->unsigned();
             $table->text('observacion')->nullable();
 

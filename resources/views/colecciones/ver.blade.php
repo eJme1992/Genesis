@@ -39,7 +39,8 @@
 						<th class="text-center">Codigo</th>
 						<th class="text-center">Nombre</th>
 						<th class="text-center">Fecha de coleccion</th>
-						<th class="text-center">Marcas registradas</th>
+						<th class="text-center">Marcas</th>
+						<th class="text-center">Precio almacen / Precio establecido</th>
 						<th class="text-center">Modelos</th>
 						<th class="text-center">Proveedor</th>
 					</tr>
@@ -50,7 +51,30 @@
 							<td>000{{ $d->id }}</td>
 							<td>{{ $d->name }}</td>
 							<td>{{ $d->fecha_coleccion }}</td>
-							<td>{{ $d->cmCount() }}</td>
+							<td class="text-left">
+								@forelse($d->cm as $m)
+									<i class="fa fa-arrow-right"></i>
+									<span class="text-capitalize">
+										{{ $m->marca->name.' - ['.$m->marca->material->name.']' }} 
+									</span>
+									<br>
+								@empty
+									<em class="text-warning">No posee marcas asignadas</em>
+								@endforelse
+							</td>
+							<td>
+								@foreach($d->cm as $m)
+									@if($m->precio_almacen)
+										<i class="fa fa-arrow-right"></i>
+										<span>
+											{{ $m->precio_almacen.' Sl / '.$m->precio_venta_establecido.' Sl' }} 
+										</span>
+										<br>
+									@else
+										<em class="text-warning">No asignado</em><br>
+									@endif	
+								@endforeach
+							</td>
 							<td>
 								{{ $d->modelos($d->id)->count() }}
 								<span class="pull-right">

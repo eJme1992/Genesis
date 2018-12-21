@@ -18,6 +18,8 @@ class CreateColeccionMarcasTable extends Migration
             $table->integer("coleccion_id")->unsigned();
             $table->integer("marca_id")->unsigned();
             $table->string('rueda')->nullable();
+            $table->decimal('precio_almacen', 12,2)->nullable();
+            $table->decimal('precio_venta_establecido', 12,2)->nullable();
 
             $table->foreign('coleccion_id')->references('id')
                                        ->on('colecciones')

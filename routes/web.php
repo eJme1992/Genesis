@@ -86,6 +86,7 @@ Route::group(['middleware' => 'auth'], function() { //middleware auth
 	Route::post('editCol', 'ColeccionController@update')->name("editCol");
 	Route::post('saveCol', 'ColeccionController@saveCol')->name("saveCol");
 	Route::get('ver_colecciones', 'ColeccionController@ver')->name("colecciones.ver");
+	// Route::get('cargarSectionAñadirMarca/{contador}', 'ColeccionController@cargarSectionAñadirMarca');
 
 	// proveedores
 	Route::get('allP', 'ProveedoresController@allP')->name('allP');

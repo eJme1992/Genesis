@@ -30,10 +30,6 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="">Precio</label>
-							<input type="text" name="precio" class="form-control nf" required="" placeholder="0.00" id="precio_marca_edit">
-						</div>
-						<div class="form-group">
 							<label for="">Observacion</label>
 							<textarea name="observacion" id="observacion_marca" class="form-control"></textarea>
 						</div>

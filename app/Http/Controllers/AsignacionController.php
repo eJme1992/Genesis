@@ -28,12 +28,12 @@ class AsignacionController extends Controller
     public function rutasIndex()
     {
         return view("asignaciones.indexrutas",[
-            "rutas" => Ruta::all(),
-            "motivo" => MotivoViaje::all(),
-            "direcciones" => Direccion::all(),
+            "rutas"             => Ruta::all(),
+            "motivo"            => MotivoViaje::all(),
+            "direcciones"       => Direccion::all(),
             "asignacionesrutas" => VendedorRuta::all(),
-            "users" => User::where("status", "activo")->get(),
-            "departamentos" => Departamento::all()
+            "users"             => User::where("status", "activo")->get(),
+            "departamentos"     => Departamento::all()
         ]);
     }
 
@@ -41,16 +41,16 @@ class AsignacionController extends Controller
     {
         return view("asignaciones.create",[
             "colecciones" => Coleccion::all(),
-            "users" => User::where("status", "activo")->get()
+            "users"       => User::where("status", "activo")->get()
         ]);
     }
 
     public function asigRutaCreate()
     {
         return view("asignaciones.create_asignacion_ruta",[
-            "motivo" => MotivoViaje::all(),
+            "motivo"      => MotivoViaje::all(),
             "direcciones" => Direccion::all(),
-            "users" => User::where("status", "activo")->get()
+            "users"       => User::where("status", "activo")->get()
         ]);
     }
 
@@ -59,8 +59,8 @@ class AsignacionController extends Controller
 
         $this->validate($request, [
             'modelo_id' => 'required',
-            'user_id' => 'required',
-            'monturas' => 'required|array',
+            'user_id'   => 'required',
+            'monturas'  => 'required|array',
         ]);
 
         return Asignacion::saveAsignacion($request); 
@@ -71,8 +71,8 @@ class AsignacionController extends Controller
     {
 
         $this->validate($request, [
-            'user_id' => 'required',
-            'direccion_id' => 'required',
+            'user_id'         => 'required',
+            'direccion_id'    => 'required',
             'motivo_viaje_id' => 'required|in:1,2,3',
         ]);
 
@@ -105,8 +105,8 @@ class AsignacionController extends Controller
     public function asigRutasUpdate(Request $request, $id)
     {
         $this->validate($request, [
-            'user_id' => 'required',
-            'direccion_id' => 'required',
+            'user_id'         => 'required',
+            'direccion_id'    => 'required',
             'motivo_viaje_id' => 'required|in:1,2,3',
         ]);
 

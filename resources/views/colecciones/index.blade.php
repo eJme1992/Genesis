@@ -110,13 +110,13 @@
 
 			$("#section_marca").append(
 					"<div class='div_total_marcas"+contM+"'>"+
-						"<div class='form-group col-sm-5'>"+
+						"<div class='form-group col-sm-4'>"+
 							"<label>Marcas</label>"+
 							"<select name='marca_id[]' class='form-control s_m' required='' id='s_m_"+contM+"'>"+
 								"<option value=''>Seleccione</option>"+cargarMarcas()+
 							"</select>"+
 						"</div>"+
-						"<div class='form-group col-sm-3'>"+
+						"<div class='form-group col-sm-2'>"+
 							"<label>Ruedas</label>"+
 							"<select name='rueda[]' class='form-control ru' required=''>"+
 								"<option value='1'>1</option>"+
@@ -141,7 +141,15 @@
 								"<option value='20'>20</option>"+
 							"</select>"+
 						"</div>"+
-						"<div class='form-group col-sm-2 text-left' style='padding: 0.4em;'>"+
+						"<div class='form-group col-sm-2'>"+
+							"<label>Precio de almacen</label>"+
+							"<input type='number' step='0.01' max='999999999999' min='1' name='precio_almacen[]' class='form-control pa' required=''>"+
+						"</div>"+
+						"<div class='form-group col-sm-2'>"+
+							"<label>Precio de venta establecido</label>"+
+							"<input type='number' step='0.01' max='999999999999' min='1' name='precio_venta_establecido[]' class='form-control pve' required=''>"+
+						"</div>"+	
+						"<div class='form-group col-sm-1 text-left' style='padding: 0.4em;'>"+
 							"<br>"+
 							"<button class='btn btn-danger' type='button' id='btn_delete_marca"+contM+"'>"+
 								"<i class='fa fa-remove'></i>"+
@@ -235,7 +243,7 @@
 				headers: {'X-CSRF-TOKEN': token},
 				type: 'POST',
 				dataType: 'JSON',
-				data: {name: $("#marca_name").val(), observacion: $('#marca_observacion').val(), material_id: $('#marca_material_id').val(), precio: $("#precio_marca").val()},
+				data: {name: $("#marca_name").val(), observacion: $('#marca_observacion').val(), material_id: $('#marca_material_id').val()},
 			})
 			.done(function(data) {
 				$("#modal_marca").modal('toggle');
@@ -328,16 +336,21 @@
 			.done(function(data) {
 				$("#id_col").val(data.id);
 				$("#id_col2").val(data.id);
-				$("#msj_col").fadeIn(400, "linear");
-
-				$("#fecha").attr("readonly", "readonly");
-				$("#fecha").removeClass("fecha");
+				$("#fecha").attr("readonly", "readonly").removeClass("fecha hasDatepicker");
 				$("#name").attr("readonly", "readonly");
 				$("#s_p").attr("disabled", "disabled");
 				$("#btn_prove").addClass("hide");
 				btn.addClass("hide");
-
 				$("#section_marcas").fadeIn(400, "linear");
+			    $.alert({
+			        title: 'Listo!',
+			        content: "Coleccion creada exitosamente!",
+			        icon: 'fa fa-check',
+			        theme: 'modern',
+			        type: 'green',
+			        boxWidth: '30%',
+    				useBootstrap: true,
+			    });
 			})
 			.fail(function(data) {
 				msj = data.responseText; 
@@ -408,22 +421,34 @@
 					data: form,
 				})
 				.done(function(data) {
-					$("#msj_mar").fadeIn(400, "linear");
 					$("#form_mc").remove();
 					cargarColMar();
 					$("#section_modelos").fadeIn(400, "linear");
 					$("#btn_new_col").fadeIn(400, "linear");
+				    $.alert({
+				        title: 'Listo!',
+				        content: "Marcas añadidas a la coleccion",
+				        icon: 'fa fa-check',
+				        theme: 'modern',
+				        type: 'green',
+				        boxWidth: '30%',
+	    				useBootstrap: true,
+				    });
 
 				})
 				.fail(function(data) {
-					btn.text("Guardar marcas");
-					btn.removeClass("disabled");
+					btn.text("Guardar marcas").removeClass("disabled");
+				    msj = data.responseText;
+					msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
+					msj = msj.replace(/\,/gi,"<br>");
 					$.alert({
 				        title: 'Error!',
-				        content: "Intente de nuevo!",
+				        content: msj.toUpperCase(),
 				        icon: 'fa fa-warning',
 				        theme: 'modern',
-				        type: 'red'
+				        type: 'red',
+				        boxWidth: '30%',
+	    				useBootstrap: true,
 				    });
 				})
 				.always(function() {
@@ -509,5 +534,6 @@
 			}
 
 		});
+		// setInterval($("#section_marca"), 5000);
 	</script>
 @endsection
