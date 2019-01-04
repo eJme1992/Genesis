@@ -53,34 +53,36 @@ class ModeloController extends Controller
         // obtenemos la coleccion
         $coleccion = Coleccion::findOrFail($request->id_coleccion);
 
+        // dd($request->all());
         // recorremos la cantidad de modelos
         for ($m = 0 ; $m < count($request->name); $m++) {
 
-          // y los multiplicamos por la cantidad de ruedas
-          for ($i = 0; $i < $request->rueda; $i++) {
-
-            $modelo = new Modelo();
-            $modelo->codigo = $i + 1;
-            $modelo->name = $request->name[$m];
-            $modelo->descripcion_modelo = $request->descripcion_modelo[$m];
-            $modelo->coleccion_id = $request->id_coleccion;
-            $modelo->marca_id = $request->marca_id;
-            $modelo->montura = $request->montura[$m];
-            $modelo->status_id = 1;
-            $modelo->save();
-
-          }
+            // y los multiplicamos por la cantidad de ruedas o cajas sea el caso
+            if ($request->caja[$m]) {
+                $cajas = $request->caja[$m];
+            }else{
+                $cajas = $request->rueda;
+            }
+            
+            for ($i = 0; $i < $cajas; $i++) {
+                $modelo = new Modelo();
+                $modelo->codigo = $i + 1;
+                $modelo->name = $request->name[$m];
+                $modelo->descripcion_modelo = $request->descripcion_modelo[$m];
+                $modelo->coleccion_id = $request->id_coleccion;
+                $modelo->marca_id = $request->marca_id;
+                $modelo->montura = $request->montura[$m];
+                $modelo->status_id = 1;
+                $modelo->save();
+            }
         }
 
         // guardamos la coleccion en la tabla productos
         Producto::savePro($request->id_coleccion);
-
-        $mod = $request->rueda * count($request->name);
-
         $bu = new BitacoraUser;
         $bu->fecha = date("d/m/Y");
         $bu->hora = date("H:i:s");
-        $bu->movimiento = "Creacion de nuevo(s) modelo(s) = (".$mod.") para la coleccion (".$coleccion->name.")";
+        $bu->movimiento = "Creacion de nuevo(s) modelo(s) para la coleccion (".$coleccion->name.")";
         $bu->user_id = \Auth::user()->id;
         $bu->save();
 

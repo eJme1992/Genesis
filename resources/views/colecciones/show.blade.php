@@ -90,7 +90,16 @@
       </span>
     </div>
     <div class="col-sm-8 fondo_form">
-        <div class="form-group col-sm-4">
+        <div class="col-sm-12">
+            <div class="alert alert-info">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <span class="text-center">
+                <i class="fa fa-info"></i>
+                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual  
+              </span> 
+            </div>
+        </div>
+        <div class="col-sm-4">
             <label for="">
               Seleccione Marca(*)
               [<a href="#cm" class="btn-link" data-toggle="modal" data-target="#cm">
@@ -104,69 +113,97 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group col-sm-4" style="margin-top: 1.9em;">
+        <div class="col-sm-4" style="margin-top: 1.9em;">
             <button class="btn btn-primary btn-sm" type="button" id="btn_buscar_marca">Cargar</button>
             <span id="rm" style="display:none;" class="text-center">
                 <i class="fa fa-refresh fa-pulse fa-fw text-primary"></i>
             </span>
         </div>
-        <div class="form-group col-sm-4">
+        <div class="col-sm-4">
             <label>Nº de Ruedas</label>
             <input type="text" readonly="" class="form-control" id="ruedas">
         </div>
-        <div class="col-sm-12">
+        
+        <div class="col-sm-12"><hr></div>
 
-            <!-- formulario de modelos -->
-            <form id="form_modelos2" method="POST">
-                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                <input type='hidden' name='marca_id' id="marca_id_2">
-                <input type="hidden" name="rueda" class="ruedas">
-                <input type="hidden" value="{{ $coleccion->id }}" id="coleccion" name="id_coleccion">
+        <!-- formulario de modelos -->
+        <form id="form_modelos2" method="POST" class="">
+            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+            <input type='hidden' name='marca_id' id="marca_id_2">
+            <input type="hidden" name="rueda" class="ruedas">
+            <input type="hidden" value="{{ $coleccion->id }}" id="coleccion" name="id_coleccion">
 
-                <section id="sm" style="display: none;">
-                    <div class="div_total">
-                        <div class='form-group col-sm-3'>
-                            <label class='control-label' for='name'>Nombre modelo: *</label>
-                                <input type='text' name='name[]' class='form-control nombre_modelo2' id="nombre_modelo_0" required=''>
-                        </div>
-                        <div class='form-group col-sm-2'>
-                            <label class='control-label'>Cantidad Monturas: *</label>
-                                <select name='montura[]' class='form-control' required=''>
-                                        <option value='1'>1</option>
-                                        <option value='2'>2</option>
-                                        <option value='3'>3</option>
-                                        <option value='4'>4</option>
-                                        <option value='5'>5</option>
-                                        <option value='6'>6</option>
-                                        <option value='7'>7</option>
-                                        <option value='8'>8</option>
-                                        <option value='9'>9</option>
-                                        <option value='10'>10</option>
-                                        <option value='11'>11</option>
-                                        <option value='12' selected>12</option>
-                                </select>
-                        </div>
-                        <div class='form-group col-sm-5'>
-                            <label>Descripcion </label>
-                                <textarea name='descripcion_modelo[]' class='form-control'></textarea>
-                        </div>
+            <section id="sm" style="display: none;">
+                <div class="div_total">
+                    <div class='form-group col-sm-3'>
+                        <label class='control-label' for='name'>Nombre modelo *</label>
+                            <input type='text' name='name[]' class='form-control nombre_modelo2' id="nombre_modelo_0" required=''>
                     </div>
-                </section>
-
-                    <div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>
-                        <button class='btn btn-primary' type='button' id='btn_añadir_modelo' style="display:none;">
-                            <i class='fa fa-plus'></i>
-                        </button>
+                    <div class='form-group col-sm-2'>
+                        <label class='control-label'>Monturas *</label>
+                            <select name='montura[]' class='form-control' required=''>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                    <option value='4'>4</option>
+                                    <option value='5'>5</option>
+                                    <option value='6'>6</option>
+                                    <option value='7'>7</option>
+                                    <option value='8'>8</option>
+                                    <option value='9'>9</option>
+                                    <option value='10'>10</option>
+                                    <option value='11'>11</option>
+                                    <option value='12' selected>12</option>
+                            </select>
                     </div>
+                    <div class='form-group col-sm-3'>
+                        <label>Descripcion </label>
+                        <input type='text' name='descripcion_modelo[]' class='form-control'>
+                    </div>
+                    <div class='form-group col-sm-2'>
+                        <label>Cajas </label>
+                        <select name='caja[]' class='form-control'>
+                                    <option value='' selected></option>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                    <option value='4'>4</option>
+                                    <option value='5'>5</option>
+                                    <option value='6'>6</option>
+                                    <option value='7'>7</option>
+                                    <option value='8'>8</option>
+                                    <option value='9'>9</option>
+                                    <option value='10'>10</option>
+                                    <option value='11'>11</option>
+                                    <option value='12'>12</option>
+                                    <option value='13'>13</option>
+                                    <option value='14'>14</option>
+                                    <option value='15'>15</option>
+                                    <option value='16'>16</option>
+                                    <option value='17'>17</option>
+                                    <option value='18'>18</option>
+                                    <option value='19'>19</option>
+                                    <option value='20'>20</option>
+                            </select>
+                    </div>
+                </div>
+            </section>
 
-                <div class="form-group col-sm-12 text-right">
-                    <br>
+                <div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>
+                    <button class='btn btn-primary' type='button' id='btn_añadir_modelo' style="display:none;">
+                        <i class='fa fa-plus'></i>
+                    </button>
+                </div>
+
+            <div class="form-group col-sm-12">
+                <br>
+                <span class="pull-right">
                     <button class="btn btn-danger" type="submit" id="btn_save_mod" style="display: none;">
                         <i class="fa fa-save"></i> Guardar Modelos
                     </button>
-                </div>
-            </form>
-        </div>
+                </span>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
@@ -287,17 +324,28 @@
         var id_marca = $("#marca").val();
         var id_coleccion = $("#coleccion").val();
         var ruta = '../buscarMarcaColeccion/'+id_coleccion+'/'+id_marca+'';
-        $.get(ruta, function(res){
 
-            $(".ruedas").val(res.rueda);
-            $("#ruedas").val(res.rueda);
-            $("#marca_id_2").val(res.marca_id);
+        if (id_marca == null) {
+            $.alert({
+                title: 'Alerta!',
+                content: "La marca esta vacia",
+                icon: 'fa fa-warning',
+                theme: 'modern',
+                type: 'red'
+            });
+        }else{
+            $.get(ruta, function(res){
 
-            $("#btn_añadir_modelo").fadeIn(400, "linear");
-            $("#sm").fadeIn(400, "linear");
-            $("#btn_save_mod").fadeIn(400, "linear");
+                $(".ruedas").val(res.rueda);
+                $("#ruedas").val(res.rueda);
+                $("#marca_id_2").val(res.marca_id);
 
-        });
+                $("#btn_añadir_modelo").fadeIn(400, "linear");
+                $("#sm").fadeIn(400, "linear");
+                $("#btn_save_mod").fadeIn(400, "linear");
+
+            });
+        }
 
         $("#rm").fadeOut(400);
     });
@@ -317,11 +365,11 @@
             $("#sm").append(
                     "<div class='div_total"+contador+"'>"+
                     "<div class='form-group col-sm-3'>"+
-                        "<label class='control-label' for='name'>Nombre modelo: *</label>"+
-                            "<input type='text' name='name[]' class='form-control nombre_modelo2' id='nombre_modelo_"+contador+"' required=''>"+
+                        "<label class='control-label' for='name'>Nombre modelo *</label>"+
+                        "<input type='text' name='name[]' class='form-control nombre_modelo2' id='nombre_modelo_"+contador+"' required=''>"+
                     "</div>"+
                     "<div class='form-group col-sm-2'>"+
-                        "<label class='control-label'>Cantidad Monturas: *</label>"+
+                        "<label class='control-label'>Monturas *</label>"+
                             "<select name='montura[]' class='form-control' required=''>"+
                                 "<option value='1'>1</option>"+
                                 "<option value='2'>2</option>"+
@@ -337,9 +385,35 @@
                                 "<option value='12' selected>12</option>"+
                             "</select>"+
                     "</div>"+
-                    "<div class='form-group col-sm-5'>"+
+                    "<div class='form-group col-sm-3'>"+
                         "<label>Descripcion </label>"+
-                            "<textarea name='descripcion_modelo[]' class='form-control'></textarea>"+
+                        "<input type='text' name='descripcion_modelo[]' class='form-control'>"+
+                    "</div>"+
+                    "<div class='form-group col-sm-2'>"+
+                        "<label class='control-label'>Cajas </label>"+
+                            "<select name='caja[]' class='form-control'>"+
+                                "<option value='' selected></option>"+
+                                "<option value='1'>1</option>"+
+                                "<option value='2'>2</option>"+
+                                "<option value='3'>3</option>"+
+                                "<option value='4'>4</option>"+
+                                "<option value='5'>5</option>"+
+                                "<option value='6'>6</option>"+
+                                "<option value='7'>7</option>"+
+                                "<option value='8'>8</option>"+
+                                "<option value='9'>9</option>"+
+                                "<option value='10'>10</option>"+
+                                "<option value='11'>11</option>"+
+                                "<option value='12'>12</option>"+
+                                "<option value='13'>13</option>"+
+                                "<option value='14'>14</option>"+
+                                "<option value='15'>15</option>"+
+                                "<option value='16'>16</option>"+
+                                "<option value='17'>17</option>"+
+                                "<option value='18'>18</option>"+
+                                "<option value='19'>19</option>"+
+                                "<option value='20'>20</option>"+
+                            "</select>"+
                     "</div>"+
                     "<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>"+
                         "<button class='btn btn-danger' type='button' id='btn_delete_modelo"+contador+"'>"+
@@ -390,8 +464,7 @@
                 var token = $("#token").val();
                 var ruta = '{{ route('modelos.store') }}';
 
-                btn.text("Espere un momento...");
-                btn.addClass("disabled");
+                btn.text("Espere un momento...").addClass("disabled");
 
                 var form = $(this);
 
@@ -403,8 +476,7 @@
                     data: form.serialize(),
                 })
                 .done(function(data) {
-                    btn.text("Guardado! espere....");
-                    btn.removeClass("disabled");
+                    btn.text("Guardado! espere....").removeClass("disabled");
                     location.reload(400);
                 })
                 .fail(function(data) {
