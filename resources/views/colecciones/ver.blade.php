@@ -67,7 +67,7 @@
 									@if($m->precio_almacen)
 										<i class="fa fa-arrow-right"></i>
 										<span>
-											{{ $m->precio_almacen.' Sl / '.$m->precio_venta_establecido.' Sl' }} 
+											{{ 'S/'.$m->precio_almacen.' | S/'.$m->precio_venta_establecido }} 
 										</span>
 										<br>
 									@else

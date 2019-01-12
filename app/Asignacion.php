@@ -27,6 +27,15 @@ class Asignacion extends Model
         return response()->json($marcas);
     }
 
+    public static function precioColeccionMarca($marca, $coleccion){
+        $precios = ColeccionMarca::where([
+            ["coleccion_id", "=", $coleccion],
+            ["marca_id", "=", $marca],
+        ])->first(["precio_almacen", "precio_venta_establecido"]);
+
+        return $precios;                           
+    }
+
     // pintar la tabla y validar sus opciones
     public static function modelosAll($coleccion, $marca){
     	$modelos = Modelo::where("coleccion_id", $coleccion)
@@ -35,12 +44,21 @@ class Asignacion extends Model
                           ->get()->groupBy("name");
         $data = array();
         $model = array();
+        $precio = array();
 
         if ($modelos->count() > 0) {
 
         	foreach ($modelos as $m) {
 
         		foreach ($m as $mod) {
+
+                    $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
+
+                    if ($precios->precio_almacen && $precios->precio_venta_establecido) {
+                        $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
+                    }else{
+                        $precios = "<b>N/A</b><br>";
+                    }
 
         			$name = $mod->name;
         			$montura = $mod->montura;
@@ -53,11 +71,9 @@ class Asignacion extends Model
         			}
 
                     $data [] = "<tr>
-                            <input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'>
-                            <input type='hidden' value='".$name."' id='name_".$id."' name='name[]'>
-                            <td>".$name.' - ['.$id.']'."</td>
+                            <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
+                            <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
                             <td>".$montura."</td>
-                            <td>".$precio_montura."</td>
                             <td>
                                 <select class='form-control' name='monturas[]' id='monturas_".$id."'>
                                 <option value=''>...</option>
@@ -67,16 +83,19 @@ class Asignacion extends Model
                         </tr>"; 
         		}
 
-                $model [] = $name;
+                $model [] = $name."<br>";
+                $precio [] = $precios;
             }
         }else{
-            $data [] = "<tr><td colspan='4'>No posee modelos asociados</td></tr>";
+            $data [] = "";
             $model [] = "";
+            $precio [] = "";
         }                  
 
         return response()->json([
             "data" => $data, 
-            "model" => str_replace(",", " | ", join(",", $model)) 
+            "model" => str_replace(",", "  ", join(",", $model)), 
+            "precio" => str_replace(",", "  ", join(",", $precio)), 
         ]);
     }
 

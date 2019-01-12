@@ -87,12 +87,12 @@
 
 								<div class='form-group col-sm-2'>
 									<label>Precio de almacen</label>
-									<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen[]' class='form-control pa' required=''>
+									<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen[]' class='form-control pa' required='' id="pa_0">
 								</div>
 
 								<div class='form-group col-sm-2'>
 									<label>Precio de venta establecido</label>
-									<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido[]' class='form-control pve' required=''>
+									<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido[]' class='form-control pve' required='' id="pve_0">
 								</div>
 							</div>
 
@@ -147,7 +147,10 @@
 
 						<div class="form-group col-sm-4">
 							<label for="">Seleccione marca</label>
-							<select name="mar_mod" class="form-control" required="" id="col_mar">
+							<a class="btn-link" id="link_mas_marcas" data-toggle="tooltip" data-placement="top" title="Ir al panel para añadir marcas">
+				                <span class="text-primary"><i class="fa fa-plus"></i> Añadir mas marcas</span>
+				            </a>
+				            <select name="mar_mod" class="form-control" required="" id="col_mar">
 							</select>
 						</div>
 

@@ -34,6 +34,30 @@
 		  	});
 		}
 
+		// // cargar todas las marcas
+	 //    function cargarMarcasDesdeColeccion(){
+	 //        $("#col_mar").empty();
+	 //        var id_coleccion = $("#id_col").val();
+	 //        var ruta = '../buscarMC/'+id_coleccion+'';
+	 //        $.get(ruta, function(res){
+	 //            $.each(res, function(index, val) {
+	 //                $("#col_mar").append("<option value='"+val.id+"'>"+val.name+" | ("+val.material.name+")</option>");
+	 //            });
+	 //        });
+	 //    }
+
+	 //    // cargar todas las marcas en el modal 
+		// function cargarMarcasEnModal(){
+		// 	$(".marca_id").empty();
+	 //        var id_coleccion = $("#id_col").val();
+	 //        var ruta = '../marDisponible/'+id_coleccion+'';
+		//   	$.get(ruta, function(res){
+		//   		$.each(res, function(index, val) {
+		//     		$(".marca_id").append("<option value='"+val.id+"'>"+val.name+" | ("+val.material.name+")</option>");
+		//     	});
+		//   	});
+		// }
+
 		// cargar las marcas de dicha coleccion
 		function cargarColMar(){
 			$("#col_mar").empty();
@@ -405,15 +429,12 @@
 		$("#form_mc").on("submit", function(e) {
 			e.preventDefault();
 			var err = 0;
+			var err_2 = 0;
 
 			$.each($('.s_m'),function(index, val){
 				name = $(val).val();
 				id_name = $(val).attr('id');
-				campo = this.id;
-				//console.log('val1 :'+$(val).valal())
-				//console.log(id1)
 				$.each($('.s_m'),function(index2, val2){
-					//console.log('v2 :'+$(v2).val())
 					 if(name == $(val2).val() && id_name !=  $(val2).attr('id')){
 						 err++
 						 $(this).css('border','red 2px solid');
@@ -447,22 +468,43 @@
 					data: form,
 				})
 				.done(function(data) {
-					$("#form_mc").remove();
-					cargarColMar();
-					$("#section_modelos").fadeIn(400, "linear");
-					$("#btn_new_col").fadeIn(400, "linear");
-				    $.alert({
-				        title: 'Listo!',
-				        content: "Marcas añadidas a la coleccion",
-				        icon: 'fa fa-check',
-				        theme: 'modern',
-				        type: 'green',
-				        boxWidth: '30%',
-	    				useBootstrap: true,
-				    });
+					console.log(data)
+					if (data == 1) {
+						 $.alert({
+					        title: 'Error!',
+					        content: "El precio de venta establecido no puede ser menor al precio de costo de almacen, VERIFIQUE",
+					        icon: 'fa fa-warning',
+					        theme: 'modern',
+					        type: 'red',
+					        boxWidth: '30%',
+		    				useBootstrap: true,
+					    });
+						btn.text("Guardar marcas").removeClass("disabled");
+					}else{
+					    $.alert({
+					        title: 'Listo!',
+					        content: "Marcas añadidas a la coleccion",
+					        icon: 'fa fa-check',
+					        theme: 'modern',
+					        type: 'green',
+					        boxWidth: '30%',
+		    				useBootstrap: true,
+					    });
+
+					    $("#form_mc").remove();
+						cargarColMar();
+						$("#section_modelos").fadeIn(400, "linear");
+						$("#btn_new_col").fadeIn(400, "linear");
+
+						// añadir href al link de añadir mas marcas  
+						link = '{{ route("colecciones.show","id_col2") }}'; 
+		    			link = link.replace('id_col2', $("#id_col2").val());
+						$("#link_mas_marcas").attr('href', link);
+					}
 
 				})
 				.fail(function(data) {
+					console.log(data)
 					btn.text("Guardar marcas").removeClass("disabled");
 				    msj = data.responseText;
 					msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");

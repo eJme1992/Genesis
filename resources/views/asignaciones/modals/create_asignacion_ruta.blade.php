@@ -37,7 +37,7 @@
 							<button type="button" data-toggle="modal" data-target="#modal_create" aria-expanded="false" aria-controls="modal_create" class="btn btn-link btn-sm">
 								<i class="fa fa-plus" aria-hidden="true"></i> Nueva direccion
 							</button>
-							<select class="form-control" name="direccion_id" required="" id="dir_asig">
+							<select class="form-control dir_asig" name="direccion_id" required="" id="dir_asig">
 								@foreach($direcciones as $m)
 								@php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
 								<option value="{{ $m->id }}">

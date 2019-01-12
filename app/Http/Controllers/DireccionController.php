@@ -38,7 +38,7 @@ class DireccionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'detalle' => 'unique:direcciones|string',
+            'detalle' => 'unique:direcciones',
             'departamento_id' => 'required',
             'provincia_id' => 'required',
             'tipo' => 'required|in:00,01',

@@ -11,7 +11,7 @@
 							<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 							<div class="form-group col-sm-12">
 								<label for="">Nombre de la marca</label>
-								<select name="marca_id" id="marca_id" class="form-control">
+								<select name="marca_id" id="marca_id" class="form-control marca_id">
 									@foreach($m as $mar)
 									<option value="{{ $mar->id }}">{{ $mar->name }} | ({{ $mar->material->name }})</option>
 									@endforeach
@@ -30,7 +30,7 @@
 				<div class="modal-footer">
 					<div class="form-group text-right">
 						<input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
-						<button type="button" class="btn btn-primary btn_cm">
+						<button type="button" class="btn btn-primary btn_acm">
 							<i class="fa fa-save"></i> Guardar
 						</button>
 					</div>

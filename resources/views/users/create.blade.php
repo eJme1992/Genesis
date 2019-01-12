@@ -168,8 +168,9 @@
 		$.get("../prov/"+event.target.value+"",function(response, dep){
 			$("#prov").empty();
 			$("#dist").empty();
+			$("#prov").append("<option value=''></option>");
 			for (i = 0; i<response.length; i++) {
-					$("#prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
+				$("#prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
 			}
 		});
 	});
@@ -179,7 +180,7 @@
 		$.get("../dist/"+event.target.value+"",function(response, dep){
 			$("#dist").empty();
 			for (i = 0; i<response.length; i++) {
-					$("#dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
+				$("#dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
 			}
 		});
 	});

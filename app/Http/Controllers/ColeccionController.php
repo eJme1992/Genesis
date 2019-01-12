@@ -81,18 +81,28 @@ class ColeccionController extends Controller
             'precio_venta_establecido' => 'required|between:1,99.99|min:1|max:999999999999',
         ]);
 
+        $contador = 0;
         $coleccion = Coleccion::findOrFail($request->id_coleccion);
 
         for ($i = 0; $i < count($request->marca_id); $i++) {
-
+              if ($request->precio_venta_establecido[$i] < $request->precio_almacen[$i]) {
+                $contador++;
+              }
+        }
+        // dd($contador);
+        if ($contador > 0) {
+            $registro = 1;
+            return response()->json($registro);
+        }else{
+          for ($i = 0; $i < count($request->marca_id); $i++) {
               $registro = ColeccionMarca::create([
-                  'marca_id' => $request->marca_id[$i],
-                  'coleccion_id' => $request->id_coleccion,
-                  'rueda' => $request->rueda[$i],
-                  'precio_almacen' => $request->precio_almacen[$i],
-                  'precio_venta_establecido' => $request->precio_venta_establecido[$i],
+                    'marca_id' => $request->marca_id[$i],
+                    'coleccion_id' => $request->id_coleccion,
+                    'rueda' => $request->rueda[$i],
+                    'precio_almacen' => $request->precio_almacen[$i],
+                    'precio_venta_establecido' => $request->precio_venta_establecido[$i],
               ]);
-
+          }
         }
 
         $bu = new BitacoraUser;

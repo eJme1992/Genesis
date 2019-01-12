@@ -24,26 +24,50 @@ class Direccion extends Model
     }
 
     public static function saveDir($request){
+        
         $dir = new Direccion($request->all());
         $dir->fecha = date("d-m-Y");
         $dir->detalle = trim(strtoupper($request->detalle));
         if ($request->tipo == 00){ $dir->tipo = "ORIGEN"; } else{ $dir->tipo = "DESTINO"; };
+        
+        $busqueda = Direccion::where([
+            ['departamento_id', '=', $request->departamento_id], 
+            ['provincia_id', '=', $request->provincia_id], 
+            ['distrito_id', '=', $request->distrito_id], 
+            ['tipo', '=', $dir->tipo],
+            ['detalle', '=', $dir->detalle],
+        ])->count();
 
-        if ($dir->save()) {
+        // validadmos si existen registros
+        if ($busqueda > 0) {
             if($request->ajax()) {
+                $dir = 1;
                 return response()->json($dir);
             }else{
                 return redirect("direcciones")->with([
-                    'flash_message' => 'Direccion agregada correctamente.',
-                    'flash_class' => 'alert-success'
+                    'flash_message' => 'Direccion ya existente.',
+                    'flash_class' => 'alert-danger'
                 ]);
             }
         }else{
-            return redirect("direcciones")->with([
-                'flash_message' => 'Ha ocurrido un error.',
-                'flash_class' => 'alert-danger',
-                'flash_important' => true
-            ]);
+             
+            if ($dir->save()) {
+                if($request->ajax()) {
+                    return response()->json($dir);
+                }else{
+                    return redirect("direcciones")->with([
+                        'flash_message' => 'Direccion agregada correctamente.',
+                        'flash_class' => 'alert-success'
+                    ]);
+                }
+            }else{
+                return redirect("direcciones")->with([
+                    'flash_message' => 'Ha ocurrido un error.',
+                    'flash_class' => 'alert-danger',
+                    'flash_important' => true
+                ]);
+            }
+            
         }
 
     }

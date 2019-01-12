@@ -33,10 +33,11 @@
                     <i class="fa fa-arrow-right"></i>
                     <span>
                         <strong data-toggle="tooltip" data-placement="top" title="Precio de almacen">[PA]</strong> 
-                        {{ $marcas->precio_almacen }} SL
+                        S/ {{ $marcas->precio_almacen }} 
                     </span> | 
                     <span>
-                        <strong data-toggle="tooltip" data-placement="top" title="Precio de venta establecido">[PVE]</strong> {{ $marcas->precio_venta_establecido }} SL
+                        <strong data-toggle="tooltip" data-placement="top" title="Precio de venta establecido">[PVE]</strong> 
+                        S/ {{ $marcas->precio_venta_establecido }}
                     </span>
                 </div>
                 @endif
@@ -584,9 +585,9 @@
         });
 
         // añadir marcas
-    		$(".btn_cm").click(function(e) {
+    		$(".btn_acm").click(function(e) {
     			e.preventDefault();
-    			var btn = $(".btn_cm");
+    			var btn = $(".btn_acm");
     			var token = $("#token").val();
     			var ruta = '{{ route("saveMC") }}';
 

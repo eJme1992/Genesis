@@ -134,7 +134,6 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('proveedores.index') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
-                <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
                 <li><a href="{{ route('marcas.index') }}"><i class="fa fa-circle-o"></i>Marcas</a></li>
                 <li><a href="{{ route('colecciones.index') }}"><i class="fa fa-circle-o"></i>Colecciones</a></li>
                 <li><a href="{{ route('productos.index') }}"><i class="fa fa-circle-o"></i>Consultas y Modelos</a></li>
@@ -173,6 +172,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ver Ventas</a></li>
+                <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
               </ul>
             </li>
 

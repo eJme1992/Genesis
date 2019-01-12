@@ -53,26 +53,28 @@
 								<button class="btn btn-primary btn_sm" type="button" id="btn_cargar_modelos">
 									 Cargar modelos
 								</button>
-							<hr>
+								<hr>
 							</div>
-							<section id="mostrar_modelos" style="display: none;">
-								<div class="form-group col-sm-8">
-									<div class="list-group-item text-capitalize">
-										<strong id="name_modelos"></strong>
-									</div>
-									<table class="table table-bordered table-striped">
-										<thead class="label-danger">
-											<tr>
-												<td>Nombre - [Codigo]</td>
-												<td>Monturas disponibles</td>
-												<td>Precio Monturas</td>
-												<td>Asignacion (monturas)</td>
-											</tr>
-										</thead>
-										<tbody id="data_modelos"></tbody>
-									</table>
-								</div>
-							</section>
+
+							<div class="col-sm-12">
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td style="width: 80px"><span id="name_modelos"></span></td>
+										<td><span id="precio_modelos"></span></td>
+									</tr>
+								</table>
+								<table class="table data-table table-bordered table-striped">
+									<thead class="label-danger">
+										<tr>
+											<th>[Codigo]</th>
+											<th>Nombre</th>
+											<th>Monturas disponibles</th>
+											<th>Asignacion (monturas)</th>
+										</tr>
+									</thead>
+									<tbody id="data_modelos"></tbody>
+								</table>
+							</div>
 
 							@if (count($errors) > 0)
 							<div class="col-sm-12">	
@@ -88,9 +90,10 @@
 					        @endif
 
 							<div class="form-group text-right col-sm-12">
+								<hr><br>
 					        	<em class="pull-left"><i class="fa fa-info-circle"></i> Seleccione solo las monturas de los modelos que desea asignar</em>
 					        	<a class="btn btn-flat btn-default" href="{{route('asignaciones.index')}}"><i class="fa fa-reply"></i> Atras</a>
-								<button class="btn btn-success" type="submit">
+								<button class="btn btn-success" type="submit" onclick="return confirm('Desea Asignar estos datos al usuario?');">
 									<i class="fa fa-save"></i> Guardar
 								</button>
 							</div>
@@ -133,13 +136,24 @@
 		precio_montura_modelo = "";
 
 		if ($("#coleccion").val() && $("#marcas").val()) {
+			$("#data_modelos").empty();
+			$("#name_modelos").empty();
+
 			$.get("../modelosAll/"+$("#coleccion").val()+"/"+$("#marcas").val()+"",function(response, dep){
-					// alert(response.model);
-					$("#data_modelos").empty();
-					$("#name_modelos").empty();
-					$("#data_modelos").append(response.data);
-					$("#name_modelos").append(response.model);
-					$("#mostrar_modelos").fadeIn(400);
+					// alert(response.data);
+
+					$('.data-table').DataTable().destroy();
+				    $("#data_modelos").html(response.data);
+				    $("#name_modelos").html(response.model);
+				    $("#precio_modelos").html(response.precio);
+				    $('.data-table').DataTable({
+				    	responsive: true,
+					    language: {
+					      	url:'{{asset("plugins/datatables/spanish.json")}}'
+					    }
+				    });
+
+					// $("#mostrar_modelos").fadeIn(400);
 			});
 		}else{
 			$.alert({

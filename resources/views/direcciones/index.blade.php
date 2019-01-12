@@ -124,9 +124,10 @@
 
 	// busqueda de provincias
 	$('.dep').change(function(event) {
+		$(".prov").empty();
+		$(".dist").empty();
+		$(".prov").append("<option value=''>...</option>");
 		$.get("prov/"+event.target.value+"",function(response, dep){
-			$(".prov").empty();
-			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
 					$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
 			}
@@ -135,8 +136,8 @@
 
 	// busqueda de distritos
 	$('.prov').change(function(event) {
+		$(".dist").empty();
 		$.get("dist/"+event.target.value+"",function(response, dep){
-			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
 					$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
 			}

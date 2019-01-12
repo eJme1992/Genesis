@@ -116,11 +116,12 @@
 	  	var ruta = '{{ route("allDireccion") }}';
 
 	  	$.get(ruta, function(response, dir){
-	  		$("#dir_asig").empty();
+	  		$(".dir_asig").empty();
 	  		for (i = 0; i<response.length; i++) {
 	  			var dist = [];
 	  			if (response[i].distrito != null) {dist = response[i].distrito.distrito}else{dist = "<cite>sin distrito</cite>";}
-				$("#dir_asig").append("<option value='"+response[i].id+"'> "+
+
+				$(".dir_asig").append("<option value='"+response[i].id+"'> "+
 									response[i].departamento.departamento+' | '+
 									response[i].provincia.provincia+' | '+
 									dist+' | '+
@@ -147,9 +148,9 @@
 
 	// busqueda de provincias
 	$('.dep').change(function(event) {
+		$(".prov").empty();
+		$(".dist").empty();
 		$.get("prov/"+event.target.value+"",function(response, dep){
-			$(".prov").empty();
-			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
 					$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
 			}
@@ -158,8 +159,8 @@
 
 	// busqueda de distritos
 	$('.prov').change(function(event) {
+		$(".dist").empty();
 		$.get("dist/"+event.target.value+"",function(response, dep){
-			$(".dist").empty();
 			for (i = 0; i<response.length; i++) {
 					$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
 			}
@@ -184,15 +185,27 @@
 		})
 		.done(function(data) {
 			allDir();
-			$.alert({
-		        title: 'Listo!',
-		        content: "Agregado con exito",
-		        icon: 'fa fa-check',
-		        theme: 'modern',
-		        type: 'green'
-		    });
-			$("#modal_create").modal('toggle');
-			btn.text("Guardar").removeAttr("disabled", 'disabled');
+			if (data == 1) {
+				$.alert({
+			        title: 'Error!',
+			        content: "Direccion ya existente, verifique",
+			        icon: 'fa fa-warning',
+			        theme: 'modern',
+			        type: 'red'
+			    });
+			    // $("#modal_create").modal('toggle');
+				btn.text("Guardar").removeAttr("disabled", 'disabled');
+			}else{
+				$.alert({
+			        title: 'Listo!',
+			        content: "Agregado con exito",
+			        icon: 'fa fa-check',
+			        theme: 'modern',
+			        type: 'green'
+			    });
+				$("#modal_create").modal('toggle');
+				btn.text("Guardar").removeAttr("disabled", 'disabled');
+			}
 		})
 		.fail(function(data) {
 			btn.text("Guardar").removeAttr("disabled", 'disabled');
