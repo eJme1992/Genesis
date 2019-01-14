@@ -15,11 +15,11 @@ class BitacoraUser extends Model
     }
 
     public static function saveBitacora($mov){
-    	$bu = new BitacoraUser;
-        $bu->fecha = date("d/m/Y");
-        $bu->hora = date("h:m a");
+    	$bu             = new BitacoraUser;
+        $bu->fecha      = date("d/m/Y");
+        $bu->hora       = date("h:i a");
         $bu->movimiento = $mov;
-        $bu->user_id = \Auth::user()->id;
+        $bu->user_id    = \Auth::user()->id;
         return $bu->save();
     }
 }

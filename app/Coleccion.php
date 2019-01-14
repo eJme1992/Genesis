@@ -37,70 +37,74 @@ class Coleccion extends Model
       return $this->hasMany("App\Modelo");
     }
 
-    // public static function cargarSectionAñadirMarca($contador){
+    // añadir marcas a la coleccion
+    public static function colStore($request)
+    {
+        $contador = 0;
+        $coleccion = Coleccion::findOrFail($request->id_coleccion);
 
-    //     $data = "<div class='div_total_marcas".$contador."'>
-    //                     <div class='form-group col-sm-4'>
-    //                         <label>Marcas</label>
-    //                         <select name='marca_id[]' class='form-control s_m' required='' id='s_m_".$contador."'>
-    //                             <option value=''>Seleccione</option>
-    //                             ".Coleccion::cargarMarcas()."
-    //                         </select>
-    //                     </div>
-    //                     <div class='form-group col-sm-2'>
-    //                         <label>Ruedas</label>
-    //                         <select name='rueda[]' class='form-control ru' required=''>
-    //                             <option value='1'>1</option>
-    //                             <option value='2'>2</option>
-    //                             <option value='3'>3</option>
-    //                             <option value='4'>4</option>
-    //                             <option value='5'>5</option>
-    //                             <option value='6'>6</option>
-    //                             <option value='7'>7</option>
-    //                             <option value='8'>8</option>
-    //                             <option value='9'>9</option>
-    //                             <option value='10'>10</option>
-    //                             <option value='11'>11</option>
-    //                             <option value='12'>12</option>
-    //                             <option value='13'>13</option>
-    //                             <option value='14'>14</option>
-    //                             <option value='15'>15</option>
-    //                             <option value='16'>16</option>
-    //                             <option value='17'>17</option>
-    //                             <option value='18'>18</option>
-    //                             <option value='19'>19</option>
-    //                             <option value='20'>20</option>
-    //                         </select>
-    //                     </div>
-    //                     <div class='form-group col-sm-2'>
-    //                         <label>Precio de almacen</label>
-    //                         <input type='text' name='precio_almacen[]' class='form-control pa nf' required=''>
-    //                     </div>
-    //                     <div class='form-group col-sm-2'>
-    //                         <label>Precio de venta establecido</label>
-    //                         <input type='text' name='precio_venta_establecido[]' class='form-control pve nf' required=''>
-    //                     </div>   
-    //                     <div class='form-group col-sm-1 text-left' style='padding: 0.4em;'>
-    //                         <br>
-    //                         <button class='btn btn-danger' type='button' id='btn_delete_marca".$contador."'>
-    //                             <i class='fa fa-remove'></i>
-    //                         </button>
-    //                     </div>
-    //                 </div>";
-
-    //      return $data;           
-    // }
-
-    public static function cargarMarcas(){
-
-        $data = Marca::all();
-        $marcas = array();
-
-        foreach ($data as $d) {
-            $marcas [] = "<option value=".$d->id.">".$d->name.' | '.$d->material->name."</option>";
+        for ($i = 0; $i < count($request->marca_id); $i++) {
+              if ($request->precio_venta_establecido[$i] < $request->precio_almacen[$i]) {
+                $contador++;
+              }
         }
 
-        return join(",",$marcas);
+        if ($contador > 0) {
+            $registro = 1;
+            return response()->json($registro);
+        }else{
+          for ($i = 0; $i < count($request->marca_id); $i++) {
+              $registro = ColeccionMarca::create([
+                    'marca_id'                 => $request->marca_id[$i],
+                    'coleccion_id'             => $request->id_coleccion,
+                    'rueda'                    => $request->rueda[$i],
+                    'precio_almacen'           => $request->precio_almacen[$i],
+                    'precio_venta_establecido' => $request->precio_venta_establecido[$i],
+              ]);
+          }
+        }
+
+        BitacoraUser::saveBitacora("Marcas añadidas a la coleccion (".$coleccion->name.")");
+        return response()->json($registro);
+    }
+
+    // cargar marcas
+    // public static function cargarMarcas(){
+
+    //     $data = Marca::all();
+    //     $marcas = array();
+
+    //     foreach ($data as $d) {
+    //         $marcas [] = "<option value=".$d->id.">".$d->name.' | '.$d->material->name."</option>";
+    //     }
+
+    //     return join(",",$marcas);
+    // }
+
+    // guardar coleccion
+    public static function saveCol($request){
+
+        $coleccion = new Coleccion($request->all());
+
+        if($coleccion->save()){
+            BitacoraUser::saveBitacora("Creacion de coleccion (".$request->name.")");
+            return response()->json($coleccion);
+        }else{
+            return response()->json($coleccion);
+        }
+    }
+
+    // establecer codigo unico para la coleccion
+    public static function establecerCodigo(){
+
+        if (Coleccion::count() > 0) {
+            $suma = Coleccion::orderBy("id", "DESC")->value("codigo") + 1;
+            $col = "00".$suma;
+        }else{
+            $col = "001";
+        }
+
+        return $col;
     }
 
 }

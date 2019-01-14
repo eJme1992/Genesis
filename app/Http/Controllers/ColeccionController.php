@@ -19,28 +19,17 @@ class ColeccionController extends Controller
      */
     public function index()
     {
-        // $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        // $coleccion->fecha_coleccion = $meses[date('n')-1].' '.date("Y");
-
-        $colecciones = Coleccion::count();
-
-        if ($colecciones > 0) {
-            $suma = Coleccion::orderBy("id", "DESC")->value("codigo") + 1;
-            $col = "00".$suma;
-        }else{
-            $col = "001";
-        }
-
         return view("colecciones.index",[
             "marcas" => Marca::all(),
             "colecciones" => Coleccion::all(),
             "proveedores" => Proveedor::all(),
             "materiales" => Material::all(),
-            "col" => $col
+            "col" => Coleccion::establecerCodigo(),
         ]);
     }
 
-    public function ver(){
+    public function ver()
+    {
         return view("colecciones.ver",[
             "marcas" => Marca::all(),
             "colecciones" => Coleccion::all(),
@@ -49,113 +38,42 @@ class ColeccionController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    // public function cargarSectionAñadirMarca($contador)
-    // {
-    //     $data = Coleccion::cargarSectionAñadirMarca($contador);
-    //     return response()->json($data);
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-
         $this->validate($request, [
-            'marca_id' => 'required',
-            'rueda' => 'required',
-            'precio_almacen' => 'required|between:1,99.99|min:1|max:999999999999',
+            'marca_id'                 => 'required',
+            'rueda'                    => 'required',
+            'precio_almacen'           => 'required|between:1,99.99|min:1|max:999999999999',
             'precio_venta_establecido' => 'required|between:1,99.99|min:1|max:999999999999',
         ]);
 
-        $contador = 0;
-        $coleccion = Coleccion::findOrFail($request->id_coleccion);
-
-        for ($i = 0; $i < count($request->marca_id); $i++) {
-              if ($request->precio_venta_establecido[$i] < $request->precio_almacen[$i]) {
-                $contador++;
-              }
-        }
-        // dd($contador);
-        if ($contador > 0) {
-            $registro = 1;
-            return response()->json($registro);
-        }else{
-          for ($i = 0; $i < count($request->marca_id); $i++) {
-              $registro = ColeccionMarca::create([
-                    'marca_id' => $request->marca_id[$i],
-                    'coleccion_id' => $request->id_coleccion,
-                    'rueda' => $request->rueda[$i],
-                    'precio_almacen' => $request->precio_almacen[$i],
-                    'precio_venta_establecido' => $request->precio_venta_establecido[$i],
-              ]);
-          }
-        }
-
-        $bu = new BitacoraUser;
-        $bu->fecha = date("d/m/Y");
-        $bu->hora = date("h:m a");
-        $bu->movimiento = "Marcas añadidas a la coleccion (".$coleccion->name.")";
-        $bu->user_id = \Auth::user()->id;
-        $bu->save();
-
-        return response()->json($registro);
+        return Coleccion::colStore($request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $coleccion = Coleccion::findOrFail($id);
-        $m = Marca::whereNotIn("id", ColeccionMarca::where("coleccion_id", $id)->get(["marca_id"]))->get();
         return view("colecciones.show",[
-          'coleccion' => $coleccion,
-          'm' => $m
+          'coleccion' => Coleccion::findOrFail($id),
+          'm' => Marca::whereNotIn("id", ColeccionMarca::where("coleccion_id", $id)->get(["marca_id"]))->get(),
         ]);
     }
 
     public function marDisponible($id)
     {
-        $coleccion = Coleccion::findOrFail($id);
         $m = Marca::with("material")->whereNotIn("id", ColeccionMarca::where("coleccion_id", $id)->get(["marca_id"]))->get();
         return response()->json($m);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $col = Coleccion::findOrFail($request->id);
@@ -163,31 +81,20 @@ class ColeccionController extends Controller
         $col->marca_id = $request->marca_id;
 
         if ($col->save()) {
-            $bu = new BitacoraUser;
-            $bu->fecha = date("d/m/Y");
-            $bu->hora = date("h:m a");
-            $bu->movimiento = "Actualizacion de coleccion";
-            $bu->user_id = \Auth::user()->id;
-            $bu->save();
+            BitacoraUser::saveBitacora("Actualizacion de coleccion");
             return response()->json($col);
         }else{
             return response()->json(["msj" => "no se actualizo"]);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $mar = Coleccion::destroy($id);
 
         return redirect('marcas')->with([
-                'flash_class'   => 'alert-success',
-                'flash_message' => 'coleccion y todos sus modelos eliminadas con exito.'
+            'flash_class'   => 'alert-success',
+            'flash_message' => 'coleccion y todos sus modelos eliminadas con exito.'
         ]);
     }
 
@@ -216,20 +123,36 @@ class ColeccionController extends Controller
             'fecha_coleccion' => 'required'
         ]);
 
-        $coleccion = new Coleccion;
-        $coleccion->fill($request->all());
+        return Coleccion::saveCol($request);
+    }
 
-        $bu = new BitacoraUser;
-        $bu->fecha = date("d/m/Y");
-        $bu->hora = date("h:m a");
-        $bu->movimiento = "Creacion de coleccion (".$request->name.")";
-        $bu->user_id = \Auth::user()->id;
-        $bu->save();
+    public function updatePrecios(Request $request){
 
-        if($coleccion->save()){
-            return response()->json($coleccion);
+        $this->validate($request, [
+            'precio_almacen'           => 'required|between:1,99.99|min:1|max:999999999999',
+            'precio_venta_establecido' => 'required|between:1,99.99|min:1|max:999999999999',
+        ]);
+        $id = ColeccionMarca::where([
+          ["coleccion_id", "=", $request->coleccion],
+          ["marca_id", "=", $request->marca],
+        ])->value("id"); 
+
+        // dd($request->all());
+        $cm = ColeccionMarca::findOrFail($id);
+        $cm->precio_almacen = $request->precio_almacen;
+        $cm->precio_venta_establecido = $request->precio_venta_establecido;
+        
+        if ($request->precio_venta_establecido < $request->precio_almacen) {
+              return redirect('ver_colecciones')->with([
+                'flash_class'   => 'alert-danger',
+                'flash_message' => 'El precio de venta no puede ser menor al costo de almacen'
+              ]);
         }else{
-            return response()->json($coleccion);
+              $cm->save();
+              return redirect('ver_colecciones')->with([
+                'flash_class'   => 'alert-success',
+                'flash_message' => 'Precios añadidos con exito.'
+              ]);
         }
     }
 }

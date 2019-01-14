@@ -9,6 +9,11 @@
 @endsection
 @section('content')
 @include('partials.flash')
+<style type="text/css">
+	.icon_color:hover{
+		color: #35C96B;
+	}
+</style>
 <div class="row">
   	<div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
@@ -71,13 +76,19 @@
 										</span>
 										<br>
 									@else
-										<em class="text-warning">No asignado</em><br>
+										No asignado
+										<span data-toggle="tooltip" title="Añadir precios">
+											<a href="#precio" data-toggle="modal" data-target="#precio" class="btn-link btn-sm btn_precio" id="{{$d->id}}" value="{{$m->marca_id}}">
+												<i class="fa fa-plus-circle text-success icon_color"></i> añadir
+											</a>
+										</span>
+										<br>
 									@endif	
 								@endforeach
 							</td>
 							<td>
 								{{ $d->modelos($d->id)->count() }}
-								<span class="pull-right">
+								<span class="">
 									<a href="{{ route('colecciones.show',[$d->id]) }}" class="btn btn-default"
 										data-toggle="tooltip" data-placement="top" title="Añadir mas modelos">
 										<i class="fa fa-plus-circle"></i>
@@ -92,4 +103,13 @@
 		</div>
 	</div>
 </div>
+@include("colecciones.modals.precio")
+@endsection
+@section("script")
+<script>
+	$(".btn_precio").click(function(event) {
+		$("#col").val($(this).attr("id"));
+		$("#mar").val($(this).attr("value"));
+	});
+</script>
 @endsection

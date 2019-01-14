@@ -24,8 +24,8 @@ class UserController extends Controller
       $users = User::all();
     	$roles = Rol::all();
     	return view('users.index',[
-        'users'=>$users,
-        'roles'=>$roles
+        'users' =>  $users,
+        'roles' =>  $roles
       ]);
     }
 
@@ -38,7 +38,10 @@ class UserController extends Controller
     {
       $roles = Rol::all();
       $departamentos = Departamento::all();
-      return view("users.create",["roles" => $roles, "departamentos" => $departamentos]);
+      return view("users.create",[
+        "roles"         => $roles, 
+        "departamentos" => $departamentos
+      ]);
     }
 
     /**
@@ -50,21 +53,21 @@ class UserController extends Controller
     public function store(Request $request)
     {
       $this->validate($request, [
-        'name' => 'required',
-        'ape' => 'required',
-        'sexo' => 'required',
-        'documento' => 'required',
-        'identificacion' => 'required',
+        'name'            => 'required',
+        'ape'             => 'required',
+        'sexo'            => 'required',
+        'documento'       => 'required',
+        'identificacion'  => 'required',
         'departamento_id' => 'required',
-        'provincia_id' => 'required',
-        'distrito_id' => 'required',
-        'direccion_hab' => 'required',
-        'correo' => 'required',
-        'telefono_movil' => 'required',
-        'imagen' => 'required',
-        'cargo' => 'required',
-        'usuario' =>'required|unique:users',
-        'password' => 'required|min:6|max:12|confirmed'
+        'provincia_id'    => 'required',
+        'distrito_id'     => 'required',
+        'direccion_hab'   => 'required',
+        'correo'          => 'required',
+        'telefono_movil'  => 'required',
+        'imagen'          => 'required',
+        'cargo'           => 'required',
+        'usuario'         => 'required|unique:users',
+        'password'        => 'required|min:6|max:12|confirmed'
       ]);
 
       $user = new User;
@@ -149,11 +152,11 @@ class UserController extends Controller
       $provincias = Provincia::all();
       $distritos = Distrito::all();
       return view("users.edit", [
-        "user" => $user,
-        "roles" => $roles,
+        "user"          => $user,
+        "roles"         => $roles,
         "departamentos" => $departamentos,
-        "provincias" => $provincias,
-        "distritos" => $distritos
+        "provincias"    => $provincias,
+        "distritos"     => $distritos
       ]);
     }
 
@@ -169,20 +172,20 @@ class UserController extends Controller
       $user = User::findOrFail($id);
 
       $this->validate($request, [
-        'name' => 'required',
-        'ape' => 'required',
-        'sexo' => 'required',
-        'documento' => 'required',
-        'identificacion' => 'required',
+        'name'            => 'required',
+        'ape'             => 'required',
+        'sexo'            => 'required',
+        'documento'       => 'required',
+        'identificacion'  => 'required',
         'departamento_id' => 'required',
-        'provincia_id' => 'required',
-        'distrito_id' => 'required',
-        'direccion_hab' => 'required',
-        'correo' => 'required',
-        'telefono_movil' => 'required',
-        'cargo' => 'required',
-        'usuario' =>'required|unique:users,usuario,'.$user->id.',id',
-        'clave' => 'required|min:6|max:12'
+        'provincia_id'    => 'required',
+        'distrito_id'     => 'required',
+        'direccion_hab'   => 'required',
+        'correo'          => 'required',
+        'telefono_movil'  => 'required',
+        'cargo'           => 'required',
+        'usuario'         => 'required|unique:users,usuario,'.$user->id.',id',
+        'clave'           => 'required|min:6|max:12'
       ]);
 
       $user->fill($request->all());
@@ -216,12 +219,12 @@ class UserController extends Controller
         $bu->save();
         return redirect("users")->with([
           'flash_message' => 'Usuario actualizado correctamente.',
-          'flash_class' => 'alert-success'
+          'flash_class'   => 'alert-success'
           ]);
       }else{
         return redirect("users")->with([
-          'flash_message' => 'Ha ocurrido un error.',
-          'flash_class' => 'alert-danger',
+          'flash_message'   => 'Ha ocurrido un error.',
+          'flash_class'     => 'alert-danger',
           'flash_important' => true
           ]);
       }
@@ -267,9 +270,9 @@ class UserController extends Controller
     	$user = User::find(Auth::user()->id);
 
       $this->validate($request, [
-        'name' => 'required',
+        'name'     => 'required',
         'password' => 'required',
-        'usuario' =>'required|unique:users,usuario,'.$user->id.',id'
+        'usuario'  => 'required|unique:users,usuario,'.$user->id.',id'
       ]);
 
     	$user->fill($request->all());
@@ -291,12 +294,12 @@ class UserController extends Controller
         $bu->save();
         return redirect('perfil')->with([
           'flash_message' => 'Cambios guardados correctamente.',
-          'flash_class' => 'alert-success'
+          'flash_class'   => 'alert-success'
           ]);
     	}else{
         return redirect('perfil')->with([
-          'flash_message' => 'Ha ocurrido un error.',
-          'flash_class' => 'alert-danger',
+          'flash_message'   => 'Ha ocurrido un error.',
+          'flash_class'     => 'alert-danger',
           'flash_important' => true
         	]);
     	}
@@ -323,7 +326,7 @@ class UserController extends Controller
           $bu->save();
           return redirect('users')->with([
             'flash_message' => 'Status actualizado con exito!.',
-            'flash_class' => 'alert-success'
+            'flash_class'   => 'alert-success'
             ]);
       }
     }
