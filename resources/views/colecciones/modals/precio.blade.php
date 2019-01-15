@@ -1,4 +1,4 @@
-<form action="{{ route('colecciones.updatePrecios') }}" method="POST">
+<form method="POST" id="form_precios" action="{{ route('colecciones.savePrecios') }}">
 	{{ csrf_field() }}
 	<div class="modal fade" tabindex="-1" role="dialog" id="precio">
 		<div class="modal-dialog" role="document">
@@ -6,7 +6,7 @@
 				<div class="panel panel-success">
 					<buttton class="close" type="button" data-dismiss="modal">&times;</buttton>
 					<div class="panel-heading text-center">
-						<h3><i class="fa fa-plus"></i> Añadir precios</h3>
+						<h3><i class="fa fa-plus"></i> Precios </h3>
 					</div>
 					<div class="modal-body text-left">
 						<div class="panel-body">
@@ -14,11 +14,11 @@
 							<input type="hidden" name="marca" id="mar">
 							<div class="form-group col-sm-12">
 								<label>Precio de almacen</label>
-								<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen' class='form-control' required=''>
+								<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen' class='form-control' required='' id="val_pa">
 							</div>
 				            <div class='form-group col-sm-12'>
 				              	<label>Precio de venta establecido</label>
-								<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido' class='form-control' required=''>
+								<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido' class='form-control' required='' id="val_pve">
 				            </div>
 						</div>
 					</div>

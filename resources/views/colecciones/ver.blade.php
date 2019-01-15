@@ -73,6 +73,9 @@
 										<i class="fa fa-arrow-right"></i>
 										<span>
 											{{ 'S/'.$m->precio_almacen.' | S/'.$m->precio_venta_establecido }} 
+											<a href="#precio" data-toggle="modal" data-target="#precio" class="btn-link btn-sm btn_precio_edit" id="{{$d->id}}" value="{{$m->marca_id}}" data-pa="{{ $m->precio_almacen }}" data-pve="{{ $m->precio_venta_establecido }}">
+												<i class="fa fa-edit text-warning"></i> editar
+											</a>
 										</span>
 										<br>
 									@else
@@ -107,9 +110,28 @@
 @endsection
 @section("script")
 <script>
-	$(".btn_precio").click(function(event) {
+	$(".btn_precio").click(function(e) {
+
+		$("#val_pa").val("");
+		$("#val_pve").val("");
+
 		$("#col").val($(this).attr("id"));
 		$("#mar").val($(this).attr("value"));
+	});
+
+	$(".btn_precio_edit").click(function(e) {
+
+		// vaciamos primero los campos
+		$("#val_pa").val("");
+		$("#val_pve").val("");
+
+		// asignamosla marca y coleccion
+		$("#col").val($(this).attr("id"));
+		$("#mar").val($(this).attr("value"));
+
+		// asignamos los datos a los campos
+		$("#val_pa").val($(this).data("pa"));
+		$("#val_pve").val($(this).data("pve"));
 	});
 </script>
 @endsection

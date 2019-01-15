@@ -37,6 +37,31 @@ class Coleccion extends Model
       return $this->hasMany("App\Modelo");
     }
 
+    public static function savePrecios($request){
+        
+        $id = ColeccionMarca::where([
+          ["coleccion_id", "=", $request->coleccion],
+          ["marca_id", "=", $request->marca],
+        ])->value("id"); 
+
+        // dd($request->all());
+        $cm = ColeccionMarca::findOrFail($id);
+        $cm->precio_almacen = $request->precio_almacen;
+        $cm->precio_venta_establecido = $request->precio_venta_establecido;
+        
+        if ($request->precio_venta_establecido < $request->precio_almacen) {
+              return redirect('ver_colecciones')->with([
+                'flash_class'   => 'alert-danger',
+                'flash_message' => 'El precio de venta no puede ser menor al costo de almacen'
+              ]);
+        }else{
+              $cm->save();
+              return redirect('ver_colecciones')->with([
+                'flash_class'   => 'alert-success',
+                'flash_message' => 'Precios añadidos con exito.'
+              ]);
+        }
+    }
     // añadir marcas a la coleccion
     public static function colStore($request)
     {
@@ -67,19 +92,6 @@ class Coleccion extends Model
         BitacoraUser::saveBitacora("Marcas añadidas a la coleccion (".$coleccion->name.")");
         return response()->json($registro);
     }
-
-    // cargar marcas
-    // public static function cargarMarcas(){
-
-    //     $data = Marca::all();
-    //     $marcas = array();
-
-    //     foreach ($data as $d) {
-    //         $marcas [] = "<option value=".$d->id.">".$d->name.' | '.$d->material->name."</option>";
-    //     }
-
-    //     return join(",",$marcas);
-    // }
 
     // guardar coleccion
     public static function saveCol($request){

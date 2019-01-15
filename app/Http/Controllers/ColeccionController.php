@@ -20,21 +20,21 @@ class ColeccionController extends Controller
     public function index()
     {
         return view("colecciones.index",[
-            "marcas" => Marca::all(),
+            "marcas"      => Marca::all(),
             "colecciones" => Coleccion::all(),
             "proveedores" => Proveedor::all(),
-            "materiales" => Material::all(),
-            "col" => Coleccion::establecerCodigo(),
+            "materiales"  => Material::all(),
+            "col"         => Coleccion::establecerCodigo(),
         ]);
     }
 
     public function ver()
     {
         return view("colecciones.ver",[
-            "marcas" => Marca::all(),
+            "marcas"      => Marca::all(),
             "colecciones" => Coleccion::all(),
             "proveedores" => Proveedor::all(),
-            "materiales" => Material::all(),
+            "materiales"  => Material::all(),
         ]);
     }
 
@@ -117,42 +117,23 @@ class ColeccionController extends Controller
     public function saveCol(Request $request){
 
         $this->validate($request, [
-            'proveedor_id' => 'required',
-            'name' => 'required|unique:colecciones,name',
-            'codigo' => 'required',
+            'proveedor_id'    => 'required',
+            'name'            => 'required|unique:colecciones,name',
+            'codigo'          => 'required',
             'fecha_coleccion' => 'required'
         ]);
 
         return Coleccion::saveCol($request);
     }
 
-    public function updatePrecios(Request $request){
+    public function savePrecios(Request $request){
 
         $this->validate($request, [
             'precio_almacen'           => 'required|between:1,99.99|min:1|max:999999999999',
             'precio_venta_establecido' => 'required|between:1,99.99|min:1|max:999999999999',
         ]);
-        $id = ColeccionMarca::where([
-          ["coleccion_id", "=", $request->coleccion],
-          ["marca_id", "=", $request->marca],
-        ])->value("id"); 
-
-        // dd($request->all());
-        $cm = ColeccionMarca::findOrFail($id);
-        $cm->precio_almacen = $request->precio_almacen;
-        $cm->precio_venta_establecido = $request->precio_venta_establecido;
         
-        if ($request->precio_venta_establecido < $request->precio_almacen) {
-              return redirect('ver_colecciones')->with([
-                'flash_class'   => 'alert-danger',
-                'flash_message' => 'El precio de venta no puede ser menor al costo de almacen'
-              ]);
-        }else{
-              $cm->save();
-              return redirect('ver_colecciones')->with([
-                'flash_class'   => 'alert-success',
-                'flash_message' => 'Precios añadidos con exito.'
-              ]);
-        }
+        return Coleccion::savePrecios($request);
     }
+
 }

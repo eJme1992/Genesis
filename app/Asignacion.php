@@ -20,7 +20,7 @@ class Asignacion extends Model
     }
 
     public static function marcasAll($id){
-    	$marcas = ColeccionMarca::with("marca")
+    	$marcas = ColeccionMarca::with("marca.material")
     	                          ->where("coleccion_id", $id)
     	                          ->get();
 
