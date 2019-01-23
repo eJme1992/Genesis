@@ -13,8 +13,7 @@ class DireccionController extends Controller
 {   
     public function all()
     {
-        $data = Direccion::with("departamento", "provincia", "distrito")->orderBy("id", "DESC")->get();
-        return response()->json($data);
+        return Direccion::allDir();
     }
 
     public function index()

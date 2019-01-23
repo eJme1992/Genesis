@@ -13,7 +13,7 @@ class MotivoGuiaSeeder extends Seeder
     {
         $status = array(
 	        array('id' => '1','nombre' => 'Venta'),
-	        array('id' => '2','nombre' => 'Emisor_itinerante'),
+	        array('id' => '2','nombre' => 'Emisor Itinerante'),
 	        array('id' => '3','nombre' => 'Consignacion'),
 	        array('id' => '4','nombre' => 'Devolucion')
 	    );

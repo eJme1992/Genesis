@@ -1,6 +1,6 @@
-<form class="" action="{{ route('clientes.store') }}" method="POST" enctype="multipart/form-data">
+<form id="form_cliente_save" action="{{ route('clientes.store') }}" method="POST" enctype="multipart/form-data">
 {{ csrf_field() }}
-	<div class="modal fade" tabindex="-1" role="dialog" id="create">
+	<div class="modal fade" tabindex="-1" role="dialog" id="create_cliente">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="panel panel-success">
@@ -11,18 +11,8 @@
 					<div class="panel-body">
 
 						<div class="form-group col-sm-6">
-							<label>Nombre </label>
-							<input type="text" class="form-control text-uppercase" name="name" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="">
-						</div>
-
-						<div class="form-group col-sm-6">
-							<label>Apellido </label>
-							<input type="text" class="form-control text-uppercase" name="ape" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="">
-						</div>
-
-						<div class="form-group col-sm-6">
-							<label>Documento </label>
-							<select name="documento" class="form-control" required="">
+							<label>Tipo de identificacion *</label>
+							<select name="tipo_id" class="form-control" required="">
 								<option value="DNI">DNI</option>
 								<option value="PASAPORTE">PASAPORTE</option>
 								<option value="CARNET DE EXTRANGERIA">CARNET DE EXTRANGERIA</option>
@@ -30,38 +20,57 @@
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Identificacion </label>
+							<label>Identificacion *</label>
 							<input type="text" name="identificacion" class="form-control int" placeholder="indique Nº de identificacion..." required="">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>RUC </label>
-							<input type="text" name="ruc" class="form-control int" placeholder="Registro unico de constribuyentes...">
+							<label>Primer nombre *</label>
+							<input type="text" class="form-control text-uppercase" name="nombre_1" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Telefono </label> <span>+51</span>
-							<input type="text" name="telefono" class="form-control int" maxlength="9">
+							<label>Segundo nombre </label>
+							<input type="text" class="form-control text-uppercase" name="nombre_2" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos">
 						</div>
 
 						<div class="form-group col-sm-6">
+							<label>Primer apellido *</label>
+							<input type="text" class="form-control text-uppercase" name="ape_1" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="">
+						</div>
+
+						<div class="form-group col-sm-6">
+							<label>Segundo apellido </label>
+							<input type="text" class="form-control text-uppercase" name="ape_2" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos">
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label>Domicilio fiscal *</label>
+							<textarea class="form-control" name="direccion" required=""></textarea>
+						</div>
+
+						<div class="form-group col-sm-12">
 							<label>Correo </label>
 							<input type="email" name="correo" class="form-control">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Sexo </label>
-							<select name="sexo" class="form-control" required="">
-								<option value="Masculino">Masculino</option>
-								<option value="Femenino">Femenino</option>
-							</select>
+							<label>Telefono local </label>
+							<span>01</span>
+							<input type="text" name="telefono_1" class="form-control int" placeholder="indique telefono de su casa (7 digitos)..." maxlength="7">
+						</div>
+
+						<div class="form-group col-sm-6">
+							<label>Telefono movil *</label>
+							<span>+51</span>
+							<input type="text" name="telefono_2" class="form-control int" placeholder="indique telefono movil (9 digitos)..." required="" maxlength="9">
 						</div>
 
 					</div>		
 					<div class="modal-footer">
 						<div class="form-group text-right">
 							<input type="button" class="btn btn-danger cerrar" data-dismiss="modal" value="Cerrar">
-							<button type="submit" class="btn btn-success">
+							<button type="submit" class="btn btn-success btn_create_cliente">
 								<i class="fa fa-save"></i> Guardar
 							</button>
 						</div>

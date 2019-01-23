@@ -25,6 +25,62 @@ class AsignacionController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return view("asignaciones.create",[
+            "colecciones" => Coleccion::all(),
+            "users"       => User::where("status", "activo")->get()
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'modelo_id' => 'required',
+            'user_id'   => 'required',
+            'monturas'  => 'required|array',
+        ]);
+
+        return Asignacion::saveAsignacion($request);        
+    }
+
+    public function marcasAll($id)
+    {
+        return Asignacion::marcasAll($id);
+    }
+
+    public function modelosAll($coleccion, $marca)
+    {
+        return Asignacion::modelosAll($coleccion, $marca);
+    }
+
+    public function show($id)
+    {
+        //
+    }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function buscarModeloAsignado($id)
+    {   
+        return Asignacion::buscarModeloAsignado($id);
+    }
+
+    // --------------- Asignacion - Ruta -------------------
+
     public function rutasIndex()
     {
         return view("asignaciones.indexrutas",[
@@ -37,14 +93,6 @@ class AsignacionController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return view("asignaciones.create",[
-            "colecciones" => Coleccion::all(),
-            "users"       => User::where("status", "activo")->get()
-        ]);
-    }
-
     public function asigRutaCreate()
     {
         return view("asignaciones.create_asignacion_ruta",[
@@ -52,19 +100,6 @@ class AsignacionController extends Controller
             "direcciones" => Direccion::all(),
             "users"       => User::where("status", "activo")->get()
         ]);
-    }
-
-    public function store(Request $request)
-    {
-
-        $this->validate($request, [
-            'modelo_id' => 'required',
-            'user_id'   => 'required',
-            'monturas'  => 'required|array',
-        ]);
-
-        return Asignacion::saveAsignacion($request); 
-            
     }
 
     public function asigRutasStore(Request $request)
@@ -80,26 +115,11 @@ class AsignacionController extends Controller
             
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
     public function editAsigRuta($id)
     {
         $data = VendedorRuta::with("ruta.motivo_viaje", "ruta.direccion", "user")->findOrFail($id);
 
         return response()->json($data);
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     public function asigRutasUpdate(Request $request, $id)
@@ -113,37 +133,8 @@ class AsignacionController extends Controller
         return Asignacion::saveRutasUpdate($request, $id); 
     }
 
-    public function destroy($id)
-    {
-        //
-    }
-
     public function asigRutasDestroy($id)
     {
-        $dir = VendedorRuta::find($id);
-
-        $bu = new BitacoraUser;
-        $bu->fecha = date("d/m/Y");
-        $bu->hora = date("H:i:s");
-        $bu->movimiento = "Asignacion de vendedor - ruta eliminada (".$dir->user->name.", ".$dir->ruta->direccion->detalle.")";
-        $bu->user_id = \Auth::user()->id;
-        $bu->save();
-
-        VendedorRuta::destroy($id);
-
-        return redirect('asignacionesRutas')->with([
-                'flash_class'   => 'alert-success',
-                'flash_message' => 'Asignacion ruta - vendedor eliminada con exito.'
-        ]);
-    }
-
-    public function marcasAll($id)
-    {
-        return Asignacion::marcasAll($id);
-    }
-
-    public function modelosAll($coleccion, $marca)
-    {
-        return Asignacion::modelosAll($coleccion, $marca);
+        return Asignacion::asigRutaDestroy($id);
     }
 }

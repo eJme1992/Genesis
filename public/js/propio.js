@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('.data-table').DataTable({
       responsive: true,
       language: {
-      	url:'{{asset("plugins/datatables/spanish.json")}}'
+      	url:'plugins/datatables/spanish.json'
       }
     });
 
@@ -63,4 +63,16 @@ $(document).ready(function(){
       'separator': '.',
       'separatorAuthorized': [',']
     });
+
+    // select2
+    // $('.select2').select2({
+    //   language: {
+    //     noResults: function() {
+    //       return "Sin resultados";        
+    //     },
+    //     searching: function() {
+    //       return "Buscando..";
+    //     }
+    //   }
+    // });
 });

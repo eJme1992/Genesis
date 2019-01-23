@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class GuiaRemision extends Model
 {
@@ -34,5 +35,40 @@ class GuiaRemision extends Model
 
     public function guias(){
       return $this->belongsToMany('App\GuiaRemision','modelo_guias');
+    }
+
+    // ------------------- funciones personalizadas ---------------------------
+
+    public static function guiaStore($request){
+
+        $query = GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count();
+
+        if ($query > 0) {
+            return response()->json(1);
+        }else{
+            DB::transaction(function() use ($request) {
+                ($request->motivo_guia_id == 2) ? $request->cliente_id = null : $request->cliente_id = $request->cliente_id;//emisor itinerante
+                ($request->motivo_guia_id == 4) ? $user = null : $user = \Auth::user()->id;//devolucion
+
+                $data = GuiaRemision::create([
+                    'serial'         => $request->serial.'-'.$request->guia,
+                    'motivo_guia_id' => $request->motivo_guia_id,
+                    'direccion_id'   => $request->direccion_id,
+                    'cliente_id'     => $request->cliente_id,
+                    'user_id'        => $user,
+                ]);
+
+                for ($i = 0; $i < count($request->modelo_id) ; $i++) { 
+                    $data->modeloGuias()->create([
+                        'modelo_id'   => Asignacion::findOrfail($request->modelo_id[$i])->modelo_id,
+                        'montura'     => $request->montura[$i],
+                    ]);
+                }
+
+            });
+        }
+        
+        return response()->json('ok');
+
     }
 }

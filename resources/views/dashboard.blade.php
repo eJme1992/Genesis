@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title','Inicio - '.config('app.name'))
-
+@section('header','Dashboard')
 @section('content')
 	<div class="row">
 		<h1 style="background-color: #fff; border-top: solid 1px #198F56; border-bottom: solid 1px #198F56; padding: 0.5em;">Distribuidora Genesis</h1>			

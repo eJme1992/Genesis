@@ -92,4 +92,21 @@ class Direccion extends Model
 
     }
 
+    // cargar direcciones en un select
+    public static function allDir(){
+        $query = Direccion::with("departamento", "provincia", "distrito")->orderBy("id", "DESC")->get();
+        $data = array();
+        $dist = array();
+        for ($i = 0; $i < $query->count(); $i++) {
+            $data [] = "<option value='".$query[$i]->id."'> ".
+                                $query[$i]->departamento->departamento.' | '.
+                                $query[$i]->provincia->provincia.' | '.
+                                $query[$i]->distrito->distrito.' | '.
+                                $query[$i]->detalle.
+                    "</option>";
+        }
+
+        return response()->json(join(",", $data));
+    }
+
 }

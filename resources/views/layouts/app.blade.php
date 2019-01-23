@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}"> -->
 
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/ep.css')}}">
@@ -35,14 +35,10 @@
     <!-- confirm - jquery -->
     <link rel="stylesheet" href="{{ asset('plugins/confirm/jquery-confirm.min.css') }}">
 
+    <!-- select 2 -->
+    <link rel="stylesheet" href="{{ asset('plugins/select/css/bootstrap-select.min.css') }}" />
+
   	<style type="text/css">
-	    .perfil{
-			  position: relative;
-			  background: #fff;
-			  border: 1px solid #f4f4f4;
-			  padding: 20px;
-			  margin: 10px 25px;
-			}
       body, html, div, section, label, span, h1, h2, h3, h4, table, tr, td, select, input, textarea, option{
         font-family: calibri light, calibri, arial;
       }
@@ -51,65 +47,56 @@
   <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
-        <!-- Logo -->
         <a href="{{route('dashboard')}}" class="logo">
-          <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini">
-            <img class="img-responsive" src="{{ asset('img/genesis2.png') }}" alt="Logo" style="height:40px">
+            DG
           </span>
-          <!-- logo for regular state and mobile devices -->
           <span class="logo-lg"><b>Distribuidora G.</b></span>
         </a>
 
-        <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
-          <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Navegación</span>
+            <span class="sr-only"></span>
           </a>
-          <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <!-- Messages: style can be found in dropdown.less-->
-              <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <span class="hidden-xs">{{ Auth::user()->usuario }}</span>
+                  <span class="hidden-xs text-uppercase">{{ Auth::user()->usuario }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <!-- User image -->
                   <li class="user-header">
                     <p>
-                      DESCRIPCCION
-                      <small></small>
+                      <i class="fa fa-user-o fa-5x"></i>
                     </p>
+                    <p><cite>Bienvenido</cite></p>
                   </li>
 
-                  <!-- Menu Footer-->
                   <li class="user-footer">
                   	<div class="pull-left">
-                  		<a href="{{route('perfil')}}" class="btn btn-flat btn-default"><i class="fa fa-user-circle" aria-hidden="true"></i> Perfil</a>
+                  		<a href="{{route('perfil')}}" class="btn btn-flat btn-default">
+                        <i class="fa fa-user-circle" aria-hidden="true"></i> Perfil
+                      </a>
                   	</div>
 
                    	<div class="pull-right">
                       <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         {{ csrf_field() }}
-                        <button class="btn btn-flat btn-default" type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</button>
+                        <button class="btn btn-flat btn-default" type="submit">
+                          <i class="fa fa-sign-out" aria-hidden="true"></i> Salir
+                        </button>
                       </form>
                     </div>
                   </li>
+
                 </ul>
               </li>
             </ul>
           </div>
         </nav>
       </header>
-      <!-- Left side column. contains the logo and sidebar -->
       <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-          <!-- Sidebar user panel -->
-          <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
 
             <li class="treeview">
@@ -121,7 +108,6 @@
               <ul class="treeview-menu">
                 <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>Usuarios</a></li>
                 <li><a href="{{ route('users.roles') }}"><i class="fa fa-circle-o"></i>Roles (perfiles)</a></li>
-                <!-- <li><a href="{{ route('users.create') }}"><i class="fa fa-circle-o"></i>Agregar usuario</a></li> -->
                 <li><a href="{{ route('actividad') }}"><i class="fa fa-circle-o"></i>Actividad</a></li>
               </ul>
             </li>
@@ -148,7 +134,6 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
-                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
               </ul>
             </li>
 
@@ -171,38 +156,29 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ver Ventas</a></li>
+                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
+                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
               </ul>
             </li>
 
-
           </ul>
         </section>
-        <!-- /.sidebar -->
       </aside>
 
-      <!--Contenido-->
-      <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
-        <!-- Main content -->
-        <section class="content-header">
-          <h1>
-            @yield('header')
-          </h1>
+        <section class="content-header" style="background-color: #FFFFFF; padding: 1em; border-bottom: solid 1px #198F56;">
+          <h1> @yield('header')</h1>
           @yield('breadcrumb')
         </section>
-        <!-- Main content -->
-        <section class="content">
-        	@yield('content')
-        </section>
-      </div><!-- /.content-wrapper -->
-      <!--Fin-Contenido-->
+        <section class="content">@yield('content')</section>
+      </div>
+
       <footer class="main-footer">
         <!-- Desarrollado por @luisb0992 -->
         <strong>Copyright &copy; 2016 - {{ date('Y') }}</strong> All rights reserved.
       </footer>
-    </div><!-- .wrapper -->
+    </div>
 
     <!-- jQuery 2.1.4 -->
     <script src="{{asset('js/jQuery-2.1.4.min.js')}}"></script>
@@ -215,7 +191,7 @@
     
     <!-- Data table -->
     <script src="{{ asset('plugins/datatables/datatables.js') }}"></script>
-    <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script>
+    <!-- <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script> -->
 
     <!-- fileinput -->
     <script src="{{ asset('plugins/fileinput/js/fileinput.min.js') }}"></script>
@@ -232,6 +208,9 @@
 
     <!-- confirm - jquery -->
     <script src="{{ asset('plugins/confirm/jquery-confirm.min.js') }}"></script>
+
+    <!-- select2 -->
+    <script src="{{ asset('plugins/select/js/bootstrap-select.min.js') }}"></script>
 
     <!-- propio script -->
     <script src="{{ asset('js/propio.js') }}"></script>

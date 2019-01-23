@@ -27,6 +27,9 @@ class Asignacion extends Model
         return response()->json($marcas);
     }
 
+    // ------------------------- funciones personalizadas ------------------------------
+
+    // obtener precios pa y pve
     public static function precioColeccionMarca($marca, $coleccion){
         $precios = ColeccionMarca::where([
             ["coleccion_id", "=", $coleccion],
@@ -134,12 +137,6 @@ class Asignacion extends Model
                     // no hacemos nada
                 }else{
 
-                	// // obtenemos los respectivos modelos para almacenar 
-                 //    $modelo = Modelo::where("name", $request->name[$i])->get();
-
-                 //    // contamos de nuevo el resultado de todos los modelos
-                 //    for ($m=0; $m < count($modelo); $m++) { 
-
                     	// instanciamos y guardamos
                         $asignacion = new Asignacion;
                         $asignacion->modelo_id = $request->modelo_id[$i];   
@@ -169,12 +166,20 @@ class Asignacion extends Model
         }   
     }
 
-    public static function saveAsigRutasStore($request){
-        $query = Ruta::where("motivo_viaje_id", $request->motivo_viaje_id)
-                        ->where("direccion_id", $request->direccion_id)->first();
-        if ($query) {
+    //----------------------- Rutas asignadas a usuarios ----------------------------
+
+    // Asignacion de rutas a users
+    public static function saveAsigRutasStore($request)
+    {
+        $query = Ruta::whereIn("id", VendedorRuta::where("user_id", $request->user_id)->get(["ruta_id"]))
+                     ->where([
+                        ["motivo_viaje_id", $request->motivo_viaje_id],
+                        ["direccion_id", $request->direccion_id],
+                    ])->get();
+        // dd($query->count());
+        if ($query->count() > 0) {
             return redirect("asignacionesRutas")->with([
-                'flash_message' => 'Ruta ya existente, veirifique.',
+                'flash_message' => 'Ruta ya existente para el usuario seleccionado, veirifique.',
                 'flash_class' => 'alert-danger'
             ]);
         }else{           
@@ -187,6 +192,7 @@ class Asignacion extends Model
                 $vr->user_id = $request->user_id;
                 $vr->fecha = date("d-m-Y");
                 $vr->save();
+                BitacoraUser::saveBitacora("Ruta asignada");
 
                 return redirect("asignacionesRutas")->with([
                     'flash_message' => 'Ruta asignada correctamente.',
@@ -198,12 +204,18 @@ class Asignacion extends Model
 
     }
 
-    public static function saveRutasUpdate($request, $id){
-        $query = Ruta::where("motivo_viaje_id", $request->motivo_viaje_id)
-                        ->where("direccion_id", $request->direccion_id)->first();
-        if ($query) {
+    // Actualizacion de asignacion de rutas - users
+    public static function saveRutasUpdate($request, $id)
+    {
+        $query = Ruta::whereIn("id", VendedorRuta::where("user_id", $request->user_id)->get(["ruta_id"]))
+                     ->where([
+                        ["motivo_viaje_id", $request->motivo_viaje_id],
+                        ["direccion_id", $request->direccion_id],
+                    ])->get();
+
+        if ($query->count() > 0) {
             return redirect("asignacionesRutas")->with([
-                'flash_message' => 'Ruta ya existente, veirifique.',
+                'flash_message' => 'Ruta ya existente para el usuario seleccionado, veirifique.',
                 'flash_class' => 'alert-danger'
             ]);
         }else{           
@@ -214,6 +226,7 @@ class Asignacion extends Model
                 $vr = VendedorRuta::where("ruta_id", $id)->first();
                 $vr->user_id = $request->user_id;
                 $vr->save();
+                BitacoraUser::saveBitacora("Ruta actualizada y asignada");
 
                 return redirect("asignacionesRutas")->with([
                     'flash_message' => 'Ruta actualizada correctamente.',
@@ -223,5 +236,35 @@ class Asignacion extends Model
             }
         }
 
+    }
+
+    // eliminar asignacion - ruta
+    public static function asigRutaDestroy($id)
+    {
+        $dir = VendedorRuta::find($id);
+        BitacoraUser::saveBitacora("Asignacion de vendedor - ruta eliminada (".$dir->user->name.", ".$dir->ruta->direccion->detalle.")");
+        VendedorRuta::destroy($id);
+
+        return redirect('asignacionesRutas')->with([
+                'flash_class'   => 'alert-success',
+                'flash_message' => 'Asignacion ruta - vendedor eliminada con exito.'
+        ]);
+    }
+
+    // buscar modelo asignado
+    public static function buscarModeloAsignado($id)
+    {
+        $datos = array();
+        $query = Asignacion::findOrfail($id);
+        
+        for ($i = 1; $i < $query->monturas + 1; $i++) { 
+            if ($i == $query->monturas) {
+                $datos [] = "<option value=".$i." selected>".$i."</option>";
+            }else{
+                $datos [] = "<option value=".$i.">".$i."</option>";
+            } 
+        }
+
+        return response()->json(join(",",$datos));
     }
 }

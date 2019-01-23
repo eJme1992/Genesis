@@ -8,11 +8,6 @@ use App\BitacoraUser;
 
 class ClientesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view("clientes.index",[
@@ -20,88 +15,54 @@ class ClientesController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'ape' => 'required',
-            'sexo' => 'required|in:Masculino,Femenino',
-            'documento' => 'required',
-            'identificacion' => 'required|unique:clientes',
-            'correo' => 'email|unique:clientes',
-            'telefono' => 'unique:clientes',
-          ]);
+            'identificacion'    => 'required|unique:clientes',
+            'tipo_id'           => 'required',
+            'nombre_1'          => 'required|string',
+            'ape_1'             => 'required|string',
+            'direccion'         => 'required',
+            'correo'            => 'email|unique:clientes',
+            'telefono_1'        => 'unique:clientes',
+            'telefono_2'        => 'unique:clientes',
+        ]);
 
         return Cliente::storeCliente($request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data = Cliente::findOrFail($id);
         return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-       $this->validate($request, [
-            'name' => 'required',
-            'ape' => 'required',
-            'sexo' => 'required|in:Masculino,Femenino',
-            'documento' => 'required',
-            'identificacion' => 'required|unique:clientes,identificacion,'.$id.',id',
-            'correo' => 'email|unique:clientes,correo,'.$id.',id',
-            'telefono' => 'unique:clientes,telefono,'.$id.',id',
-          ]);
+        $this->validate($request, [
+            'identificacion'    => 'required|unique:clientes,identificacion,'.$id.',id',
+            'tipo_id'           => 'required',
+            'nombre_1'          => 'required|string',
+            'ape_1'             => 'required|string',
+            'direccion'         => 'required',
+            'correo'            => 'email|unique:clientes,correo,'.$id.',id',
+            'telefono_1'        => 'unique:clientes,telefono_1,'.$id.',id',
+            'telefono_2'        => 'unique:clientes,telefono_2,'.$id.',id',
+        ]);
 
         return Cliente::updateCliente($request, $id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $cliente = Cliente::findOrFail($id);

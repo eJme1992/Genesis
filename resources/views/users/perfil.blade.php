@@ -11,47 +11,46 @@
 @section('content')
 	<section class="perfil">
 		<div class="row">
-			<div class="col-md-12">
-        <h2 class="page-header" style="margin-top:0!important">
-          <i class="fa fa-user" aria-hidden="true"></i>
-          {{$perfil->name}}
-        </h2>
-
-			  <form action="{{route('update_perfil')}}" method="POST">
-				  {{method_field('PATCH')}}
-				  {{csrf_field()}}
+			<div class="col-sm-5 col-sm-offset-3 fondo_form">
+			  	<form action="{{route('update_perfil')}}" method="POST" class="">
+				  	{{method_field('PATCH')}}
+				  	{{csrf_field()}}
 					@include('partials.flash')
-				  <div class="form-group col-md-4 col-md-offset-4 {{$errors->has('name')?'has-error':''}}">
-				    <label for="name">Nombre: *</label>
-				    <input type="text" class="form-control" name="name"  value="{{$perfil->name}}" required>
-				  </div>
-				  <div class="form-group col-md-4 col-md-offset-4 {{$errors->has('usuario')?'has-error':''}}">
-				    <label for="email">Usuario: *</label>
-				    <input type="text" class="form-control" name="usuario" value="{{$perfil->usuario}}" required>
-				  </div>
+					<h2 class="page-header text-center">
+			          	<i class="fa fa-user" aria-hidden="true"></i>
+			          	{{$perfil->name}}
+			        </h2>
+				  	<div class="form-group col-md-12 {{$errors->has('name')?'has-error':''}}">
+				    	<label for="name">Nombre: *</label>
+				    	<input type="text" class="form-control" name="name"  value="{{$perfil->name}}" required>
+				  	</div>
+				  	<div class="form-group col-md-12 {{$errors->has('usuario')?'has-error':''}}">
+				    	<label for="email">Usuario: *</label>
+				    	<input type="text" class="form-control" name="usuario" value="{{$perfil->usuario}}" required>
+				  	</div>
 
-				  <div class="col-md-4 col-md-offset-4">
-				  	<div class="checkbox">
-					    <label>
-					      <input id="pp" type="checkbox" name="checkbox" value="Yes"> Cambiar contraseña?
-					    </label>
-				    </div>
-				  </div>
+				  	<div class="col-md-12">
+				  		<div class="checkbox">
+					    	<label>
+					      		<input id="pp" type="checkbox" name="checkbox" value="Yes"> Cambiar contraseña?
+					    	</label>
+				    	</div>
+				  	</div>
 				  
-				  <section id="password_fields" style="display:none">
-					  <div class="form-group col-md-4 col-md-offset-4">
-					  	<label>Contraseña nueva: *</label>
-					  	<input id="password" class="form-control" type="password" name="password">
-					  </div>
-					  <div class=" form-group col-md-4 col-md-offset-4">
-					  	<label>Verificar: *</label>
-					  	<input id="password_confirmation" class="form-control" type="password" name="password_confirmation">
-					  </div>
-				  </section>
+				  	<section id="password_fields" style="display:none">
+					  	<div class="form-group col-md-12">
+					  		<label>Contraseña nueva: *</label>
+					  		<input id="password" class="form-control" type="password" name="password">
+					  	</div>
+					  	<div class=" form-group col-md-12">
+					  		<label>Verificar: *</label>
+					  		<input id="password_confirmation" class="form-control" type="password" name="password_confirmation">
+					  	</div>
+				  	</section>
 
 					@if (count($errors) > 0)
 					<div class="col-md-12">
-						<div class="col-md-4 col-md-offset-4">
+						<div class="col-md-12">
 			          		<div class="alert alert-danger">
 				          		<ul>
 						            @foreach($errors->all() as $error)
@@ -63,11 +62,11 @@
 			        </div>
 			        @endif
 
-				  <div class="col-md-4 col-md-offset-4">
-				    <button class="btn btn-flat btn-success" type="submit">Actualizar</button>
-				  </div>
-			  </form>
-      </div>
+				  	<div class="col-md-12">
+				    	<button class="btn btn-flat btn-success" type="submit">Actualizar</button>
+				  	</div>
+			  	</form>
+      		</div>
 		</div>
 	</section>
 @endsection

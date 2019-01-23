@@ -37,8 +37,11 @@ class Coleccion extends Model
       return $this->hasMany("App\Modelo");
     }
 
+    //-------------------- funciones personalizadas ---------------------
+    
+    // asignar precios desde las colecciones
     public static function savePrecios($request){
-        
+
         $id = ColeccionMarca::where([
           ["coleccion_id", "=", $request->coleccion],
           ["marca_id", "=", $request->marca],
@@ -62,6 +65,7 @@ class Coleccion extends Model
               ]);
         }
     }
+
     // añadir marcas a la coleccion
     public static function colStore($request)
     {
@@ -94,8 +98,8 @@ class Coleccion extends Model
     }
 
     // guardar coleccion
-    public static function saveCol($request){
-
+    public static function saveCol($request)
+    {
         $coleccion = new Coleccion($request->all());
 
         if($coleccion->save()){

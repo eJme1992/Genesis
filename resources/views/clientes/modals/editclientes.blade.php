@@ -12,18 +12,8 @@
 					<div class="panel-body">
 
 						<div class="form-group col-sm-6">
-							<label>Nombre </label>
-							<input type="text" class="form-control text-uppercase" name="name" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="" id="name">
-						</div>
-
-						<div class="form-group col-sm-6">
-							<label>Apellido </label>
-							<input type="text" class="form-control text-uppercase" name="ape" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="" id="ape">
-						</div>
-
-						<div class="form-group col-sm-6">
-							<label>Documento </label>
-							<select name="documento" class="form-control" required="" id="documento">
+							<label>Tipo de identificacion *</label>
+							<select name="tipo_id" class="form-control" required="" id="tipo_id">
 								<option value="DNI">DNI</option>
 								<option value="PASAPORTE">PASAPORTE</option>
 								<option value="CARNET DE EXTRANGERIA">CARNET DE EXTRANGERIA</option>
@@ -31,31 +21,50 @@
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Identificacion </label>
+							<label>Identificacion *</label>
 							<input type="text" name="identificacion" class="form-control int" placeholder="indique Nº de identificacion..." required="" id="identificacion">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>RUC </label>
-							<input type="text" name="ruc" class="form-control int" placeholder="Registro unico de constribuyentes..." id="ruc">
+							<label>Primer nombre *</label>
+							<input type="text" class="form-control text-uppercase" name="nombre_1" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="" id="nombre_1">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Telefono </label> <span>+51</span>
-							<input type="text" name="telefono" class="form-control int" maxlength="9" id="telefono">
+							<label>Segundo nombre </label>
+							<input type="text" class="form-control text-uppercase" name="nombre_2" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" id="nombre_2">
 						</div>
 
 						<div class="form-group col-sm-6">
+							<label>Primer apellido *</label>
+							<input type="text" class="form-control text-uppercase" name="ape_1" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" required="" id="ape_1">
+						</div>
+
+						<div class="form-group col-sm-6">
+							<label>Segundo apellido </label>
+							<input type="text" class="form-control text-uppercase" name="ape_2" pattern="[A-Z a-z]+" title="Indique solo letras sin guiones ni puntos" id="ape_2">
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label>Domicilio fiscal *</label>
+							<textarea class="form-control" name="direccion" required="" id="direccion"></textarea>
+						</div>
+
+						<div class="form-group col-sm-12">
 							<label>Correo </label>
 							<input type="email" name="correo" class="form-control" id="correo">
 						</div>
 
 						<div class="form-group col-sm-6">
-							<label>Sexo </label>
-							<select name="sexo" class="form-control" required="" id="sexo">
-								<option value="Masculino">Masculino</option>
-								<option value="Femenino">Femenino</option>
-							</select>
+							<label>Telefono local </label>
+							<span>01</span>
+							<input type="text" name="telefono_1" class="form-control int" placeholder="indique telefono de su casa (7 digitos)..." maxlength="7" id="telefono_1">
+						</div>
+
+						<div class="form-group col-sm-6">
+							<label>Telefono movil *</label>
+							<span>+51</span>
+							<input type="text" name="telefono_2" class="form-control int" placeholder="indique telefono movil (9 digitos)..." required="" maxlength="9" id="telefono_2">
 						</div>
 
 					</div>		

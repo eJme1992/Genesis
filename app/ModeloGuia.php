@@ -15,7 +15,7 @@ class ModeloGuia extends Model
     	return $this->belongsTo("App\GuiaRemision", "guia_remision_id");
     }
 
-    public function guia_remision(){
+    public function modelo(){
     	return $this->belongsTo("App\Modelo", "modelo_id");
     }
 }

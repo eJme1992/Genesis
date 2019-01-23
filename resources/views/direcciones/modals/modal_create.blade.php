@@ -1,7 +1,7 @@
 <form class="form_create_direccion" action="{{ route('direcciones.store') }}" method="POST" enctype="multipart/form-data">
 {{ csrf_field() }}
 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-	<div class="modal fade" tabindex="-1" role="dialog" id="modal_create">
+	<div class="modal fade modal_create_direccion" tabindex="-1" role="dialog" id="modal_create">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="panel panel-success">

@@ -11,38 +11,20 @@ use App\BitacoraUser;
 
 class ModeloController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $modelos = Modelo::all();
-        $marcas = Marca::all();
-
         return view("modelos.index", [
-            "modelos" => $modelos,
-            "marcas" => $marcas
+            "modelos" => Modelo::all(),
+            "marcas" => Marca::all()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -50,79 +32,22 @@ class ModeloController extends Controller
             'montura' => 'required'
         ]);
 
-        // obtenemos la coleccion
-        $coleccion = Coleccion::findOrFail($request->id_coleccion);
-
-        // dd($request->all());
-        // recorremos la cantidad de modelos
-        for ($m = 0 ; $m < count($request->name); $m++) {
-
-            // y los multiplicamos por la cantidad de ruedas o cajas sea el caso
-            if ($request->caja[$m]) {
-                $cajas = $request->caja[$m];
-            }else{
-                $cajas = $request->rueda;
-            }
-            
-            for ($i = 0; $i < $cajas; $i++) {
-                $modelo = new Modelo();
-                $modelo->codigo = $i + 1;
-                $modelo->name = $request->name[$m];
-                $modelo->descripcion_modelo = $request->descripcion_modelo[$m];
-                $modelo->coleccion_id = $request->id_coleccion;
-                $modelo->marca_id = $request->marca_id;
-                $modelo->montura = $request->montura[$m];
-                $modelo->status_id = 1;
-                $modelo->save();
-            }
-        }
-
-        // guardamos la coleccion en la tabla productos
-        Producto::savePro($request->id_coleccion);
-        $bu = new BitacoraUser;
-        $bu->fecha = date("d/m/Y");
-        $bu->hora = date("H:i:s");
-        $bu->movimiento = "Creacion de nuevo(s) modelo(s) para la coleccion (".$coleccion->name.")";
-        $bu->user_id = \Auth::user()->id;
-        $bu->save();
-
-        return response()->json($modelo);
+       return Modelo::store($request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $modelo = Modelo::findOrFail($id);
-        $marcas = Marca::all();
         return view("modelos.edit",[
-            "marcas" => $marcas,
-            "modelo" => $modelo
+            "marcas" => Marca::all(),
+            "modelo" => Modelo::findOrFail($id)
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
 
@@ -130,12 +55,7 @@ class ModeloController extends Controller
         $modelo->fill($request->all());
 
         if ($modelo->save()) {
-            $bu = new BitacoraUser;
-            $bu->fecha = date("d/m/Y");
-            $bu->hora = date("H:i:s");
-            $bu->movimiento = "Actualizacion de modelo (".$modelo->name.")";
-            $bu->user_id = \Auth::user()->id;
-            $bu->save();
+            BitacoraUser::saveBitacora("Actualizacion de modelo (".$modelo->name.")");
             return response()->json($modelo);
         }else{
             return response()->json(["msj" => "no se actualizo"]);
@@ -150,41 +70,21 @@ class ModeloController extends Controller
             'montura' => 'required'
         ]);
 
-        // recorremos la cantidad de modelos
-        for ($m = 0 ; $m < count($request->id); $m++) {
-            $modelo = Modelo::find($request->id[$m]);
-            $modelo->name = $request->name[$m];
-            $modelo->descripcion_modelo = $request->descripcion_modelo[$m];
-            if($request->montura[$m] == ''){
-              $modelo->montura = $modelo->montura;
-            }else{
-              $modelo->montura = $request->montura[$m];
-            }
-            $modelo->save();
-        }
-
-        return response()->json($modelo);
+        return Modelo::updateAll($request);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $mar = Modelo::destroy($id);
 
         return redirect('marcas')->with([
-                'flash_class'   => 'alert-success',
-                'flash_message' => 'modelo y todas sus dependencias eliminadas con exito.'
+            'flash_class'   => 'alert-success',
+            'flash_message' => 'modelo y todas sus dependencias eliminadas con exito.'
         ]);
     }
 
     public function busMol($id){
         $col = Modelo::with("marca","coleccion","status")->where("id", $id)->first();
-
         return response()->json($col);
     }
 
@@ -211,14 +111,7 @@ class ModeloController extends Controller
     }
 
     public function delete(Request $request){
-        $modelos = Modelo::with("marca","status")->where("coleccion_id", $request->col_del)->where("marca_id", $request->mar_del)->get();
-
-        foreach ($modelos as $mod) {
-            $mod->status_id = 5;
-            $mod->name = $mod->name." (Eliminado)";
-            $mod->save();
-        }
-
-        return response()->json($mod);
+        
+        return Modelo::deleteAll($request);
     }
 }
