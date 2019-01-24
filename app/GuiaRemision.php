@@ -21,11 +21,15 @@ class GuiaRemision extends Model
     }
 
     public function user(){
-    	return $this->belongsTo("App\User", "user_id");
+    	return $this->belongsTo("App\User", "user_id")->withDefault([
+            'name' => 'vacio'
+        ]);
     }
 
     public function cliente(){
-    	return $this->belongsTo("App\Cliente", "cliente_id");
+    	return $this->belongsTo("App\Cliente", "cliente_id")->withDefault([
+            'nombre_full' => 'vacio'
+        ]);
     }
 
     // guias - modelos
@@ -65,10 +69,38 @@ class GuiaRemision extends Model
                     ]);
                 }
 
+                BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
+
             });
         }
         
         return response()->json('ok');
+
+    }
+
+    // actualizar guia de remision
+    public static function guiaUpdate($request, $id){
+        // $guia = GuiaRemision::findOrFail($id);
+        // BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
+        // GuiaRemision::destroy($id);
+
+        // return redirect('guiaRemision')->with([
+        //     'flash_class'   => 'alert-success',
+        //     'flash_message' => 'Guia de remision eliminada con exito.'
+        // ]);
+
+    }
+
+    // eliminar guia de remision
+    public static function guiaDestroy($id){
+        $guia = GuiaRemision::findOrFail($id);
+        BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
+        GuiaRemision::destroy($id);
+
+        return redirect('guiaRemision')->with([
+            'flash_class'   => 'alert-success',
+            'flash_message' => 'Guia de remision eliminada con exito.'
+        ]);
 
     }
 }

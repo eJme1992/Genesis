@@ -7,7 +7,7 @@ Route::get('/', function () { return view('login'); })->name('login');
 Route::post('auth', 'LoginController@login')->name('auth');
 Route::post('/logout', 'LoginController@logout')->name('logout');
 
-Route::group(['middleware' => 'auth'], function() { //middleware auth
+Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 
 	// rutas resources
 	Route::resources([

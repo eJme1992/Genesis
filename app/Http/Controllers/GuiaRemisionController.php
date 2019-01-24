@@ -11,7 +11,7 @@ class GuiaRemisionController extends Controller
     public function index()
     {
         return view("guia_remision.index", [
-            "guias"          => GuiaRemision::all(),
+            "guias"          => GuiaRemision::where("user_id", \Auth::id())->get(),
             "motivo"         => MotivoGuia::all(),
             "direcciones"    => Direccion::all(),
             "users"          => User::all(),
@@ -43,7 +43,18 @@ class GuiaRemisionController extends Controller
 
     public function show($id)
     {
-        //
+        $query = GuiaRemision::findOrFail($id)->modeloGuias;
+        $modelo = array();
+        $montura = array();
+        foreach ($query as $m) {
+            $modelo []  = $m->modelo->name.'<br>';
+            $montura [] = $m->montura.'<br>';
+        }
+
+        return response()->json([
+            "modelo" => $modelo,
+            "montura" => $montura,
+        ]);
     }
 
     public function edit($id)
@@ -53,11 +64,11 @@ class GuiaRemisionController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        return GuiaRemision::guiaUpdate($request, $id);
     }
 
     public function destroy($id)
     {
-        //
+        return GuiaRemision::guiaDestroy($id);
     }
 }

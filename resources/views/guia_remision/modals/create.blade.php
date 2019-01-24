@@ -1,6 +1,6 @@
-<form id="form_create_guia" action="{{ route('clientes.store') }}" method="POST" enctype="multipart/form-data">
+<form id="form_create_guia" method="POST" enctype="multipart/form-data">
 {{ csrf_field() }}
-	<div class="modal fade" role="dialog" id="create">
+	<div class="modal fade" role="dialog" id="create_guia">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="panel panel-success">
@@ -12,12 +12,12 @@
 						<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">	
 						<div class="form-group col-sm-6">
 							<label>Nº Serie *</label>
-							<input type="text" name="serial" class="form-control" placeholder="Nª de serie..." required="" autofocus="">
+							<input type="text" name="serial" class="form-control" placeholder="Nª de serie..." required="" autofocus="" id="serial">
 						</div>
 
 						<div class="form-group col-sm-6">
 							<label>Nº Guia *</label>
-							<input type="text" name="guia" class="form-control" placeholder="Nª de guia de remision..." required="">
+							<input type="text" name="guia" class="form-control" placeholder="Nª de guia de remision..." required="" id="guia">
 						</div>
 
 						<div class="form-group col-sm-6">
