@@ -44,10 +44,11 @@
 								<th class="text-center">Motivo</th>
 								<th class="text-center">Vendedor</th>
 								<th class="text-center">Cliente</th>
+								<th class="text-center">Modelos</th>
 								<th class="text-center">Acciones</th>
 							</tr>
 						</thead>
-						<tbody class="text-center">
+						<tbody class="">
 							@foreach($guias as $d)
 								<tr>
 									<td><b>{{ $d->serial }}</b></td>
@@ -65,26 +66,27 @@
 									<td>{{ $d->motivo_guia->nombre }}</td>
 									<td>{{ $d->user->name ?? '' }}</td>
 									<td>{{ $d->cliente->nombre_full ?? '' }}</td>
+									<td class="text-center">
+										{{ count($d->modeloGuias) }}
+										<a href="#modelos_guia"
+											data-toggle="modal"
+											data-serial="{{ $d->serial }}"
+											data-id="{{ $d->id }}"
+											class="btn btn-link btn_mg">
+											<i class="fa fa-eye" aria-hidden="true"></i>
+										</a> 
+									</td>
 									<td>
-										<span class="col-sm-4">
-											<a href="#modelos_guia"
-												data-toggle="modal"
-												data-serial="{{ $d->serial }}"
-												data-id="{{ $d->id }}"
-												class="btn btn-info btn-sm btn_mg">
-												<i class="fa fa-eye" aria-hidden="true"></i>
-											</a>
-										</span>
-										<span class="col-sm-4">
-											<a href="#create_guia"
+										<span class="col-sm-6">
+											<!-- <a href="#create_guia"
 												data-toggle="modal" 
 												data-target="#create_guia"
 												value="{{ $d->id }}"
 												class="btn btn-warning btn-sm">
 												<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
-											</a>
+											</a> -->
 										</span>
-										<span class="col-sm-4">
+										<span class="col-sm-6">
 											<form action="{{ route('guiaRemision.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
 		              							{{ csrf_field() }}
@@ -119,9 +121,9 @@ $(".btn_mg").click(function(e) {
 	$.get(ruta, function(res) {
 		$("#mostrar_mod").empty().append(res.modelo);
 		$("#mostrar_mont").empty().append(res.montura);
-		alert(res.montura.length)
+		$(".flecha").empty();
 		for (i = 0; i < res.montura.length; i++) {
-			$(".flecha").empty().append('<i class="fa fa-arrow-right"></i><br>');
+			$(".flecha").append('<i class="fa fa-arrow-right"></i><br>');
 		}
 	});
 });
