@@ -40,7 +40,7 @@
 
   	<style type="text/css">
       body, html, div, section, label, span, h1, h2, h3, h4, table, tr, td, select, input, textarea, option{
-        font-family: calibri light, calibri, arial;
+        font-family: 'Open Sans Condensed', sans-serif;
       }
 	  </style>
   </head>
