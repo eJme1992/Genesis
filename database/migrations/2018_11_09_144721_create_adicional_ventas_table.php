@@ -13,16 +13,16 @@ class CreateAdicionalVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('adicional_ventas', function (Blueprint $table) {
+        Schema::create('ref_adicional', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('venta_id')->unsigned();
             $table->integer('factura_id')->unsigned()->nullable();
-            $table->string('item')->nullable();
+            $table->string('item')->nullable(); // factura, estuche
             $table->string('fecha')->nullable(); // fecha en la que cambia el estado
-            $table->integer('status_adicional_id')->unsigned();
+            $table->integer('ref_estadic_id')->unsigned();
 
-            $table->foreign('status_adicional_id')->references('id')
-                                        ->on('status_adicional_ventas')
+            $table->foreign('ref_estadic_id')->references('id')
+                                        ->on('ref_estadic')
                                         ->onDelete('cascade');
 
             $table->foreign('venta_id')->references('id')
@@ -43,6 +43,6 @@ class CreateAdicionalVentasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('adicional_ventas');
+        Schema::dropIfExists('ref_adicional');
     }
 }

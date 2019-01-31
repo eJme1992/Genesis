@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Asignacion extends Model
 {
@@ -164,6 +165,34 @@ class Asignacion extends Model
                 'flash_class' => 'alert-success'
             ]);
         }   
+    }
+
+     // eliminar asignacion - modelo
+    public static function asigDestroy($id)
+    {
+        $t = DB::transaction(function() use ($id) {
+            $asig = Asignacion::findOrFail($id);
+            
+            $modelo = Modelo::findOrFail($asig->modelo_id);
+            $modelo->montura = $modelo->montura + $asig->monturas;
+            $modelo->status_id = 1;
+            $modelo->save();
+            
+            BitacoraUser::saveBitacora("Asignacion de vendedor - modelo eliminada (".$asig->user->name.", ".$asig->modelo->name.")");
+            Asignacion::destroy($id);
+        });
+
+        if (is_null($t)) {
+            return redirect('asignaciones')->with([
+                'flash_class'   => 'alert-success',
+                'flash_message' => 'Asignacion ruta - modelo eliminada con exito.'
+            ]);
+        }else{
+            return redirect('asignaciones')->with([
+                'flash_class'   => 'alert-danger',
+                'flash_message' => 'Ocurrio un error al eliminar.'
+            ]);
+        }
     }
 
     //----------------------- Rutas asignadas a usuarios ----------------------------

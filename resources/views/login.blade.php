@@ -13,11 +13,18 @@
 	    <!-- Theme style -->
 	    <link rel="stylesheet" href="{{asset('css/AdminLTE.min.css')}}">
 	    <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">  ç
+
+    	<link rel="icon" type="image/png" sizes="240x240" href="{{asset('img/genesis2.png')}}">
+
+	    <link rel="stylesheet" href="{{asset('css/ep.css')}}">
 	</head>
 	<style>
 		body{
 			background-color: #efefef;
 		}
+		html, div, section, label, span, h1, h2, h3, h4, table, tr, td, select, input, textarea, option{
+	        font-family: 'Abel', sans-serif;
+	    }
 	</style>
 	<body class="">
 		@include('partials.flash')
@@ -27,8 +34,8 @@
 	    	<img class="img-responsive" src="{{ asset('img/genesis2.png') }}" alt="Logo" style="height:200px">
 	    </center>
 	    </div><!-- /.login-logo -->
-	    <div class="login-box-body">
-	      <p class="login-box-msg">-Login-</p>
+	    <div class="login-box-body page-header" style="border-radius: 10px">
+	      <p class="login-box-msg"> Login </p>
 	      @if (count($errors) > 0)
 	        <div class="alert alert-danger">
 	        	<ul>
@@ -61,7 +68,6 @@
 	    </div><!-- /.login-box-body -->
 	  </div><!-- /.login-box -->
 	  <script type="text/javascript" src="{{asset('js/jQuery-2.1.4.min.js')}}"></script>
-
 	  	<script type="text/javascript">
       		$("#form-login").on('submit',function() {
       			$(".progress").fadeIn(400, "linear");

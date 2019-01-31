@@ -17,11 +17,14 @@ class CreateFacturasTable extends Migration
             $table->increments('id');
             $table->string('serie')->nullable();//numero de serie
             $table->string('num_fact')->nullable();//numero de factura
-            $table->integer('ciente_id')->unsigned();
+            $table->integer('cliente_id')->unsigned();
             $table->decimal('subtotal', 12, 2)->nullable();
             $table->decimal('impuesto', 12, 2)->nullable();
             $table->decimal('total', 12, 2)->nullable();
-            $table->string('fecha')->nullable();
+
+            $table->foreign('cliente_id')->references('id')
+                                        ->on('clientes')
+                                        ->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -47,13 +47,13 @@ class GuiaRemisionController extends Controller
         $modelo = array();
         $montura = array();
         foreach ($query as $m) {
-            $modelo []  = $m->modelo->name.'<br>';
+            $modelo []  = $m->modelo->name.' / ['.$m->modelo->id.']<br>';
             $montura [] = $m->montura.'<br>';
         }
 
         return response()->json([
-            "modelo" => $modelo,
-            "montura" => $montura,
+            "modelo"    => $modelo,
+            "montura"   => $montura,
         ]);
     }
 

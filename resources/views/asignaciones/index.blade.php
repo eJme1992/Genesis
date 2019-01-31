@@ -49,11 +49,20 @@
 						<tbody class="text-center">
 							@foreach($asignaciones as $d)
 								<tr>
-									<td class="text-capitalize">{{ $d->user->name }} {{ $d->user->ape }}</td>
+									<td class="text-capitalize"><strong>{{ $d->user->name }} {{ $d->user->ape }}</strong></td>
 									<td>{{ $d->modelo->name.' - ['.$d->modelo->id.']' }}</td>
 									<td>{{ $d->monturas }}</td>
 									<td>{{ $d->fecha }}</td>
-									<td>...</td>
+									<td>
+										<span class="">
+											<form action="{{ route('asignaciones.destroy', $d->id) }}" method="POST">
+												{{ method_field( 'DELETE' ) }}
+		              							{{ csrf_field() }}
+		              							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
+		              							</button>
+											</form>
+										</span>
+									</td>
 								</tr>
 							@endforeach
 						</tbody>

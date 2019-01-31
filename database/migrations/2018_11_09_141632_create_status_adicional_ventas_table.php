@@ -13,9 +13,9 @@ class CreateStatusAdicionalVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_adicional_ventas', function (Blueprint $table) {
+        Schema::create('ref_estadic', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre')->nullable();
+            $table->string('nombre')->nullable();// solicitado pendiente, no solicitado, entregado
             $table->timestamps();
         });
     }

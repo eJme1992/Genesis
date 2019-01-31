@@ -71,7 +71,7 @@ class AsignacionController extends Controller
 
     public function destroy($id)
     {
-        //
+        return Asignacion::asigDestroy($id);
     }
 
     public function buscarModeloAsignado($id)

@@ -46,7 +46,6 @@ class GuiaRemision extends Model
     public static function guiaStore($request){
 
         $query = GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count();
-
         if ($query > 0) {
             return response()->json(1);
         }else{
@@ -67,6 +66,11 @@ class GuiaRemision extends Model
                         'modelo_id'   => Asignacion::findOrfail($request->modelo_id[$i])->modelo_id,
                         'montura'     => $request->montura[$i],
                     ]);
+
+                    $asig = Asignacion::findOrfail($request->modelo_id[$i]);
+                    $asig->monturas = $asig->monturas - $request->montura[$i];
+                    $asig->save();
+
                 }
 
                 BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
@@ -94,6 +98,14 @@ class GuiaRemision extends Model
     // eliminar guia de remision
     public static function guiaDestroy($id){
         $guia = GuiaRemision::findOrFail($id);
+        $mg = ModeloGuia::where("guia_remision_id", $id)->get(["modelo_id", "montura"]);
+
+        for ($i = 0; $i < count($mg); $i++) {
+            $asig = Asignacion::where("user_id", \Auth::user()->id)->where("modelo_id", $mg[$i]->modelo_id)->first();
+            $asig->monturas = $asig->monturas + $mg[$i]->montura;
+            $asig->save();
+        }
+
         BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
         GuiaRemision::destroy($id);
 

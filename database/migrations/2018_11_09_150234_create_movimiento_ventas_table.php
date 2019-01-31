@@ -13,7 +13,7 @@ class CreateMovimientoVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('movimiento_ventas', function (Blueprint $table) {
+        Schema::create('mov_ventas', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('venta_id')->unsigned();
             $table->integer('modelo_id')->unsigned();
