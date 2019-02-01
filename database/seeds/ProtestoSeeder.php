@@ -12,11 +12,11 @@ class ProtestoSeeder extends Seeder
     public function run()
     {
         $p = array(
-	        array('monto' => '00,00'),
-	        array('monto' => '85,00')
+	        array('monto' => '00.00'),
+	        array('monto' => '85.00')
 	    );
       	
       	//insert manual a una base de datos con array
-      	\DB::table('protestos')->insert($p);
+      	\DB::table('protesto_letras')->insert($p);
     }
 }

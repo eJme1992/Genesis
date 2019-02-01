@@ -42,10 +42,10 @@
 
       <div class="col-sm-6">
         @if($user->foto)
-          <img src="{{ url("images/$user->id.$user->foto") }}" 
-          class="img-rounded center-block img-responsive col-sm-10" style="padding: 1em;">
+          <img src="{{ url('images/'."$user->id.$user->foto") }}" 
+          class="img-circle center-block img-responsive" width="200">
         @else
-          <img src="{{ asset('img/sin_imagen.jpg') }}" alt="imagen" class="img-rounded center-block img-responsive" width="350px" height="300px">
+          <img src="{{ asset('img/sin_imagen.jpg') }}" alt="imagen" class="img-circle center-block img-responsive" width="200">
         @endif
       </div>
 		

@@ -17,6 +17,6 @@ class StatusAdicionalVentas extends Seeder
 	        array('id' => '3','nombre' => 'Entregado')
 	    );
       //insert manual a una base de datos con array
-      \DB::table('status_adicional_ventas')->insert($status);
+      \DB::table('ref_estadic')->insert($status);
     }
 }
