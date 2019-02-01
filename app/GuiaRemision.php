@@ -97,18 +97,21 @@ class GuiaRemision extends Model
 
     // eliminar guia de remision
     public static function guiaDestroy($id){
-        $guia = GuiaRemision::findOrFail($id);
-        $mg = ModeloGuia::where("guia_remision_id", $id)->get(["modelo_id", "montura"]);
+        
+        DB::transaction(function() use ($id) {
+            $guia = GuiaRemision::findOrFail($id);
+            $mg = ModeloGuia::where("guia_remision_id", $id)->get(["modelo_id", "montura"]);
 
-        for ($i = 0; $i < count($mg); $i++) {
-            $asig = Asignacion::where("user_id", \Auth::user()->id)->where("modelo_id", $mg[$i]->modelo_id)->first();
-            $asig->monturas = $asig->monturas + $mg[$i]->montura;
-            $asig->save();
-        }
+            for ($i = 0; $i < count($mg); $i++) {
+                $asig = Asignacion::where("user_id", \Auth::user()->id)->where("modelo_id", $mg[$i]->modelo_id)->first();
+                $asig->monturas = $asig->monturas + $mg[$i]->montura;
+                $asig->save();
+            }
 
-        BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
-        GuiaRemision::destroy($id);
-
+            BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
+            GuiaRemision::destroy($id);
+        });
+        
         return redirect('guiaRemision')->with([
             'flash_class'   => 'alert-success',
             'flash_message' => 'Guia de remision eliminada con exito.'

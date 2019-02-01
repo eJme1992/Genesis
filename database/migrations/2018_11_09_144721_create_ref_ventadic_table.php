@@ -13,13 +13,15 @@ class CreateAdicionalVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('ref_adicional', function (Blueprint $table) {
+        // Tabla que detalla el estado de la entrega de la factura,
+        //Cuando el estado de la factura cambia a entregado se debe colocar el id de la factura
+        Schema::create('ref_ventadic', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('venta_id')->unsigned();
             $table->integer('factura_id')->unsigned()->nullable();
-            $table->string('item')->nullable(); // factura, estuche
+            $table->string('item')->nullable(); // F:factura, E:estuche
             $table->string('fecha')->nullable(); // fecha en la que cambia el estado
-            $table->integer('ref_estadic_id')->unsigned();
+            $table->integer('ref_estadic_id')->unsigned(); // llave que referencia a la tabla "estado de entrega"
 
             $table->foreign('ref_estadic_id')->references('id')
                                         ->on('ref_estadic')
@@ -43,6 +45,6 @@ class CreateAdicionalVentasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ref_adicional');
+        Schema::dropIfExists('ref_ventadic');
     }
 }

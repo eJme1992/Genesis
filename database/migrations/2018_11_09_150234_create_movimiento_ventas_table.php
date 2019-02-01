@@ -13,13 +13,14 @@ class CreateMovimientoVentasTable extends Migration
      */
     public function up()
     {
+        // En el movimiento de venta se detalla la cantidad y el costo de cada producto
         Schema::create('mov_ventas', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('venta_id')->unsigned();
             $table->integer('modelo_id')->unsigned();
-            $table->integer('montura')->unsigned();
+            $table->integer('monturas')->unsigned();
             $table->decimal('precio_montura', 12, 2)->nullable();
-            $table->decimal('precio_modelo', 12, 2)->nullable(); // monturas + precio monturas
+            $table->decimal('precio_modelo', 12, 2)->nullable(); // monturas(cajas) + precio monturas = total
 
             $table->foreign('venta_id')->references('id')
                                         ->on('ventas')
@@ -39,6 +40,6 @@ class CreateMovimientoVentasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movimiento_ventas');
+        Schema::dropIfExists('mov_ventas');
     }
 }

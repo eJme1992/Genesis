@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStatusAdicionalVentasTable extends Migration
+class CreateProtestoLetrasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateStatusAdicionalVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('ref_estadic', function (Blueprint $table) {
+        Schema::create('protesto_letras', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre')->nullable();// solicitado pendiente, no solicitado, entregado
+            $table->decimal('monto', 12, 2)->nullable(); 
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateStatusAdicionalVentasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_adicional_ventas');
+        Schema::dropIfExists('protesto_letras');
     }
 }

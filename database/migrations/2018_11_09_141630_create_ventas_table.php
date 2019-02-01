@@ -12,15 +12,16 @@ class CreateVentasTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   
+        // venta o nota de pedido
         Schema::create('ventas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('num_pedido')->nullable();
+            $table->string('num_pedido')->nullable(); //numero de documento fisico
             $table->integer('user_id')->unsigned();
             $table->integer('cliente_id')->unsigned();
             $table->integer('direccion_id')->unsigned();
             $table->decimal('total', 12, 2)->nullable();// monto total de venta
-            $table->string('fecha')->nullable();
+            $table->string('fecha')->nullable(); //fecha del registro del pedido
 
             $table->foreign('user_id')->references('id')
                                         ->on('users')
