@@ -12,15 +12,21 @@ class Direccion extends Model
 
     // relaciones
     public function departamento(){
-    	return $this->belongsTo("App\Departamento", "departamento_id");
+    	return $this->belongsTo("App\Departamento", "departamento_id")->withDefault([
+            'departamento' => 'vacio'
+        ]);
     }
 
     public function provincia(){
-    	return $this->belongsTo("App\Provincia", "provincia_id");
+    	return $this->belongsTo("App\Provincia", "provincia_id")->withDefault([
+            'provincia' => 'vacio'
+        ]);
     }
 
     public function distrito(){
-    	return $this->belongsTo("App\Distrito", "distrito_id");
+    	return $this->belongsTo("App\Distrito", "distrito_id")->withDefault([
+            'distrito' => 'vacio'
+        ]);
     }
 
     public static function saveDir($request){

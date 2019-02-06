@@ -10,10 +10,10 @@
 @endsection
 @section('content')
 	<section>
-    <a class="btn btn-flat btn-default" href="{{ route('users.index') }}"><i class="fa fa-reply" aria-hidden="true"></i> Volver</a>
-    <a class="btn btn-flat btn-warning" href="{{ route('users.edit',[$user->id]) }}"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</a>
+    <a class="btn btn-default" href="{{ route('users.index') }}"><i class="fa fa-reply" aria-hidden="true"></i> Volver</a>
+    <a class="btn btn-warning" href="{{ route('users.edit',[$user->id]) }}"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</a>
     @if(Auth::user()->usuario <> "admin")
-    <button class="btn btn-flat btn-danger" data-toggle="modal" data-target="#delModal"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
+    <button class="btn btn-danger" data-toggle="modal" data-target="#delModal"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
     @endif
 	</section>
 
@@ -67,8 +67,8 @@
               <h4 class="text-center">¿Esta seguro de eliminar este usuario?</h4><br>
 
               <center>
-                <button class="btn btn-flat btn-danger" type="submit">Eliminar</button>
-                <button type="button" class="btn btn-flat btn-default" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
               </center>
             </form>
           </div>

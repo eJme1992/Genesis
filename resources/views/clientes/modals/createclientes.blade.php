@@ -1,7 +1,7 @@
 <form id="form_cliente_save" action="{{ route('clientes.store') }}" method="POST" enctype="multipart/form-data">
 {{ csrf_field() }}
 	<div class="modal fade" tabindex="-1" role="dialog" id="create_cliente">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="panel panel-success">
 					<div class="panel-heading text-center">
@@ -10,7 +10,7 @@
 					</div>
 					<div class="panel-body">
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-sm-4">
 							<label>Tipo de identificacion *</label>
 							<select name="tipo_id" class="form-control" required="">
 								<option value="DNI">DNI</option>
@@ -19,9 +19,14 @@
 							</select>
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-sm-4">
 							<label>Identificacion *</label>
 							<input type="text" name="identificacion" class="form-control int" placeholder="indique Nº de identificacion..." required="">
+						</div>
+
+						<div class="form-group col-sm-4">
+							<label>RUC </label>
+							<input type="text" name="ruc" class="form-control int" placeholder="Registro unico de constribuyentes...">
 						</div>
 
 						<div class="form-group col-sm-6">
@@ -45,8 +50,18 @@
 						</div>
 
 						<div class="form-group col-sm-12">
-							<label>Domicilio fiscal *</label>
-							<textarea class="form-control" name="direccion" required=""></textarea>
+							<label>Domicilio fiscal *[<em>Dep|Prov|Dist|Detalle</em>]</label>
+							<button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-sm">
+								<i class="fa fa-plus" aria-hidden="true"></i> Nueva direccion
+							</button>
+							<select class="form-control direccion_id" name="direccion_id" required="" id="direccion_id">
+								@foreach($direcciones as $m)
+								@php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
+								<option value="{{ $m->id }}">
+									{{ $m->departamento->departamento.' | '.$m->provincia->provincia.' | '.$distrito.' | '.$m->detalle }}
+								</option>
+								@endforeach
+							</select>
 						</div>
 
 						<div class="form-group col-sm-12">

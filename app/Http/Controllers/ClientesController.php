@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Cliente;
-use App\BitacoraUser;
+use App\{Cliente, BitacoraUser, Direccion, Departamento};
 
 class ClientesController extends Controller
 {
     public function index()
     {
         return view("clientes.index",[
-            "clientes" => Cliente::all()
+            "clientes"       => Cliente::all(),
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
         ]);
     }
 
@@ -27,7 +28,7 @@ class ClientesController extends Controller
             'tipo_id'           => 'required',
             'nombre_1'          => 'required|string',
             'ape_1'             => 'required|string',
-            'direccion'         => 'required',
+            'direccion_id'      => 'required',
             'correo'            => 'email|unique:clientes',
             'telefono_1'        => 'unique:clientes',
             'telefono_2'        => 'unique:clientes',
@@ -50,14 +51,14 @@ class ClientesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'identificacion'    => 'required|unique:clientes,identificacion,'.$id.',id',
-            'tipo_id'           => 'required',
-            'nombre_1'          => 'required|string',
-            'ape_1'             => 'required|string',
-            'direccion'         => 'required',
-            'correo'            => 'email|unique:clientes,correo,'.$id.',id',
-            'telefono_1'        => 'unique:clientes,telefono_1,'.$id.',id',
-            'telefono_2'        => 'unique:clientes,telefono_2,'.$id.',id',
+            'identificacion'        => 'required|unique:clientes,identificacion,'.$id.',id',
+            'tipo_id'               => 'required',
+            'nombre_1'              => 'required|string',
+            'ape_1'                 => 'required|string',
+            'direccion_id'          => 'required',
+            'correo'                => 'email|unique:clientes,correo,'.$id.',id',
+            'telefono_1'            => 'unique:clientes,telefono_1,'.$id.',id',
+            'telefono_2'            => 'unique:clientes,telefono_2,'.$id.',id',
         ]);
 
         return Cliente::updateCliente($request, $id);

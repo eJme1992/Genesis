@@ -17,16 +17,21 @@ class CreateClientesTable extends Migration
             $table->increments('id');
             $table->string('identificacion')->nullable();
             $table->string('tipo_id')->nullable();
+            $table->string('ruc')->nullable();
             $table->string('nombre_1')->nullable();
             $table->string('nombre_2')->nullable();
             $table->string('ape_1')->nullable();
             $table->string('ape_2')->nullable();
             $table->string('nombre_full')->nullable();
-            $table->string('direccion')->nullable();
+            $table->unsignedInteger('direccion_id')->nullable();
             $table->string('correo')->nullable();
             $table->string('telefono_1')->nullable();
             $table->string('telefono_2')->nullable();
-            $table->integer('status')->unsigned()->nullable();
+            $table->unsignedInteger('status')->nullable();
+
+            $table->foreign('direccion_id')->references('id')
+                                        ->on('direcciones')
+                                        ->onDelete('cascade');
             $table->timestamps();
         });
     }

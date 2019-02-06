@@ -226,7 +226,7 @@ $('.dep').change(function(event) {
 
 // busqueda de distritos
 $('.prov').change(function(event) {
-	$(".dist").empty().
+	$(".dist").empty();
 	$.get("dist/"+event.target.value+"",function(response, dep){
 		for (i = 0; i<response.length; i++) {
 				$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");

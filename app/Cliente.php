@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = "clientes";
-    protected $fillable = ["identificacion", "tipo_id", "nombre_1", "nombre_2", "ape_1", "ape_2", "nombre_full", "direccion", "correo", "telefono_1", "telefono_2", "status"];
+    protected $fillable = ["identificacion", "tipo_id", "ruc", "nombre_1", "nombre_2", "ape_1", "ape_2", "nombre_full", "direccion_id", "correo", "telefono_1", "telefono_2", "status"];
+
+    public function direccion(){
+        return $this->belongsTo("App\Direccion", "direccion_id");
+    }
+
+    public function dir(){
+        return $this->direccion->departamento->departamento.' '.$this->direccion->provincia->provincia.' '.$this->direccion->distrito->distrito.' '.$this->direccion->detalle;
+    }
+
+    // ---------------- metodos personalizados ------------------
 
     public static function storeCliente($request){
         $cliente = new Cliente($request->all());

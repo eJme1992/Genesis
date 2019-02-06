@@ -2,7 +2,7 @@
 {{ csrf_field() }}
 {{ method_field('PATCH') }}
 	<div class="modal fade" tabindex="-1" role="dialog" id="edit">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="panel panel-warning">
 					<div class="panel-heading text-center">
@@ -11,7 +11,7 @@
 					</div>
 					<div class="panel-body">
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-sm-4">
 							<label>Tipo de identificacion *</label>
 							<select name="tipo_id" class="form-control" required="" id="tipo_id">
 								<option value="DNI">DNI</option>
@@ -20,9 +20,14 @@
 							</select>
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-sm-4">
 							<label>Identificacion *</label>
 							<input type="text" name="identificacion" class="form-control int" placeholder="indique Nº de identificacion..." required="" id="identificacion">
+						</div>
+
+						<div class="form-group col-sm-4">
+							<label>RUC </label>
+							<input type="text" name="ruc" class="form-control int" placeholder="Registro unico de constribuyentes..." id="ruc">
 						</div>
 
 						<div class="form-group col-sm-6">
@@ -47,7 +52,15 @@
 
 						<div class="form-group col-sm-12">
 							<label>Domicilio fiscal *</label>
-							<textarea class="form-control" name="direccion" required="" id="direccion"></textarea>
+							<label>Domicilio fiscal *[<em>Dep|Prov|Dist|Detalle</em>]</label>
+							<select class="form-control" name="direccion_id" required="" id="direccion">
+								@foreach($direcciones as $m)
+								@php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
+								<option value="{{ $m->id }}">
+									{{ $m->departamento->departamento.' | '.$m->provincia->provincia.' | '.$distrito.' | '.$m->detalle }}
+								</option>
+								@endforeach
+							</select>
 						</div>
 
 						<div class="form-group col-sm-12">
