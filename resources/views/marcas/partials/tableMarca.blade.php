@@ -27,7 +27,7 @@
 				<tbody class="text-center">
 					@foreach($marcas as $d)
 						<tr>
-							<td class="text-capitalize">{{$d->codigo}}</td>
+							<td class="text-capitalize">{{$d->codigo}} <span class="pull-left">E <i class="fa {{  $d->estuche == 1 ? 'fa-check-circle text-success' : 'fa-remove text-danger' }}"></i></span></td>
 							<td class="text-capitalize">{{$d->name}}</td>
 							<td class="text-capitalize">{{$d->material->name}}</td>
 							<td class="text-capitalize">{{$d->observacion}}</td>

@@ -59,7 +59,7 @@ function cargarProv(){
 // cargar marca y mostrar campos de modelos
 $("#btn_carga_mar").click(function(e){
 	e.preventDefault();
-    $("#sm2").empty();
+  $("#sm2").empty();
 
 	var id_marca = $("#col_mar").val();
 	var id_col = $("#id_col2").val();
@@ -71,7 +71,7 @@ $("#btn_carga_mar").click(function(e){
 	    	$("#sm").fadeOut(400, "linear");
 	    	$("#btn_añadir_modelo").fadeOut(400, "linear");
 	    	$("#btn_save_mod").fadeOut(400, "linear");
-			$.alert({
+				$.alert({
 		        title: 'Alerta!',
 		        content: "Ya ha sido llenada esta marca",
 		        icon: 'fa fa-warning',
@@ -80,7 +80,7 @@ $("#btn_carga_mar").click(function(e){
 		    });
 
 		}else{
-
+				alert(res.marca);
 	    	$("#mar_rueda").val(res.rueda);
 	    	$("#cant_ruedas").val(res.rueda);
 	    	$("#marca_id").val(res.marca_id);
@@ -91,7 +91,7 @@ $("#btn_carga_mar").click(function(e){
 
 	    }
 
-  	});
+  });
 });
 
 // añadir mas marcas a la coleccion
@@ -140,7 +140,7 @@ $("#btn_añadir_marca").click(function(e){
 				"<div class='form-group col-sm-2'>"+
 					"<label>Precio de venta establecido</label>"+
 					"<input type='number' step='0.01' max='999999999999' min='1' name='precio_venta_establecido[]' class='form-control pve' required=''>"+
-				"</div>"+	
+				"</div>"+
 				"<div class='form-group col-sm-1 text-left' style='padding: 0.4em;'>"+
 					"<br>"+
 					"<button class='btn btn-danger' type='button' id='btn_delete_marca"+contM+"'>"+
@@ -298,7 +298,7 @@ $(".btn_cp").click(function(e) {
 	    cargarProv();
 	})
 	.fail(function(data) {
-		msj = data.responseText; 
+		msj = data.responseText;
 		separador = ",";
 		msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
 		msj2 = msj.replace(/\,/gi,"\n");
@@ -352,7 +352,7 @@ $("#btn_save_col").click(function(e) {
 	    });
 	})
 	.fail(function(data) {
-		msj = data.responseText; 
+		msj = data.responseText;
 		separador = ",";
 		msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
 		msj2 = msj.replace(/\,/gi,"<br>");
@@ -445,8 +445,8 @@ $("#form_mc").on("submit", function(e) {
 				$("#section_modelos").fadeIn(400, "linear");
 				$("#btn_new_col").fadeIn(400, "linear");
 
-				// añadir href al link de añadir mas marcas  
-				link = '{{ route("colecciones.show","id_col2") }}'; 
+				// añadir href al link de añadir mas marcas
+				link = '{{ route("colecciones.show","id_col2") }}';
     			link = link.replace('id_col2', $("#id_col2").val());
 				$("#link_mas_marcas").attr('href', link);
 			}
@@ -525,7 +525,7 @@ $("#form_modelos").on("submit", function(e) {
 			cont = 0;
 		})
 		.fail(function(data) {
-			msj = data.responseText; 
+			msj = data.responseText;
 			separador = ",";
 			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
 			msj2 = msj.replace(/\,/gi,"\n\n");

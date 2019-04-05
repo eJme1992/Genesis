@@ -15,9 +15,10 @@ class CreateAsignacionsTable extends Migration
     {
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('modelo_id')->unsigned();
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('modelo_id');
             $table->string('monturas')->nullable();
+            $table->unsignedInteger('estuche')->nullable();
             $table->string('fecha')->nullable();
 
             $table->foreign('user_id')->references('id')
@@ -26,7 +27,7 @@ class CreateAsignacionsTable extends Migration
 
             $table->foreign('modelo_id')->references('id')
                                        ->on('modelos')
-                                       ->onDelete('cascade');                           
+                                       ->onDelete('cascade');
             $table->timestamps();
         });
     }

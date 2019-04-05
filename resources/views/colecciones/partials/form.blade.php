@@ -120,14 +120,14 @@
 					 	<div class="col-sm-12">
 							<h3 class="label-danger padding_1em"><i class="fa fa-database"></i> <i class="fa fa-plus"></i> Añadir Modelos (Caja)</h3>
 						</div>
-						
+
 						<div class="col-sm-12">
 				            <div class="alert alert-info">
 				              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				              <span class="text-center">
 				                <i class="fa fa-info"></i>
-				                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual  
-				              </span> 
+				                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual
+				              </span>
 				            </div>
 				        </div>
 
@@ -201,35 +201,35 @@
 										</select>
 								</div>
 								<div class='form-group col-sm-3'>
-			                        <label>Descripcion </label>
-			                        <input type='text' name='descripcion_modelo[]' class='form-control'>
-			                    </div>
-			                    <div class='form-group col-sm-2'>
-			                        <label>Cajas </label>
-			                        <select name='caja[]' class='form-control'>
-			                                    <option value='' selected></option>
-			                                    <option value='1'>1</option>
-			                                    <option value='2'>2</option>
-			                                    <option value='3'>3</option>
-			                                    <option value='4'>4</option>
-			                                    <option value='5'>5</option>
-			                                    <option value='6'>6</option>
-			                                    <option value='7'>7</option>
-			                                    <option value='8'>8</option>
-			                                    <option value='9'>9</option>
-			                                    <option value='10'>10</option>
-			                                    <option value='11'>11</option>
-			                                    <option value='12'>12</option>
-			                                    <option value='13'>13</option>
-			                                    <option value='14'>14</option>
-			                                    <option value='15'>15</option>
-			                                    <option value='16'>16</option>
-			                                    <option value='17'>17</option>
-			                                    <option value='18'>18</option>
-			                                    <option value='19'>19</option>
-			                                    <option value='20'>20</option>
-			                            </select>
-			                    </div>
+                    <label>Descripcion </label>
+                    <input type='text' name='descripcion_modelo[]' class='form-control'>
+                </div>
+                <div class='form-group col-sm-2'>
+                    <label>Cajas </label>
+                    <select name='caja[]' class='form-control'>
+	                      <option value='' selected></option>
+	                      <option value='1'>1</option>
+	                      <option value='2'>2</option>
+	                      <option value='3'>3</option>
+	                      <option value='4'>4</option>
+	                      <option value='5'>5</option>
+	                      <option value='6'>6</option>
+	                      <option value='7'>7</option>
+	                      <option value='8'>8</option>
+	                      <option value='9'>9</option>
+	                      <option value='10'>10</option>
+	                      <option value='11'>11</option>
+	                      <option value='12'>12</option>
+	                      <option value='13'>13</option>
+	                      <option value='14'>14</option>
+	                      <option value='15'>15</option>
+	                      <option value='16'>16</option>
+	                      <option value='17'>17</option>
+	                      <option value='18'>18</option>
+	                      <option value='19'>19</option>
+	                      <option value='20'>20</option>
+                    </select>
+                </div>
 							</div>
 						</section>
 
@@ -248,10 +248,10 @@
 					</form>
 
 					<div class="col-sm-2">
-			          	<button class="btn btn-success btn-lg" type="button" id="btn_new_col" style="display: none;">
-							<i class="fa fa-plus"></i> Nueva Coleccion
-						</button>
-			        </div>
+			        <button class="btn btn-success btn-lg" type="button" id="btn_new_col" style="display: none;">
+								<i class="fa fa-plus"></i> Nueva Coleccion
+							</button>
+			    </div>
 
 			</div>
 		</div>

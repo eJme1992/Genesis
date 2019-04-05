@@ -52,7 +52,8 @@ class MarcaController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'material_id' => 'required'
+            'material_id' => 'required',
+            'estuche' => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)->where("material_id", $request->material_id)->count();
@@ -190,16 +191,17 @@ class MarcaController extends Controller
     }
 
     public function editMarcaSave(Request $request){
-        
+
         $this->validate($request, [
             'name' => 'required',
-            'material_id' => 'required'
+            'material_id' => 'required',
+            'estuche' => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)
                        ->where("material_id", $request->material_id)
                        ->where("id", "<>", $request->id)
-                       ->count();   
+                       ->count();
 
         if ($existe > 0) {
             // dd($existe);
@@ -238,7 +240,12 @@ class MarcaController extends Controller
             return response()->json(["msj" => "Ya se registraron modelos a esta marca!"]);
         }else{
             $cole = ColeccionMarca::where("marca_id", $id)->where("coleccion_id", $col)->first();
-            return response()->json($cole);
+            $marca = Marca::findOrFail($id)->estuche;
+
+            return response()->json([
+              "cole" => $cole,
+              "marca" => $marca
+            ]);
         }
 
     }

@@ -30,6 +30,13 @@
 							</select>
 						</div>
 						<div class="form-group">
+							<label for="">Estuches</label>
+							<select class="form-control" name="estuche" required id="marca_estuche">
+								<option value="1">SI</option>
+								<option value="0">NO</option>
+							</select>
+						</div>
+						<div class="form-group">
 							<label for="">Observacion</label>
 							<textarea name="observacion" id="observacion_marca" class="form-control"></textarea>
 						</div>

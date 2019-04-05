@@ -19,6 +19,7 @@ class CreateModelosTable extends Migration
             $table->string('name');
             $table->text('descripcion_modelo')->nullable();
             $table->integer('montura')->unsigned();
+            $table->integer('estuche')->unsigned()->nullable();
             $table->decimal('precio_montura', 12,2)->nullable();
             $table->integer('cajas')->nullable();
             $table->integer('coleccion_id')->unsigned();

@@ -15,9 +15,10 @@ class CreateModeloGuiasTable extends Migration
     {
         Schema::create('modelo_guias', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('guia_remision_id')->unsigned();
-            $table->integer('modelo_id')->unsigned();
-            $table->integer('montura')->unsigned();
+            $table->unsignedInteger('guia_remision_id');
+            $table->unsignedInteger('modelo_id');
+            $table->unsignedInteger('montura');
+            $table->unsignedInteger('estuche');
 
             $table->foreign('guia_remision_id')->references('id')
                                         ->on('guia_remision')
@@ -27,7 +28,7 @@ class CreateModeloGuiasTable extends Migration
                                         ->on('modelos')
                                         ->onDelete('cascade');
 
-                                                                    
+
             $table->timestamps();
         });
     }

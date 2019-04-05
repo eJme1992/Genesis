@@ -64,6 +64,7 @@
 		    	$("#name_marca").val(res.name);
 		    	$("#observacion_marca").val(res.observacion);
 		    	$("#material_id").val(res.material_id).attr("selected",true);
+		    	$("#marca_estuche").val(res.estuche).attr("selected",true);
 		  	});
 
 		  	$("#re").fadeOut('slow/400/fast');
@@ -124,12 +125,12 @@
 		  .fail(function(data) {
 		    $("#modal_edit").modal('toggle');
 		    btn.text('Actualizar');
-		    msj = data.responseText; 
-			separador = ",";
-			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-			msj2 = msj.replace(/\,/gi,"\n\n");
-			alert(msj2.toUpperCase());
-		  })
+		    msj = data.responseText;
+				separador = ",";
+				msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
+				msj2 = msj.replace(/\,/gi,"\n\n");
+				alert(msj2.toUpperCase());
+			  })
 		});
 
 		// actualizar coleccion
@@ -203,5 +204,6 @@
 		    }
 		  });
 		});
+
 	</script>
 @endsection

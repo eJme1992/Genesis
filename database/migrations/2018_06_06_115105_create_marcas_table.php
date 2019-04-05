@@ -18,6 +18,7 @@ class CreateMarcasTable extends Migration
             $table->string('codigo');
             $table->string('name');
             $table->integer('material_id')->unsigned();
+            $table->integer('estuche')->unsigned();
             $table->text('observacion')->nullable();
 
             $table->foreign('material_id')->references('id')

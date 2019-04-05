@@ -16,10 +16,10 @@ class CreateGuiaRemisionsTable extends Migration
         Schema::create('guia_remision', function (Blueprint $table) {
             $table->increments('id');
             $table->string('serial')->nullable();
-            $table->integer('motivo_guia_id')->unsigned();
-            $table->integer('direccion_id')->unsigned();
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->integer('cliente_id')->unsigned()->nullable();
+            $table->unsignedInteger('motivo_guia_id');
+            $table->unsignedInteger('direccion_id');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('cliente_id')->nullable();
 
             $table->foreign('motivo_guia_id')->references('id')
                                         ->on('motivo_guias')
@@ -35,8 +35,8 @@ class CreateGuiaRemisionsTable extends Migration
 
             $table->foreign('cliente_id')->references('id')
                                         ->on('clientes')
-                                        ->onDelete('cascade');                            
-                                                                    
+                                        ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
