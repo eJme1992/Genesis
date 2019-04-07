@@ -23,6 +23,11 @@
 var cont = 1;
 var cont_mar = 1;
 
+// nueva coleccion (recargar)
+$("#btn_new_col").click(function(e){
+	location.reload(5000);
+});
+
 // cargar todas las marcas
 function cargarMarcas(){
 	$(".s_m").empty();
@@ -64,30 +69,34 @@ $("#btn_carga_mar").click(function(e){
 	var id_marca = $("#col_mar").val();
 	var id_col = $("#id_col2").val();
 	var ruta = 'buscarM/'+id_marca+'/'+id_col+'';
+	$("#icon-cargar-marcas").addClass("fa-spinner fa-spin");
 	$.get(ruta, function(res){
 
 		if (res.msj != null){
 
-	    	$("#sm").fadeOut(400, "linear");
-	    	$("#btn_añadir_modelo").fadeOut(400, "linear");
-	    	$("#btn_save_mod").fadeOut(400, "linear");
-				$.alert({
-		        title: 'Alerta!',
-		        content: "Ya ha sido llenada esta marca",
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
+	    	$("#sm").fadeOut(400);
+	    	$("#btn_añadir_modelo").fadeOut(400);
+	    	$("#btn_save_mod").fadeOut(400);
+				mensajes("Alerta!", res.msj, "fa-warning", "red");
+				$("#icon-cargar-marcas").removeClass("fa-spinner fa-spin");
 
 		}else{
-				alert(res.marca);
-	    	$("#mar_rueda").val(res.rueda);
-	    	$("#cant_ruedas").val(res.rueda);
-	    	$("#marca_id").val(res.marca_id);
+				if (res.marca == 1) {
+					$("#div_estuches").show();
+					$("#select_estuche").attr("name", "estuche[]");
+				}else{
+					$("#div_estuches").hide();
+					$("#select_estuche").removeAttr("name");
+				}
 
-	    	$("#btn_añadir_modelo").fadeIn(400, "linear");
-	    	$("#sm").fadeIn(400, "linear");
-	    	$("#btn_save_mod").fadeIn(400, "linear");
+	    	$("#mar_rueda").val(res.coleccion.rueda);
+	    	$("#cant_ruedas").val(res.coleccion.rueda);
+	    	$("#marca_id").val(res.coleccion.marca_id);
+
+	    	$("#btn_añadir_modelo").fadeIn(400);
+	    	$("#sm").fadeIn(400);
+	    	$("#btn_save_mod").fadeIn(400);
+				$("#icon-cargar-marcas").removeClass("fa-spinner fa-spin");
 
 	    }
 
@@ -231,45 +240,36 @@ $("#btn_añadir_modelo").click(function(e){
 });
 
 
-// nueva coleccion (recargar)
-$("#btn_new_col").click(function(e){
-	location.reload(5000);
-});
-
-
 // guardar marcas
 $(".btn_cm").click(function(e) {
 	e.preventDefault();
 	var btn = $(".btn_cm");
 
-	btn.text("Espere un momento...").addClass("disabled");
+	btn.addClass("disabled");
+	$("#icon-save-marca").removeClass("fa-save").addClass("fa-spinner fa-spin");
 
 	$.ajax({
 		url: '{{ route("saveM") }}',
 		headers: {'X-CSRF-TOKEN': $("#token").val()},
 		type: 'POST',
 		dataType: 'JSON',
-		data: {name: $("#marca_name").val(), observacion: $('#marca_observacion').val(), material_id: $('#marca_material_id').val()},
+		data: {
+			name: $("#marca_name").val(),
+			observacion: $('#marca_observacion').val(),
+			material_id: $('#marca_material_id').val(),
+			estuche: $('#estuche').val()
+		},
 	})
 	.done(function(data) {
 		$("#modal_marca").modal('toggle');
-	    btn.text("Guardar");
 	    btn.removeClass("disabled");
+			$("#icon-save-marca").removeClass("fa-spinner fa-spin").addClass("fa-save");
 	    cargarMarcas();
 	})
 	.fail(function(data) {
-		msj = data.responseText;
-		msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-		msj2 = msj.replace(/\,/gi,"\n\n");
-		btn.text("Guardar");
 		btn.removeClass("disabled");
-		$.alert({
-	        title: 'Alerta!',
-	        content: msj2.toUpperCase(),
-	        icon: 'fa fa-warning',
-	        theme: 'modern',
-	        type: 'red'
-	    });
+		$("#icon-save-marca").removeClass("fa-spinner fa-spin").addClass("fa-save");
+		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
 	})
 	.always(function() {
 		console.log("complete");
@@ -289,7 +289,15 @@ $(".btn_cp").click(function(e) {
 		headers: {'X-CSRF-TOKEN': $("#token").val()},
 		type: 'POST',
 		dataType: 'JSON',
-		data: {nombre_pro: $("#nombre_pro").val(), telefono: $("#telefono").val(), correo: $("#correo").val(), empresa:$("#empresa").val(), ruc:$("#ruc").val(), direccion: $("#direccion").val(), observacion: $("#observacion").val() },
+		data: {
+			nombre_pro: $("#nombre_pro").val(),
+			telefono: $("#telefono").val(),
+			correo: $("#correo").val(),
+			empresa:$("#empresa").val(),
+			ruc:$("#ruc").val(),
+			direccion: $("#direccion").val(),
+			observacion: $("#observacion").val()
+		},
 	})
 	.done(function(data) {
 		$("#cp").modal('toggle');
@@ -298,19 +306,9 @@ $(".btn_cp").click(function(e) {
 	    cargarProv();
 	})
 	.fail(function(data) {
-		msj = data.responseText;
-		separador = ",";
-		msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-		msj2 = msj.replace(/\,/gi,"\n");
 		btn.text("Guardar");
 		btn.removeClass("disabled");
-		$.alert({
-	        title: 'Alerta!',
-	        content: msj2.toUpperCase(),
-	        icon: 'fa fa-warning',
-	        theme: 'modern',
-	        type: 'red'
-	    });
+		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
 	})
 	.always(function() {
 		console.log("complete");
@@ -323,50 +321,36 @@ $(".btn_cp").click(function(e) {
 $("#btn_save_col").click(function(e) {
 	e.preventDefault();
 	btn = $("#btn_save_col");
-	btn.text("Espere un momento...").addClass("disabled");
+	btn.addClass("disabled");
+	$("#icon-save-coleccion").removeClass("fa-save").addClass("fa-spinner fa-spin");
 
 	$.ajax({
 		url: '{{ route("saveCol") }}',
 		headers: {'X-CSRF-TOKEN': $("#token").val()},
 		type: 'POST',
 		dataType: 'JSON',
-		data: {name: $("#name").val(), fecha_coleccion: $("#fecha").val(), codigo: $("#codigo").val(), proveedor_id: $("#s_p").val() },
+		data: {
+			name: $("#name").val(),
+			fecha_coleccion: $("#fecha").val(),
+			codigo: $("#codigo").val(),
+			proveedor_id: $("#s_p").val()
+		},
 	})
 	.done(function(data) {
+		btn.addClass("hide");
+		$("#btn_prove").addClass("hide");
 		$("#id_col").val(data.id);
 		$("#id_col2").val(data.id);
 		$("#fecha").attr("readonly", "readonly").removeClass("fecha hasDatepicker");
 		$("#name").attr("readonly", "readonly");
 		$("#s_p").attr("disabled", "disabled");
-		$("#btn_prove").addClass("hide");
-		btn.addClass("hide");
-		$("#section_marcas").fadeIn(400, "linear");
-	    $.alert({
-	        title: 'Listo!',
-	        content: "Coleccion creada exitosamente!",
-	        icon: 'fa fa-check',
-	        theme: 'modern',
-	        type: 'green',
-	        boxWidth: '30%',
-			useBootstrap: true,
-	    });
+		$("#section_marcas").fadeIn(400);
+		mensajes("Listo!", "Coleccion creada con exito!", "fa-check", "green");
 	})
 	.fail(function(data) {
-		msj = data.responseText;
-		separador = ",";
-		msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-		msj2 = msj.replace(/\,/gi,"<br>");
-		btn.text("Guardar");
+		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
+		$("#icon-save-coleccion").removeClass("fa-spinner fa-spin").addClass("fa-save");
 		btn.removeClass("disabled");
-		$.alert({
-	        title: 'Alerta!',
-	        content: msj2.toUpperCase(),
-	        icon: 'fa fa-warning',
-	        theme: 'modern',
-	        type: 'red',
-	        boxWidth: '30%',
-			useBootstrap: false,
-	    });
 	})
 	.always(function() {
 		console.log("complete");
@@ -392,13 +376,7 @@ $("#form_mc").on("submit", function(e) {
 	});
 
 	if(err > 0){
-			$.alert({
-		        title: 'Alerta!',
-		        content: "No pueden haber 2 marcas iguales",
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
+			mensajes("Alerta!", "No pueden haber 2 marcas iguales", "fa-warning", "red");
 			return false;
 	}else{
 		var btn = $("#btn_save_mar");
@@ -417,56 +395,26 @@ $("#form_mc").on("submit", function(e) {
 			data: form,
 		})
 		.done(function(data) {
-			console.log(data)
 			if (data == 1) {
-				 $.alert({
-			        title: 'Error!',
-			        content: "El precio de venta establecido no puede ser menor al precio de costo de almacen, VERIFIQUE",
-			        icon: 'fa fa-warning',
-			        theme: 'modern',
-			        type: 'red',
-			        boxWidth: '30%',
-    				useBootstrap: true,
-			    });
+				mensajes("Error!", "El precio de venta establecido no puede ser menor al precio de costo de almacen", "fa-warning", "red");
 				btn.text("Guardar marcas").removeClass("disabled");
 			}else{
-			    $.alert({
-			        title: 'Listo!',
-			        content: "Marcas añadidas a la coleccion",
-			        icon: 'fa fa-check',
-			        theme: 'modern',
-			        type: 'green',
-			        boxWidth: '30%',
-    				useBootstrap: true,
-			    });
-
-			    $("#form_mc").remove();
+				mensajes("Listo!", "Marcas añadidas a la coleccion", "fa-check", "green");
 				cargarColMar();
-				$("#section_modelos").fadeIn(400, "linear");
-				$("#btn_new_col").fadeIn(400, "linear");
+			  $("#form_mc").remove();
+				$("#section_modelos").fadeIn(400);
+				$("#btn_new_col").fadeIn(400);
 
 				// añadir href al link de añadir mas marcas
 				link = '{{ route("colecciones.show","id_col2") }}';
-    			link = link.replace('id_col2', $("#id_col2").val());
+    		link = link.replace('id_col2', $("#id_col2").val());
 				$("#link_mas_marcas").attr('href', link);
 			}
 
 		})
 		.fail(function(data) {
-			console.log(data)
 			btn.text("Guardar marcas").removeClass("disabled");
-		    msj = data.responseText;
-			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-			msj = msj.replace(/\,/gi,"<br>");
-			$.alert({
-		        title: 'Error!',
-		        content: msj.toUpperCase(),
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red',
-		        boxWidth: '30%',
-				useBootstrap: true,
-		    });
+			mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
 		})
 		.always(function() {
 			console.log("complete");
@@ -474,7 +422,7 @@ $("#form_mc").on("submit", function(e) {
 	}
 });
 
-// guardar modelos
+// guardar modelos en la coleccion y marca
 $("#form_modelos").on("submit", function(e) {
 	e.preventDefault();
 	var err = 0;
@@ -491,14 +439,8 @@ $("#form_modelos").on("submit", function(e) {
 	});
 
 	if(err > 0){
-			$.alert({
-		        title: 'Alerta!',
-		        content: "No pueden haber nombres iguales en los modelos",
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
-			return false;
+		mensajes("Alerta!", "No pueden haber nombres iguales en los modelos", "fa-warning", "red");
+		return false;
 	}else{
 
 		var btn = $("#btn_save_mod");
@@ -518,26 +460,14 @@ $("#form_modelos").on("submit", function(e) {
 		})
 		.done(function(data) {
 			$("#sm").empty();
-			$("#btn_añadir_modelo").fadeOut(400, "linear");
-			$("#msj_mod").fadeIn(400, "linear");
-			btn.text("Guardar Modelos").removeClass("disabled");
-			btn.fadeOut(400, "linear");
+			$("#btn_añadir_modelo").fadeOut(400);
+			mensajes("Listo!", "Modelos añadidos a la coleccion", "fa-success", "green");
+			btn.text("Guardar Modelos").removeClass("disabled").fadeOut(400);
 			cont = 0;
 		})
 		.fail(function(data) {
-			msj = data.responseText;
-			separador = ",";
-			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-			msj2 = msj.replace(/\,/gi,"\n\n");
-			btn.text("Guardar");
-			btn.removeClass("disabled");
-			$.alert({
-		        title: 'Alerta!',
-		        content: msj2.toUpperCase(),
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
+			btn.text("Guardar").removeClass("disabled");
+			mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
 		})
 		.always(function() {
 			console.log("complete");

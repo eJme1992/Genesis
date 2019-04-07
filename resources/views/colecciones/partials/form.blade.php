@@ -23,9 +23,7 @@
 							<input type="text" class="form-control fecha" name="fecha_coleccion" required="" id="fecha">
 						</div>
 
-						<div class="">
-							<input type="hidden" name="codigo" value="{{ $col }}" class="form-control" readonly="" id="codigo">
-						</div>
+						<input type="hidden" name="codigo" value="{{ $col }}" class="form-control" readonly="" id="codigo">
 
 						<div class="form-group col-sm-3">
 							<label for="">
@@ -43,8 +41,8 @@
 							</select>
 						</div>
 						<div class="form-group col-sm-2" style="margin-top:2em">
-							<button class="btn btn-danger btn-sm" type="button" id="btn_save_col">
-								<i class="fa fa-save"></i> Guardar
+							<button class="btn btn-danger btn-flat" type="button" id="btn_save_col">
+								<i class="fa fa-save" id="icon-save-coleccion"></i> Guardar
 							</button>
 						</div>
 					</section>
@@ -121,42 +119,29 @@
 							<h3 class="label-danger padding_1em"><i class="fa fa-database"></i> <i class="fa fa-plus"></i> Añadir Modelos (Caja)</h3>
 						</div>
 
-						<div class="col-sm-12">
-				            <div class="alert alert-info">
-				              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				              <span class="text-center">
-				                <i class="fa fa-info"></i>
-				                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual
-				              </span>
-				            </div>
-				        </div>
-
-						<div id="msj_mod" style="display: none;" class="col-sm-12">
-							<div class="alert alert-success">
-						      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						      <strong class="text-center">Modelos añadidos a la coleccion</strong>
-						  	</div>
-						</div>
-
-						<div id="msj_mod" style="display: none;" class="col-sm-12">
-							<div class="alert alert-info">
-						      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						      <strong class="text-center" id="msj_ajax"></strong>
-						  	</div>
-						</div>
+						<div class="form-group col-sm-12">
+		            <div class="alert alert-info">
+		              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		              <span class="text-center">
+		                <i class="fa fa-info"></i>
+		                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual
+		              </span>
+		            </div>
+		        </div>
 
 						<div class="form-group col-sm-4">
 							<label for="">Seleccione marca</label>
 							<a class="btn-link" id="link_mas_marcas" data-toggle="tooltip" data-placement="top" title="Ir al panel para añadir marcas">
-				                <span class="text-primary"><i class="fa fa-plus"></i> Añadir mas marcas</span>
-				            </a>
-				            <select name="mar_mod" class="form-control" required="" id="col_mar">
+				         <span class="text-primary"><i class="fa fa-plus"></i> Añadir mas marcas</span>
+				      </a>
+				      <select name="mar_mod" class="form-control" required="" id="col_mar">
 							</select>
 						</div>
 
-						<div class="form-group col-sm-4" style="margin-top:2em">
-							<button class="btn btn-primary btn-sm" type="button" id="btn_carga_mar">
-								Cargar
+						<div class="form-group col-sm-4">
+							<label for="">---</label><br>
+							<button class="btn btn-primary btn-flat" type="button" id="btn_carga_mar">
+								<i class="fa" id="icon-cargar-marcas"></i> Cargar
 							</button>
 						</div>
 
@@ -171,7 +156,7 @@
 
 
 					<!-- formulario de modelos -->
-					<form id="form_modelos" method="POST">
+					<form id="form_modelos">
 						{{ csrf_field() }}
 						<input type='hidden' name='marca_id' id="marca_id">
 						<input type="hidden" name="rueda" id="cant_ruedas">
@@ -179,28 +164,45 @@
 
 						<section id="sm" style="display: none;">
 			    			<div class="div_total">
-				    			<div class='form-group col-sm-3'>
+				    			<div class='form-group col-sm-2'>
 									<label class='control-label' for='name'>Nombre modelo: *</label>
 										<input type='text' name='name[]' class='form-control nombre_modelo' id="nombre_modelo_0" required=''>
 								</div>
 								<div class='form-group col-sm-2'>
 									<label class='control-label'>Cantidad Monturas: *</label>
-										<select name='montura[]' class='form-control' required=''>
-												<option value='1'>1</option>
-												<option value='2'>2</option>
-												<option value='3'>3</option>
-												<option value='4'>4</option>
-												<option value='5'>5</option>
-												<option value='6'>6</option>
-												<option value='7'>7</option>
-												<option value='8'>8</option>
-												<option value='9'>9</option>
-												<option value='10'>10</option>
-												<option value='11'>11</option>
-												<option value='12' selected>12</option>
-										</select>
+									<select name='montura[]' class='form-control' required=''>
+											<option value='1'>1</option>
+											<option value='2'>2</option>
+											<option value='3'>3</option>
+											<option value='4'>4</option>
+											<option value='5'>5</option>
+											<option value='6'>6</option>
+											<option value='7'>7</option>
+											<option value='8'>8</option>
+											<option value='9'>9</option>
+											<option value='10'>10</option>
+											<option value='11'>11</option>
+											<option value='12' selected>12</option>
+									</select>
 								</div>
-								<div class='form-group col-sm-3'>
+								<div class='form-group col-sm-2' id="div_estuches" style="display: none;">
+									<label class='control-label'>Estuches: *</label>
+									<select class='form-control' required='' id="select_estuche">
+											<option value='1'>1</option>
+											<option value='2'>2</option>
+											<option value='3'>3</option>
+											<option value='4'>4</option>
+											<option value='5'>5</option>
+											<option value='6'>6</option>
+											<option value='7'>7</option>
+											<option value='8'>8</option>
+											<option value='9'>9</option>
+											<option value='10'>10</option>
+											<option value='11'>11</option>
+											<option value='12' selected>12</option>
+									</select>
+								</div>
+								<div class='form-group col-sm-2'>
                     <label>Descripcion </label>
                     <input type='text' name='descripcion_modelo[]' class='form-control'>
                 </div>

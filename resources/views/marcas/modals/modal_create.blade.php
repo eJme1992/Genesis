@@ -39,7 +39,7 @@
 					<div class="form-group text-right">
 						<input type="button" class="btn btn-danger" data-dismiss="modal" value="Cerrar">
 						<button type="submit" class="btn btn-success btn_cm">
-							<i class="fa fa-save"></i> Guardar
+							<i class="fa fa-save" id="icon-save-marca"></i> Guardar
 						</button>
 					</div>
 				</div>

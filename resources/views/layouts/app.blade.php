@@ -6,13 +6,13 @@
     <title>@yield('title',config('app.name'))</title>
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    
+
     <!-- Icon 16x16 -->
     <link rel="icon" type="image/png" sizes="240x240" href="{{asset('img/genesis2.png')}}">
-    
+
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/font-awesome.css')}}">
 
@@ -188,7 +188,7 @@
 
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
-    
+
     <!-- Data table -->
     <script src="{{ asset('plugins/datatables/datatables.js') }}"></script>
     <!-- <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script> -->
@@ -216,5 +216,28 @@
     <script src="{{ asset('js/propio.js') }}"></script>
 
     @yield('script')
+
+    <script>
+      // mensajes de alerta
+      function mensajes(title, content, icon, type){
+      	$.alert({
+      			title: title,
+      			content: content,
+      			icon: "fa"+icon,
+      			theme: 'modern',
+      			type: type
+      	});
+      }
+
+      // manipular errores por json
+      function eachErrors(data){
+      	msj = '';
+      	$.each(data.responseJSON.errors, function(index, val) {
+      		msj += "<li class='list-group-item'><b>"+ val +"</b></li>";
+      	});
+
+      	return msj;
+      }
+    </script>
   </body>
 </html>
