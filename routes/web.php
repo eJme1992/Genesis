@@ -88,14 +88,14 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('marDisponible/{id}', 	'ColeccionController@marDisponible');
 	Route::post('editCol', 				'ColeccionController@update')->name("editCol");
 	Route::post('saveCol', 				'ColeccionController@saveCol')->name("saveCol");
-	Route::get('ver_colecciones', 		'ColeccionController@ver')->name("colecciones.ver");
+	Route::get('listarcolecciones', 		'ColeccionController@ver')->name("colecciones.ver");
 	Route::post('savePrecios', 			'ColeccionController@savePrecios')->name("colecciones.savePrecios");
 	Route::post('editPrecios', 			'ColeccionController@editPrecios')->name("colecciones.editPrecios");
 
 	// proveedores
 	Route::get('allP', 		'ProveedoresController@allP')->name('allP');
 	Route::post('saveP', 	'ProveedoresController@saveP')->name('saveP');
-
+	
 	// clientes
 	Route::get('/viewClientes', function () { 
 		$data = Cliente::orderBy("id", "DESC")->get();

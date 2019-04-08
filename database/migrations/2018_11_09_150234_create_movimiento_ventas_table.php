@@ -16,10 +16,11 @@ class CreateMovimientoVentasTable extends Migration
         // En el movimiento de venta se detalla la cantidad y el costo de cada producto
         Schema::create('mov_ventas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('venta_id')->unsigned();
-            $table->integer('modelo_id')->unsigned();
-            $table->integer('monturas')->unsigned();
-            $table->decimal('precio_montura', 12, 2)->nullable();
+            $table->unsignedInteger('venta_id')->nullable();
+            $table->unsignedInteger('modelo_id')->nullable();
+            $table->unsignedInteger('monturas')->nullable();
+            $table->unsignedInteger('estuches')->nullable();
+            $table->decimal('precio_montura' , 12, 2)->nullable();
             $table->decimal('precio_modelo', 12, 2)->nullable(); // monturas(cajas) + precio monturas = total
 
             $table->foreign('venta_id')->references('id')

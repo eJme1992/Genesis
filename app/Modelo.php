@@ -9,7 +9,7 @@ class Modelo extends Model
 {
     protected $table = "modelos";
 
-    protected $fillable = ["codigo", "name", "descripcion_modelo", "coleccion_id", "marca_id", "montura", "status_id"];
+    protected $fillable = ["codigo", "name", "descripcion_modelo", "coleccion_id", "marca_id", "montura", "status_id", "estuche"];
 
     // relaciones
     public function coleccion(){
@@ -115,6 +115,7 @@ class Modelo extends Model
                 $modelo->coleccion_id = $request->id_coleccion;
                 $modelo->marca_id = $request->marca_id;
                 $modelo->montura = $request->montura[$m];
+                $modelo->estuche = $request->estuche[$m];
                 $modelo->status_id = 1;
                 $modelo->save();
             }

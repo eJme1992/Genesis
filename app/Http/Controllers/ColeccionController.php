@@ -19,7 +19,7 @@ class ColeccionController extends Controller
      */
     public function index()
     {
-        return view("colecciones.index",[
+        return view("colecciones.create",[
             "marcas"      => Marca::all(),
             "colecciones" => Coleccion::all(),
             "proveedores" => Proveedor::all(),
@@ -30,7 +30,7 @@ class ColeccionController extends Controller
 
     public function ver()
     {
-        return view("colecciones.ver",[
+        return view("colecciones.index",[
             "marcas"      => Marca::all(),
             "colecciones" => Coleccion::all(),
             "proveedores" => Proveedor::all(),

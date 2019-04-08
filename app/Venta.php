@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Venta extends Model
 {
 	protected $table = "ventas";
-    protected $fillable = ["num_pedido", "user_id", "cliente_id", "direccion_id", "total", "fecha"];
+    protected $fillable = [
+			"user_id", "cliente_id", 
+			"direccion_id", "total", "fecha"
+		];
 
     // relaciones
     public function user(){

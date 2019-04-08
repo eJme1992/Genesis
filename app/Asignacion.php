@@ -20,6 +20,9 @@ class Asignacion extends Model
     	return $this->belongsTo("App\User", "user_id");
     }
 
+    // ------------------------- funciones personalizadas ------------------------------
+    
+    // setear la marca con su material
     public static function marcasAll($id){
     	$marcas = ColeccionMarca::with("marca.material")
     	                          ->where("coleccion_id", $id)
@@ -28,7 +31,6 @@ class Asignacion extends Model
         return response()->json($marcas);
     }
 
-    // ------------------------- funciones personalizadas ------------------------------
 
     // obtener precios pa y pve
     public static function precioColeccionMarca($marca, $coleccion){
@@ -78,6 +80,7 @@ class Asignacion extends Model
                             <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
                             <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
                             <td>".$montura."</td>
+                            <td>".$mod->estuche."</td>
                             <td>
                                 <select class='form-control' name='monturas[]' id='monturas_".$id."'>
                                 <option value=''>...</option>

@@ -9,17 +9,24 @@ class GuiaRemision extends Model
 {
     protected $table = "guia_remision";
 
-    protected $fillable = ["serial", "motivo_guia_id", "direccion_id", "user_id", "cliente_id"];
+    protected $fillable = [
+      "serial", "motivo_guia_id", "dir_salida", 
+      "dir_llegada", "user_id", "cliente_id"
+    ];
 
     // relaciones
     public function motivo_guia(){
     	return $this->belongsTo("App\MotivoGuia", "motivo_guia_id");
     }
 
-    public function direccion(){
-    	return $this->belongsTo("App\Direccion", "direccion_id");
+    public function dirSalida(){
+      return $this->belongsTo("App\Direccion", "dir_salida");
     }
-
+    
+    public function dirLLegada(){
+    	return $this->belongsTo("App\Direccion", "dir_llegada");
+    }
+    
     public function user(){
     	return $this->belongsTo("App\User", "user_id")->withDefault([
             'name' => 'vacio'
@@ -54,17 +61,19 @@ class GuiaRemision extends Model
                 ($request->motivo_guia_id == 4) ? $user = null : $user = \Auth::user()->id;//devolucion
 
                 $data = GuiaRemision::create([
-                    'serial'         => $request->serial.'-'.$request->guia,
-                    'motivo_guia_id' => $request->motivo_guia_id,
-                    'direccion_id'   => $request->direccion_id,
-                    'cliente_id'     => $request->cliente_id,
-                    'user_id'        => $user,
+                    'serial'          => $request->serial.'-'.$request->guia,
+                    'motivo_guia_id'  => $request->motivo_guia_id,
+                    'dir_salida'      => $request->dir_salida,
+                    'dir_llegada'     => $request->dir_llegada,
+                    'cliente_id'      => $request->cliente_id,
+                    'user_id'         => $user,
                 ]);
 
                 for ($i = 0; $i < count($request->modelo_id) ; $i++) { 
                     $data->modeloGuias()->create([
                         'modelo_id'   => Asignacion::findOrfail($request->modelo_id[$i])->modelo_id,
                         'montura'     => $request->montura[$i],
+                        'estuche'     => $request->estuche[$i],
                     ]);
 
                     $asig = Asignacion::findOrfail($request->modelo_id[$i]);

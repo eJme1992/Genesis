@@ -17,16 +17,13 @@ class CreateGuiaRemisionsTable extends Migration
             $table->increments('id');
             $table->string('serial')->nullable();
             $table->unsignedInteger('motivo_guia_id');
-            $table->unsignedInteger('direccion_id');
+            $table->unsignedInteger('dir_salida')->nullable();
+            $table->unsignedInteger('dir_llegada')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('cliente_id')->nullable();
 
             $table->foreign('motivo_guia_id')->references('id')
                                         ->on('motivo_guias')
-                                        ->onDelete('cascade');
-
-            $table->foreign('direccion_id')->references('id')
-                                        ->on('direcciones')
                                         ->onDelete('cascade');
 
             $table->foreign('user_id')->references('id')

@@ -17,12 +17,16 @@ class CreateRefVentadicTable extends Migration
         //Cuando el estado de la factura cambia a entregado se debe colocar el id de la factura
         Schema::create('ref_ventadic', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('venta_id')->unsigned();
-            $table->integer('factura_id')->unsigned()->nullable();
-            $table->string('item')->nullable(); // F:factura, E:estuche
-            $table->string('fecha')->nullable(); // fecha en la que cambia el estado
-            $table->integer('ref_estadic_id')->unsigned(); // llave que referencia a la tabla "estado de entrega"
+            $table->unsignedInteger('venta_id')->nullable();
+            $table->unsignedInteger('factura_id')->nullable();
+            $table->unsignedInteger('ref_item_id')->nullable(); // fk de la tabla ref_item
+            $table->unsignedInteger('ref_estadic_id')->nullable(); // llave que referencia a la tabla "estado de entrega"
+            $table->string('fecha_estado')->nullable(); // fecha en la que cambia el estado
 
+            $table->foreign('ref_item_id')->references('id')
+                                        ->on('ref_item')
+                                        ->onDelete('cascade');
+            
             $table->foreign('ref_estadic_id')->references('id')
                                         ->on('ref_estadic')
                                         ->onDelete('cascade');

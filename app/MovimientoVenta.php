@@ -8,7 +8,10 @@ class MovimientoVenta extends Model
 {
     protected $table = "movimiento_ventas";
 
-    protected $fillable = ["venta_id", "modelo_id", "montura", "precio_montura", "precio_modelo"];
+    protected $fillable = [
+      "venta_id", "modelo_id", "monturas", 
+      "estuches", "precio_montura", "precio_modelo"
+    ];
 
     // relaciones
     public function venta(){

@@ -15,7 +15,8 @@ class MotivoGuiaSeeder extends Seeder
 	        array('id' => '1','nombre' => 'Venta'),
 	        array('id' => '2','nombre' => 'Emisor Itinerante'),
 	        array('id' => '3','nombre' => 'Consignacion'),
-	        array('id' => '4','nombre' => 'Devolucion')
+	        array('id' => '4','nombre' => 'Consignacion - Venta'),
+	        array('id' => '5','nombre' => 'Devolucion')
 	    );
       //insert manual a una base de datos con array
       \DB::table('motivo_guias')->insert($status);

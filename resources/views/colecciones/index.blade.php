@@ -1,479 +1,137 @@
 @extends('layouts.app')
-@section('title','Crear Coleccion - '.config('app.name'))
-@section('header','Crear Coleccion')
+@section('title','Listado de colecciones - '.config('app.name'))
+@section('header','Listado de colecciones')
 @section('breadcrumb')
 	<ol class="breadcrumb">
 	  <li><a href="{{route('dashboard')}}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
-	  <li class="active"> Crear Coleccion </li>
+	  <li class="active"> Listado de colecciones </li>
 	</ol>
 @endsection
 @section('content')
-
-	@include('partials.flash')
-
-	{{-- tablas --}}
-	<div class="row">
-		@include("colecciones.partials.form")
+@include('partials.flash')
+<style type="text/css">
+	.icon_color:hover{
+		color: #35C96B;
+	}
+</style>
+<div class="row">
+  	<div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="fa fa-table"></i></span>
+        
+        <div class="info-box-content">
+          <span class="info-box-text">Colecciones</span>
+          <span class="info-box-number">{{ count($colecciones) }}</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+</div><!--row-->
+<div class="row">
+<div class="col-sm-12 col-xs-12">
+	<div class="box box-danger box-solid">
+  		<div class="box-header with-border">
+	        <h3 class="box-title"><i class="fa fa-database"></i> Listado de colecciones</h3>
+	        <span class="pull-right">
+	        	<a href="{{ route('colecciones.index') }}" class="btn btn-sm btn-danger"><i class="fa fa-plus"></i> Nueva</a>
+	        </span>
+	    </div>
+			<div class="box-body">
+			<table class="table data-table table-bordered table-hover">
+				<thead class="label-danger">
+					<tr>
+						<th class="text-center">Codigo</th>
+						<th class="text-center">Nombre</th>
+						<th class="text-center">Fecha de coleccion</th>
+						<th class="text-center">Marcas</th>
+						<th class="text-center">Precio almacen / Precio establecido</th>
+						<th class="text-center">Modelos</th>
+						<th class="text-center">Proveedor</th>
+					</tr>
+				</thead>
+				<tbody class="text-center">
+					@foreach($colecciones as $d)
+						<tr>
+							<td>000{{ $d->id }}</td>
+							<td>{{ $d->name }}</td>
+							<td>{{ $d->fecha_coleccion }}</td>
+							<td class="text-left">
+								@forelse($d->cm as $m)
+									<i class="fa fa-arrow-right"></i>
+									<span class="text-capitalize">
+										{{ $m->marca->name.' - ['.$m->marca->material->name.']' }} 
+									</span>
+									<br>
+								@empty
+									<em class="text-warning">No posee marcas asignadas</em>
+								@endforelse
+							</td>
+							<td>
+								@foreach($d->cm as $m)
+									@if($m->precio_almacen)
+										<i class="fa fa-arrow-right"></i>
+										<span>
+											{{ 'S/'.$m->precio_almacen.' | S/'.$m->precio_venta_establecido }} 
+											<a href="#precio" data-toggle="modal" data-target="#precio" class="btn-link btn-sm btn_precio_edit" id="{{$d->id}}" value="{{$m->marca_id}}" data-pa="{{ $m->precio_almacen }}" data-pve="{{ $m->precio_venta_establecido }}">
+												<i class="fa fa-edit text-warning"></i> editar
+											</a>
+										</span>
+										<br>
+									@else
+										No asignado
+										<span data-toggle="tooltip" title="Añadir precios">
+											<a href="#precio" data-toggle="modal" data-target="#precio" class="btn-link btn-sm btn_precio" id="{{$d->id}}" value="{{$m->marca_id}}">
+												<i class="fa fa-plus-circle text-success icon_color"></i> añadir
+											</a>
+										</span>
+										<br>
+									@endif	
+								@endforeach
+							</td>
+							<td>
+								{{ $d->modelos($d->id)->count() }}
+								<span class="">
+									<a href="{{ route('colecciones.show',[$d->id]) }}" class="btn btn-default"
+										data-toggle="tooltip" data-placement="top" title="Añadir mas modelos">
+										<i class="fa fa-plus-circle"></i>
+									</a>
+								</span>
+							</td>
+							<td>{{ $d->proveedor->nombre }}</td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 	</div>
-
+</div>
+@include("colecciones.modals.marca.precio")
 @endsection
-@section('script')
+@section("script")
 <script>
+	$(".btn_precio").click(function(e) {
 
-var cont = 1;
-var cont_mar = 1;
+		$("#val_pa").val("");
+		$("#val_pve").val("");
 
-// nueva coleccion (recargar)
-$("#btn_new_col").click(function(e){
-	location.reload(5000);
-});
-
-// cargar todas las marcas
-function cargarMarcas(){
-	$(".s_m").empty();
-	var ruta = '{{ route("allM") }}';
-  	$.get(ruta, function(res){
-  		$.each(res, function(index, val) {
-    		$(".s_m").append("<option value='"+val.id+"'>"+val.name+ " | ("+val.material.name+")</option>");
-    	});
-  	});
-}
-
-// cargar las marcas de dicha coleccion
-function cargarColMar(){
-	var ruta = '{{ route("col_mar") }}';
-	$("#col_mar").empty();
-  	$.get(ruta, function(res){
-  		$.each(res, function(index, val) {
-    		$("#col_mar").append("<option value='"+val.marca.id+"'>"+val.marca.name+ " | ("+val.marca.material.name+")</option>");
-    	});
-  	});
-}
-
-// cargar proveedores
-function cargarProv(){
-	var ruta = '{{ route("allP") }}';
-	$("#s_p").empty();
-  	$.get(ruta, function(res){
-  		$.each(res, function(index, val) {
-    		$("#s_p").append("<option value='"+val.id+"'>"+val.nombre+" / "+val.empresa+"</option>");
-    	});
-  	});
-}
-
-// cargar marca y mostrar campos de modelos
-$("#btn_carga_mar").click(function(e){
-	e.preventDefault();
-  $("#sm2").empty();
-
-	var id_marca = $("#col_mar").val();
-	var id_col = $("#id_col2").val();
-	var ruta = 'buscarM/'+id_marca+'/'+id_col+'';
-	$("#icon-cargar-marcas").addClass("fa-spinner fa-spin");
-	$.get(ruta, function(res){
-
-		if (res.msj != null){
-
-	    	$("#sm").fadeOut(400);
-	    	$("#btn_añadir_modelo").fadeOut(400);
-	    	$("#btn_save_mod").fadeOut(400);
-				mensajes("Alerta!", res.msj, "fa-warning", "red");
-				$("#icon-cargar-marcas").removeClass("fa-spinner fa-spin");
-
-		}else{
-				if (res.marca == 1) {
-					$("#div_estuches").show();
-					$("#select_estuche").attr("name", "estuche[]");
-				}else{
-					$("#div_estuches").hide();
-					$("#select_estuche").removeAttr("name");
-				}
-
-	    	$("#mar_rueda").val(res.coleccion.rueda);
-	    	$("#cant_ruedas").val(res.coleccion.rueda);
-	    	$("#marca_id").val(res.coleccion.marca_id);
-
-	    	$("#btn_añadir_modelo").fadeIn(400);
-	    	$("#sm").fadeIn(400);
-	    	$("#btn_save_mod").fadeIn(400);
-				$("#icon-cargar-marcas").removeClass("fa-spinner fa-spin");
-
-	    }
-
-  });
-});
-
-// añadir mas marcas a la coleccion
-$("#btn_añadir_marca").click(function(e){
-	e.preventDefault();
-
-	var contM = cont_mar++;
-
-	$("#section_marca").append(
-			"<div class='div_total_marcas"+contM+"'>"+
-				"<div class='form-group col-sm-4'>"+
-					"<label>Marcas</label>"+
-					"<select name='marca_id[]' class='form-control s_m' required='' id='s_m_"+contM+"'>"+
-						"<option value=''>Seleccione</option>"+cargarMarcas()+
-					"</select>"+
-				"</div>"+
-				"<div class='form-group col-sm-2'>"+
-					"<label>Ruedas</label>"+
-					"<select name='rueda[]' class='form-control ru' required=''>"+
-						"<option value='1'>1</option>"+
-						"<option value='2'>2</option>"+
-						"<option value='3'>3</option>"+
-						"<option value='4'>4</option>"+
-						"<option value='5'>5</option>"+
-						"<option value='6'>6</option>"+
-						"<option value='7'>7</option>"+
-						"<option value='8'>8</option>"+
-						"<option value='9'>9</option>"+
-						"<option value='10'>10</option>"+
-						"<option value='11'>11</option>"+
-						"<option value='12'>12</option>"+
-						"<option value='13'>13</option>"+
-						"<option value='14'>14</option>"+
-						"<option value='15'>15</option>"+
-						"<option value='16'>16</option>"+
-						"<option value='17'>17</option>"+
-						"<option value='18'>18</option>"+
-						"<option value='19'>19</option>"+
-						"<option value='20'>20</option>"+
-					"</select>"+
-				"</div>"+
-				"<div class='form-group col-sm-2'>"+
-					"<label>Precio de almacen</label>"+
-					"<input type='number' step='0.01' max='999999999999' min='1' name='precio_almacen[]' class='form-control pa' required=''>"+
-				"</div>"+
-				"<div class='form-group col-sm-2'>"+
-					"<label>Precio de venta establecido</label>"+
-					"<input type='number' step='0.01' max='999999999999' min='1' name='precio_venta_establecido[]' class='form-control pve' required=''>"+
-				"</div>"+
-				"<div class='form-group col-sm-1 text-left' style='padding: 0.4em;'>"+
-					"<br>"+
-					"<button class='btn btn-danger' type='button' id='btn_delete_marca"+contM+"'>"+
-						"<i class='fa fa-remove'></i>"+
-					"</button>"+
-				"</div>"+
-			"</div>");
-
-		$('#btn_delete_marca'+contM+'').click(function(e){
-	      e.preventDefault();
-
-	      $('.div_total_marcas'+contM+'').remove();
-	      contM--;
-
-	    });
-});
-
-// añadir mas modelos a la coleccion
-$("#btn_añadir_modelo").click(function(e){
-	var contador = cont++;
-
-	$("#sm").append(
-			"<div class='div_total"+contador+"'>"+
-			"<div class='form-group col-sm-3'>"+
-				"<label class='control-label' for='name'>Nombre modelo: *</label>"+
-					"<input type='text' name='name[]' class='form-control nombre_modelo' id='nombre_modelo_"+contador+"' required=''>"+
-			"</div>"+
-			"<div class='form-group col-sm-2'>"+
-				"<label class='control-label'>Cantidad Monturas: *</label>"+
-					"<select name='montura[]' class='form-control' required=''>"+
-						"<option value='1'>1</option>"+
-						"<option value='2'>2</option>"+
-						"<option value='3'>3</option>"+
-						"<option value='4'>4</option>"+
-						"<option value='5'>5</option>"+
-						"<option value='6'>6</option>"+
-						"<option value='7'>7</option>"+
-						"<option value='8'>8</option>"+
-						"<option value='9'>9</option>"+
-						"<option value='10'>10</option>"+
-						"<option value='11'>11</option>"+
-						"<option value='12' selected>12</option>"+
-					"</select>"+
-			"</div>"+
-			 "<div class='form-group col-sm-3'>"+
-                "<label>Descripcion </label>"+
-                "<input type='text' name='descripcion_modelo[]' class='form-control'>"+
-            "</div>"+
-            "<div class='form-group col-sm-2'>"+
-                "<label class='control-label'>Cajas </label>"+
-                    "<select name='caja[]' class='form-control'>"+
-                        "<option value='' selected></option>"+
-                        "<option value='1'>1</option>"+
-                        "<option value='2'>2</option>"+
-                        "<option value='3'>3</option>"+
-                        "<option value='4'>4</option>"+
-                        "<option value='5'>5</option>"+
-                        "<option value='6'>6</option>"+
-                        "<option value='7'>7</option>"+
-                        "<option value='8'>8</option>"+
-                        "<option value='9'>9</option>"+
-                        "<option value='10'>10</option>"+
-                        "<option value='11'>11</option>"+
-                        "<option value='12'>12</option>"+
-                        "<option value='13'>13</option>"+
-                        "<option value='14'>14</option>"+
-                        "<option value='15'>15</option>"+
-                        "<option value='16'>16</option>"+
-                        "<option value='17'>17</option>"+
-                        "<option value='18'>18</option>"+
-                        "<option value='19'>19</option>"+
-                        "<option value='20'>20</option>"+
-                    "</select>"+
-            "</div>"+
-			"<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>"+
-				"<button class='btn btn-danger' type='button' id='btn_delete_modelo"+contador+"'>"+
-					"<i class='fa fa-remove'></i>"+
-				"</button>"+
-			"</div>");
-
-	$('#btn_delete_modelo'+contador+'').click(function(e){
-      e.preventDefault();
-
-      $('.div_total'+contador+'').remove();
-      contador--;
-    });
-
-});
-
-
-// guardar marcas
-$(".btn_cm").click(function(e) {
-	e.preventDefault();
-	var btn = $(".btn_cm");
-
-	btn.addClass("disabled");
-	$("#icon-save-marca").removeClass("fa-save").addClass("fa-spinner fa-spin");
-
-	$.ajax({
-		url: '{{ route("saveM") }}',
-		headers: {'X-CSRF-TOKEN': $("#token").val()},
-		type: 'POST',
-		dataType: 'JSON',
-		data: {
-			name: $("#marca_name").val(),
-			observacion: $('#marca_observacion').val(),
-			material_id: $('#marca_material_id').val(),
-			estuche: $('#estuche').val()
-		},
-	})
-	.done(function(data) {
-		$("#modal_marca").modal('toggle');
-	    btn.removeClass("disabled");
-			$("#icon-save-marca").removeClass("fa-spinner fa-spin").addClass("fa-save");
-	    cargarMarcas();
-	})
-	.fail(function(data) {
-		btn.removeClass("disabled");
-		$("#icon-save-marca").removeClass("fa-spinner fa-spin").addClass("fa-save");
-		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
-	})
-	.always(function() {
-		console.log("complete");
+		$("#col").val($(this).attr("id"));
+		$("#mar").val($(this).attr("value"));
 	});
 
-});
+	$(".btn_precio_edit").click(function(e) {
 
-// guardar proveedores
-$(".btn_cp").click(function(e) {
-	e.preventDefault();
-	var btn = $(".btn_cp");
+		// vaciamos primero los campos
+		$("#val_pa").val("");
+		$("#val_pve").val("");
 
-	btn.text("Espere un momento...").addClass("disabled");
+		// asignamosla marca y coleccion
+		$("#col").val($(this).attr("id"));
+		$("#mar").val($(this).attr("value"));
 
-	$.ajax({
-		url: '{{ route("saveP") }}',
-		headers: {'X-CSRF-TOKEN': $("#token").val()},
-		type: 'POST',
-		dataType: 'JSON',
-		data: {
-			nombre_pro: $("#nombre_pro").val(),
-			telefono: $("#telefono").val(),
-			correo: $("#correo").val(),
-			empresa:$("#empresa").val(),
-			ruc:$("#ruc").val(),
-			direccion: $("#direccion").val(),
-			observacion: $("#observacion").val()
-		},
-	})
-	.done(function(data) {
-		$("#cp").modal('toggle');
-	    btn.text("Guardar");
-	    btn.removeClass("disabled");
-	    cargarProv();
-	})
-	.fail(function(data) {
-		btn.text("Guardar");
-		btn.removeClass("disabled");
-		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
-	})
-	.always(function() {
-		console.log("complete");
+		// asignamos los datos a los campos
+		$("#val_pa").val($(this).data("pa"));
+		$("#val_pve").val($(this).data("pve"));
 	});
-
-});
-
-
-// guardar coleccion
-$("#btn_save_col").click(function(e) {
-	e.preventDefault();
-	btn = $("#btn_save_col");
-	btn.addClass("disabled");
-	$("#icon-save-coleccion").removeClass("fa-save").addClass("fa-spinner fa-spin");
-
-	$.ajax({
-		url: '{{ route("saveCol") }}',
-		headers: {'X-CSRF-TOKEN': $("#token").val()},
-		type: 'POST',
-		dataType: 'JSON',
-		data: {
-			name: $("#name").val(),
-			fecha_coleccion: $("#fecha").val(),
-			codigo: $("#codigo").val(),
-			proveedor_id: $("#s_p").val()
-		},
-	})
-	.done(function(data) {
-		btn.addClass("hide");
-		$("#btn_prove").addClass("hide");
-		$("#id_col").val(data.id);
-		$("#id_col2").val(data.id);
-		$("#fecha").attr("readonly", "readonly").removeClass("fecha hasDatepicker");
-		$("#name").attr("readonly", "readonly");
-		$("#s_p").attr("disabled", "disabled");
-		$("#section_marcas").fadeIn(400);
-		mensajes("Listo!", "Coleccion creada con exito!", "fa-check", "green");
-	})
-	.fail(function(data) {
-		mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
-		$("#icon-save-coleccion").removeClass("fa-spinner fa-spin").addClass("fa-save");
-		btn.removeClass("disabled");
-	})
-	.always(function() {
-		console.log("complete");
-	});
-
-});
-
-// guardar marcas relacionadas a la coleccion
-$("#form_mc").on("submit", function(e) {
-	e.preventDefault();
-	var err = 0;
-	var err_2 = 0;
-
-	$.each($('.s_m'),function(index, val){
-		name = $(val).val();
-		id_name = $(val).attr('id');
-		$.each($('.s_m'),function(index2, val2){
-			 if(name == $(val2).val() && id_name !=  $(val2).attr('id')){
-				 err++
-				 $(this).css('border','red 2px solid');
-			 }
-		});
-	});
-
-	if(err > 0){
-			mensajes("Alerta!", "No pueden haber 2 marcas iguales", "fa-warning", "red");
-			return false;
-	}else{
-		var btn = $("#btn_save_mar");
-		var token = $("#token").val();
-		var ruta = '{{ route("colecciones.store") }}';
-		var form = $("#form_mc").serialize();
-
-		btn.text("Espere un momento...");
-		btn.addClass("disabled");
-
-		$.ajax({
-			url: ruta,
-			headers: {'X-CSRF-TOKEN': token},
-			type: 'POST',
-			dataType: 'JSON',
-			data: form,
-		})
-		.done(function(data) {
-			if (data == 1) {
-				mensajes("Error!", "El precio de venta establecido no puede ser menor al precio de costo de almacen", "fa-warning", "red");
-				btn.text("Guardar marcas").removeClass("disabled");
-			}else{
-				mensajes("Listo!", "Marcas añadidas a la coleccion", "fa-check", "green");
-				cargarColMar();
-			  $("#form_mc").remove();
-				$("#section_modelos").fadeIn(400);
-				$("#btn_new_col").fadeIn(400);
-
-				// añadir href al link de añadir mas marcas
-				link = '{{ route("colecciones.show","id_col2") }}';
-    		link = link.replace('id_col2', $("#id_col2").val());
-				$("#link_mas_marcas").attr('href', link);
-			}
-
-		})
-		.fail(function(data) {
-			btn.text("Guardar marcas").removeClass("disabled");
-			mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
-		})
-		.always(function() {
-			console.log("complete");
-		});
-	}
-});
-
-// guardar modelos en la coleccion y marca
-$("#form_modelos").on("submit", function(e) {
-	e.preventDefault();
-	var err = 0;
-
-	$.each($('.nombre_modelo'),function(index, val){
-		name = $(val).val();
-		id_name = $(val).attr('id');
-		$.each($('.nombre_modelo'),function(index2, val2){
-			 if(name == $(val2).val() && id_name !=  $(val2).attr('id')){
-				 err++
-				 $(this).css('border','red 2px solid');
-			 }
-		});
-	});
-
-	if(err > 0){
-		mensajes("Alerta!", "No pueden haber nombres iguales en los modelos", "fa-warning", "red");
-		return false;
-	}else{
-
-		var btn = $("#btn_save_mod");
-		var token = $("#token").val();
-		var ruta = '{{ route("modelos.store") }}';
-
-		btn.text("Espere un momento...").addClass("disabled");
-
-		var form = $(this);
-
-		$.ajax({
-			url: ruta,
-			headers: {'X-CSRF-TOKEN': token},
-			type: 'POST',
-			dataType: 'JSON',
-			data: form.serialize(),
-		})
-		.done(function(data) {
-			$("#sm").empty();
-			$("#btn_añadir_modelo").fadeOut(400);
-			mensajes("Listo!", "Modelos añadidos a la coleccion", "fa-success", "green");
-			btn.text("Guardar Modelos").removeClass("disabled").fadeOut(400);
-			cont = 0;
-		})
-		.fail(function(data) {
-			btn.text("Guardar").removeClass("disabled");
-			mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
-		})
-		.always(function() {
-			console.log("complete");
-		});
-	}
-
-});
 </script>
 @endsection

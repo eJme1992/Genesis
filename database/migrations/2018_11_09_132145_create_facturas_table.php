@@ -15,9 +15,8 @@ class CreateFacturasTable extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('serie')->nullable();//numero de serie
-            $table->string('num_fact')->nullable();//numero de factura
-            $table->integer('cliente_id')->unsigned();
+            $table->string('num_factura')->nullable();//numero de factura
+            $table->unsignedInteger('cliente_id')->nullable();
             $table->decimal('subtotal', 12, 2)->nullable();
             $table->decimal('impuesto', 12, 2)->nullable();
             $table->decimal('total', 12, 2)->nullable();

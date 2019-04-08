@@ -232,11 +232,21 @@
       // manipular errores por json
       function eachErrors(data){
       	msj = '';
+        
       	$.each(data.responseJSON.errors, function(index, val) {
-      		msj += "<li class='list-group-item'><b>"+ val +"</b></li>";
+      		msj += "<li class='list-group-item list-group-item-danger'>"+ val +"</li>";
       	});
 
       	return msj;
+      }
+      
+      // validacion para el campo estuche
+      function addEstuches(contador){
+      	if (validarEstuche == 1) {
+      		$('#select_estuche, #select_estuche'+contador+'').removeAttr("disabled").attr('name', 'estuche[]').val(12);
+      	}else{
+      		$('#select_estuche, #select_estuche'+contador+'').attr("disabled", "disabled").removeAttr('name').val(0);
+      	}
       }
     </script>
   </body>

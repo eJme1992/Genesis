@@ -16,10 +16,10 @@
 								<label>Precio de almacen</label>
 								<input type='number' step="0.01" max="999999999999" min="1" name='precio_almacen' class='form-control' required='' id="val_pa">
 							</div>
-				            <div class='form-group col-sm-12'>
-				              	<label>Precio de venta establecido</label>
+				      <div class='form-group col-sm-12'>
+				       	<label>Precio de venta establecido</label>
 								<input type='number' step="0.01" max="999999999999" min="1" name='precio_venta_establecido' class='form-control' required='' id="val_pve">
-				            </div>
+				      </div>
 						</div>
 					</div>
 					<div class="modal-footer">

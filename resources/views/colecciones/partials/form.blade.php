@@ -1,7 +1,14 @@
-<div class="form-group col-sm-2 text-left">
-	<a href="{{ route('colecciones.ver') }}" class="btn btn-danger btn-lg">
-		<i class="fa fa-arrow-right"></i> Listado de colecciones
-	</a>
+<div class="col-sm-12">
+	<span class="pull-left">
+		<a href="{{ route('colecciones.ver') }}" class="btn btn-danger btn-lg">
+			<i class="fa fa-arrow-right"></i> Listado de colecciones
+		</a>
+	</span>
+	<span class="pull-right">
+		<button class="btn btn-success btn-lg" type="button" id="btn_new_col" style="display: none;">
+			<i class="fa fa-arrow-right"></i> Nueva Coleccion
+		</button>
+	</span>
 </div>
 <div class="col-sm-12">
 	<div class="box box-danger box-solid">
@@ -23,7 +30,7 @@
 							<input type="text" class="form-control fecha" name="fecha_coleccion" required="" id="fecha">
 						</div>
 
-						<input type="hidden" name="codigo" value="{{ $col }}" class="form-control" readonly="" id="codigo">
+						<input type="hidden" name="codigo" value="{{ $col }}" class="form-control" id="codigo">
 
 						<div class="form-group col-sm-3">
 							<label for="">
@@ -134,6 +141,7 @@
 							<a class="btn-link" id="link_mas_marcas" data-toggle="tooltip" data-placement="top" title="Ir al panel para añadir marcas">
 				         <span class="text-primary"><i class="fa fa-plus"></i> Añadir mas marcas</span>
 				      </a>
+							<span id="icon-span-estuche"></span>
 				      <select name="mar_mod" class="form-control" required="" id="col_mar">
 							</select>
 						</div>
@@ -149,9 +157,6 @@
 							<label for="">Ruedas</label>
 							<input type="text" class="form-control" name="rueda" readonly="" id="mar_rueda">
 						</div>
-
-						<hr>
-
 					</section>
 
 
@@ -163,8 +168,8 @@
 						<input type="hidden" name="id_coleccion" id="id_col2">
 
 						<section id="sm" style="display: none;">
-			    			<div class="div_total">
-				    			<div class='form-group col-sm-2'>
+		    			<div class="div_total">
+				    		<div class='form-group col-sm-2'>
 									<label class='control-label' for='name'>Nombre modelo: *</label>
 										<input type='text' name='name[]' class='form-control nombre_modelo' id="nombre_modelo_0" required=''>
 								</div>
@@ -185,9 +190,10 @@
 											<option value='12' selected>12</option>
 									</select>
 								</div>
-								<div class='form-group col-sm-2' id="div_estuches" style="display: none;">
+								<div class='form-group col-sm-2'>
 									<label class='control-label'>Estuches: *</label>
 									<select class='form-control' required='' id="select_estuche">
+											<option value='0'>0</option>
 											<option value='1'>1</option>
 											<option value='2'>2</option>
 											<option value='3'>3</option>
@@ -232,28 +238,22 @@
 	                      <option value='20'>20</option>
                     </select>
                 </div>
+								<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>
+									<button class='btn btn-primary' type='button' id='btn_añadir_modelo' style="display:none;">
+										<i class='fa fa-plus'></i>
+									</button>
+								</div>
 							</div>
 						</section>
 
-							<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>
-								<button class='btn btn-primary' type='button' id='btn_añadir_modelo' style="display:none;">
-									<i class='fa fa-plus'></i>
-								</button>
-							</div>
 
 						<div class="form-group col-sm-12 text-right">
-							<br>
-							<button class="btn btn-danger" type="submit" id="btn_save_mod" style="display: none;">
+							<hr>
+							<button class="btn btn-danger btn-flat" type="submit" id="btn_save_mod" style="display: none;">
 								<i class="fa fa-save"></i> Guardar Modelos
 							</button>
 						</div>
 					</form>
-
-					<div class="col-sm-2">
-			        <button class="btn btn-success btn-lg" type="button" id="btn_new_col" style="display: none;">
-								<i class="fa fa-plus"></i> Nueva Coleccion
-							</button>
-			    </div>
 
 			</div>
 		</div>

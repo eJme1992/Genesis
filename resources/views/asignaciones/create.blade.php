@@ -59,7 +59,7 @@
 							<div class="col-sm-12">
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td style="width: 80px"><span id="name_modelos"></span></td>
+										<td style="width: 150px"><span id="name_modelos"></span></td>
 										<td><span id="precio_modelos"></span></td>
 									</tr>
 								</table>
@@ -69,6 +69,7 @@
 											<th>[Codigo]</th>
 											<th>Nombre</th>
 											<th>Monturas disponibles</th>
+											<th>Estuches disponibles</th>
 											<th>Asignacion (monturas)</th>
 										</tr>
 									</thead>
@@ -78,16 +79,16 @@
 
 							@if (count($errors) > 0)
 							<div class="col-sm-12">	
-					          <div class="alert alert-danger alert-important">
-					          	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						          <ul>
-						            @foreach($errors->all() as $error)
-						              <li>{{$error}}</li>
-						            @endforeach
-						          </ul>  
-					          </div>
-					        </div> 
-					        @endif
+			          <div class="alert alert-danger alert-important">
+			          	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				          <ul>
+				            @foreach($errors->all() as $error)
+				              <li>{{$error}}</li>
+				            @endforeach
+				          </ul>  
+			          </div>
+			        </div> 
+			        @endif
 
 							<div class="form-group text-right col-sm-12">
 								<hr><br>
@@ -114,17 +115,10 @@
 				for (i = 0; i<response.length; i++) {
 						$("#marcas").append("<option value='"+response[i].marca.id+"'> "+response[i].marca.material.name+' | '+response[i].marca.name+"</option>");
 				}
-				$("#data_modelos").empty();
 			}else{
-				$.alert({
-			        title: 'Alerta!',
-			        content: "No posee marcas asociadas",
-			        icon: 'fa fa-warning',
-			        theme: 'modern',
-			        type: 'red'
-			    });
-				$("#data_modelos").empty();
+				mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");
 			}
+			$("#data_modelos").empty();
 		});
 	});
 
@@ -140,7 +134,6 @@
 			$("#name_modelos").empty();
 
 			$.get("../modelosAll/"+$("#coleccion").val()+"/"+$("#marcas").val()+"",function(response, dep){
-					// alert(response.data);
 
 					$('.data-table').DataTable().destroy();
 				    $("#data_modelos").html(response.data);
@@ -152,24 +145,11 @@
 					      	url:'{{asset("plugins/datatables/spanish.json")}}'
 					    }
 				    });
-
-					// $("#mostrar_modelos").fadeIn(400);
 			});
 		}else{
-			$.alert({
-		        title: 'Alerta!',
-		        content: "Nada para mostrar, debe llenar todos los campos",
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
+			mensajes("Alerta!", "Nada para mostrar, debe llenar todos los campos", "fa-warning", "red");
 		}
 	});
-
-	// Asignar id al elemento eleccionado
-	// $('#monturas').change(function(event) {
-	// 	$("#modelo_id").attr("name", "modelo_id[]");
-	// });
 
 </script>
 @endsection

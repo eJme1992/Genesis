@@ -11,208 +11,23 @@
 @include('partials.flash')
 
 <div class="row">
+  
     <div class="col-sm-4">
-    	<div class="panel panel-default">
-        <div class="panel-heading">
-          <h3>
-            <span style="padding: 0.4em; color:#525ad0; border-bottom: solid 1px #525ad0; border-radius:1em;">Codigo 000{{ $coleccion->id }}</span>
-          </h3>
-        </div>
-        <div class="panel-body" style="margin-left: 0.5em;">
-          <em>Nombre </em>
-          <span class="text-capitalize h4 list-group-item"><i class="fa fa-arrow-right"></i>  {{ $coleccion->name }}</span><br>
-          <em>fecha </em>
-          <span class="text-capitalize h4 list-group-item"><i class="fa fa-arrow-right"></i>  {{ $coleccion->fecha_coleccion }}</span><br>
-          <em>Marcas <span class="label label-primary">{{ $coleccion->cm->count() }}</span></em>
-            @foreach($coleccion->cm as $marcas)
-            <span class="text-capitalize list-group-item">
-              <div class="row">
-                @if($marcas->marca->name)
-                @if($marcas->precio_almacen)
-                <div class="col-sm-12">
-                    <i class="fa fa-arrow-right"></i>
-                    <span>
-                        <strong data-toggle="tooltip" data-placement="top" title="Precio de almacen">[PA]</strong> 
-                        S/ {{ $marcas->precio_almacen }} 
-                    </span> | 
-                    <span>
-                        <strong data-toggle="tooltip" data-placement="top" title="Precio de venta establecido">[PVE]</strong> 
-                        S/ {{ $marcas->precio_venta_establecido }}
-                    </span>
-                </div>
-                @endif
-                <div class="col-sm-8">
-                  <i class="fa fa-arrow-right"></i>  {{ $marcas->marca->name }} | ({{ $marcas->marca->material->name }})
-                </div>
-                <div class="col-sm-4 text-right">
-                  <form action="{{ url('marcas/'.$marcas->marca->id.'/'.$coleccion->id.'/destroy') }}" method="POST">
-                    {{ csrf_field() }}
-                    <button class="btn-link" type="submit" onclick="return confirm('Desea eliminar la marca con todas sus dependencias y modelos? S/N?');"><i class="fa fa-trash text-danger"></i>
-                    </button>
-                  </form>
-                </div>
-                @endif
-                <div class="col-sm-12" style="color:#525ad0;">
-                    <i class="fa fa-arrow-right"></i> Modelos({{ $marcas->marca->mc($coleccion->id, $marcas->marca->id) }})
-
-                    @if($marcas->marca->mc($coleccion->id, $marcas->marca->id) > 0)
-                        <div class="pull-right">
-
-                          <button type="button" id="btn_upd_mod" value="{{ $marcas->marca->id }}"
-                            data-toggle="modal" data-target="#modal_upd"
-                            aria-expanded="false" aria-controls="modal_upd"
-                            class="btn-link" onclick="UpdateModelo(this);" data-toggle="tooltip" data-placement="top" title="Actualizar modelos">
-                            <i class="fa fa-edit" style="color: orange;"></i>
-                          </button>
-                          <button type="button" id="btn_del_mod" value="{{ $marcas->marca->id }}"
-                          data-toggle="modal" data-target="#modal_del"
-                          aria-expanded="false" aria-controls="modal_del"
-                          class="btn-link" onclick="DeleteModelo(this);" data-toggle="tooltip" data-placement="top" title="Eliminar modelos">
-                              <i class="fa fa-trash text-danger"></i>
-                          </button>
-
-                      </div>
-                    @endif
-
-                </div>
-              </div>
-            </span>
-            <br>
-            @endforeach
-            @include("colecciones.modals.modal_del")
-            @include("colecciones.modals.modal_upd")
-        </div>
-      </div>
-      <span>
-        <a href="{{ route('colecciones.ver') }}" class="btn btn-default text-left"><i class="fa fa-arrow-left"></i> Atras</a>
-        <span id="reloadpage" style="display:none;" class="text-center">
-            <i class="fa fa-spinner fa-pulse fa-fw text-primary"></i>
-        </span>
-      </span>
+    	@include("colecciones.partials.show.panel_left")
     </div>
+    
     <div class="col-sm-8 fondo_form">
-        <div class="col-sm-12">
-            <div class="alert alert-info">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <span class="text-center">
-                <i class="fa fa-info"></i>
-                Si desea cambiar la cantidad de cajas, <b>seleccione en cada modelo la cantidad</b>, sino dejar tal cual  
-              </span> 
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <label for="">
-              Seleccione Marca(*)
-              [<a href="#cm" class="btn-link" data-toggle="modal" data-target="#cm">
-                <span class="text-primary"><i class="fa fa-plus"></i> Añadir</span>
-              </a>]
-              @include('colecciones.modals.cm2')
-            </label>
-            <select name="marca_id" id="marca" class="form-control" required="">
-                @foreach($coleccion->marcas as $marca)
-                <option value="{{ $marca->id }}">{{ $marca->name }} | ({{ $marca->material->name }})</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-sm-4" style="margin-top: 1.9em;">
-            <button class="btn btn-primary btn-sm" type="button" id="btn_buscar_marca">Cargar</button>
-            <span id="rm" style="display:none;" class="text-center">
-                <i class="fa fa-refresh fa-pulse fa-fw text-primary"></i>
-            </span>
-        </div>
-        <div class="col-sm-4">
-            <label>Nº de Ruedas</label>
-            <input type="text" readonly="" class="form-control" id="ruedas">
-        </div>
-        
-        <div class="col-sm-12"><hr></div>
-
-        <!-- formulario de modelos -->
-        <form id="form_modelos2" method="POST" class="">
-            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-            <input type='hidden' name='marca_id' id="marca_id_2">
-            <input type="hidden" name="rueda" class="ruedas">
-            <input type="hidden" value="{{ $coleccion->id }}" id="coleccion" name="id_coleccion">
-
-            <section id="sm" style="display: none;">
-                <div class="div_total">
-                    <div class='form-group col-sm-3'>
-                        <label class='control-label' for='name'>Nombre modelo *</label>
-                            <input type='text' name='name[]' class='form-control nombre_modelo2' id="nombre_modelo_0" required=''>
-                    </div>
-                    <div class='form-group col-sm-2'>
-                        <label class='control-label'>Monturas *</label>
-                            <select name='montura[]' class='form-control' required=''>
-                                    <option value='1'>1</option>
-                                    <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
-                                    <option value='7'>7</option>
-                                    <option value='8'>8</option>
-                                    <option value='9'>9</option>
-                                    <option value='10'>10</option>
-                                    <option value='11'>11</option>
-                                    <option value='12' selected>12</option>
-                            </select>
-                    </div>
-                    <div class='form-group col-sm-3'>
-                        <label>Descripcion </label>
-                        <input type='text' name='descripcion_modelo[]' class='form-control'>
-                    </div>
-                    <div class='form-group col-sm-2'>
-                        <label>Cajas </label>
-                        <select name='caja[]' class='form-control'>
-                                    <option value='' selected></option>
-                                    <option value='1'>1</option>
-                                    <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
-                                    <option value='7'>7</option>
-                                    <option value='8'>8</option>
-                                    <option value='9'>9</option>
-                                    <option value='10'>10</option>
-                                    <option value='11'>11</option>
-                                    <option value='12'>12</option>
-                                    <option value='13'>13</option>
-                                    <option value='14'>14</option>
-                                    <option value='15'>15</option>
-                                    <option value='16'>16</option>
-                                    <option value='17'>17</option>
-                                    <option value='18'>18</option>
-                                    <option value='19'>19</option>
-                                    <option value='20'>20</option>
-                            </select>
-                    </div>
-                </div>
-            </section>
-
-                <div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>
-                    <button class='btn btn-primary' type='button' id='btn_añadir_modelo' style="display:none;">
-                        <i class='fa fa-plus'></i>
-                    </button>
-                </div>
-
-            <div class="form-group col-sm-12">
-                <br>
-                <span class="pull-right">
-                    <button class="btn btn-danger" type="submit" id="btn_save_mod" style="display: none;">
-                        <i class="fa fa-save"></i> Guardar Modelos
-                    </button>
-                </span>
-            </div>
-        </form>
+        @include("colecciones.partials.show.panel_right")
     </div>
 </div>
+@include('colecciones.modals.marca.add_marca')
 @endsection
 
 @section("script")
 <script>
     var cont = 1;
     var cont_mar = 1;
+    var validarEstuche = '';
 
 	// cargar todas las marcas
     function DeleteModelo(btn_del_mod){
@@ -260,12 +75,13 @@
                       $("#dataM").append(
                           "<li class='list-group-item'>"+
                               "<div class='form-group'>"+
-                                "<span>Nombre <span class='pull-right'>Cod <i>[00"+val2.id+"]</i></span></span><br>"+
+                                "<span>Nombre <span class='pull-right'><strong>Cod [00"+val2.id+"]</strong></span></span><br>"+
                                 "<input type='text' class='form-control' name='name[]' value='"+val2.name+"' required='required' readonly>"+
                                 "<input type='hidden' name='id[]' value='"+val2.id+"'>"+
                                 "<span>Descripcion</span><br>"+
                                 "<input type='text' class='form-control' name='descripcion_modelo[]' value='"+val2.descripcion_modelo+"' readonly>"+
-                                "<span>Monturas [<em>Actualmente ("+val2.montura+") monturas</em>]</span><br>"+
+                                "<span>Monturas [<strong>Actualmente ("+val2.montura+") monturas</strong>]</span>"+
+                                "<span class='pull-right'><strong>Estuches ("+val2.estuche+")</strong></span><br>"+
                                 "<select name='montura[]' class='form-control'>"+
                                         "<option value='' selected>seleccione...</option>"+
                                         "<option value='1'>1</option>"+
@@ -304,39 +120,39 @@
         });
     }
 
-    // cargar todas las marcas
-	function cargarMarcasEnModal(){
-		$("#marca_id").empty();
-        var id_coleccion = $("#coleccion").val();
-        var ruta = '../marDisponible/'+id_coleccion+'';
-	  	$.get(ruta, function(res){
-	  		$.each(res, function(index, val) {
-	    		$("#marca_id").append("<option value='"+val.id+"'>"+val.name+" | ("+val.material.name+")</option>");
-	    	});
-	  	});
-	}
+    // cargar todas las marcas en modal
+  	function cargarMarcasEnModal(){
+  		$("#marca_id").empty();
+          var id_coleccion = $("#coleccion").val();
+          var ruta = '../marDisponible/'+id_coleccion+'';
+  	  	$.get(ruta, function(res){
+  	  		$.each(res, function(index, val) {
+  	    		$("#marca_id").append("<option value='"+val.id+"'>"+val.name+" | ("+val.material.name+")</option>");
+  	    	});
+  	  	});
+  	}
 
     // cargar marca y mostrar campos de modelos
     $("#btn_buscar_marca").click(function(e){
         e.preventDefault();
         $("#sm").fadeOut(400);
         $("#rm").fadeIn(400);
-
+        
         var id_marca = $("#marca").val();
         var id_coleccion = $("#coleccion").val();
         var ruta = '../buscarMarcaColeccion/'+id_coleccion+'/'+id_marca+'';
 
         if (id_marca == null) {
-            $.alert({
-                title: 'Alerta!',
-                content: "La marca esta vacia",
-                icon: 'fa fa-warning',
-                theme: 'modern',
-                type: 'red'
-            });
+            mensajes("Alerta!", "La marca esta vacia", "fa-warning", "red");
         }else{
             $.get(ruta, function(res){
-
+                
+                if (res.marca.estuche == 1) {
+                  $('.select_estuche').removeAttr("disabled").attr('name', 'estuche[]').val(12).attr("selected", true);
+              	}else{
+              		$('.select_estuche').attr("disabled", "disabled").removeAttr('name').val(0).attr("selected", true);
+              	}
+                
                 $(".ruedas").val(res.rueda);
                 $("#ruedas").val(res.rueda);
                 $("#marca_id_2").val(res.marca_id);
@@ -352,85 +168,25 @@
     });
 
     // añadir mas modelos a la coleccion
-        $("#btn_añadir_modelo").click(function(e){
-            var contador = cont++;
+    $("#btn_añadir_modelo").click(function(e){
+        var contador = cont++;
+        
+        $("#sm").append("<div id='div_campos"+contador+"'></div>");
+        $("#div_campos"+contador+"").html($("#div_campos").html());
+        $("#div_campos"+contador+"").append(
+          "<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>"+
+              "<button class='btn btn-danger' type='button' id='btn_delete_modelo"+contador+"'>"+
+                  "<i class='fa fa-remove'></i>"+
+              "</button>"+
+          "</div>");
 
-            $('#btn_delete_modelo'+contador+'').click(function(e){
-              e.preventDefault();
-
-              $('.div_total'+contador+'').remove();
-              contador--;
-
-            });
-
-            $("#sm").append(
-                    "<div class='div_total"+contador+"'>"+
-                    "<div class='form-group col-sm-3'>"+
-                        "<label class='control-label' for='name'>Nombre modelo *</label>"+
-                        "<input type='text' name='name[]' class='form-control nombre_modelo2' id='nombre_modelo_"+contador+"' required=''>"+
-                    "</div>"+
-                    "<div class='form-group col-sm-2'>"+
-                        "<label class='control-label'>Monturas *</label>"+
-                            "<select name='montura[]' class='form-control' required=''>"+
-                                "<option value='1'>1</option>"+
-                                "<option value='2'>2</option>"+
-                                "<option value='3'>3</option>"+
-                                "<option value='4'>4</option>"+
-                                "<option value='5'>5</option>"+
-                                "<option value='6'>6</option>"+
-                                "<option value='7'>7</option>"+
-                                "<option value='8'>8</option>"+
-                                "<option value='9'>9</option>"+
-                                "<option value='10'>10</option>"+
-                                "<option value='11'>11</option>"+
-                                "<option value='12' selected>12</option>"+
-                            "</select>"+
-                    "</div>"+
-                    "<div class='form-group col-sm-3'>"+
-                        "<label>Descripcion </label>"+
-                        "<input type='text' name='descripcion_modelo[]' class='form-control'>"+
-                    "</div>"+
-                    "<div class='form-group col-sm-2'>"+
-                        "<label class='control-label'>Cajas </label>"+
-                            "<select name='caja[]' class='form-control'>"+
-                                "<option value='' selected></option>"+
-                                "<option value='1'>1</option>"+
-                                "<option value='2'>2</option>"+
-                                "<option value='3'>3</option>"+
-                                "<option value='4'>4</option>"+
-                                "<option value='5'>5</option>"+
-                                "<option value='6'>6</option>"+
-                                "<option value='7'>7</option>"+
-                                "<option value='8'>8</option>"+
-                                "<option value='9'>9</option>"+
-                                "<option value='10'>10</option>"+
-                                "<option value='11'>11</option>"+
-                                "<option value='12'>12</option>"+
-                                "<option value='13'>13</option>"+
-                                "<option value='14'>14</option>"+
-                                "<option value='15'>15</option>"+
-                                "<option value='16'>16</option>"+
-                                "<option value='17'>17</option>"+
-                                "<option value='18'>18</option>"+
-                                "<option value='19'>19</option>"+
-                                "<option value='20'>20</option>"+
-                            "</select>"+
-                    "</div>"+
-                    "<div class='form-group col-sm-1 text-left' style='padding: 1.8em;'>"+
-                        "<button class='btn btn-danger' type='button' id='btn_delete_modelo"+contador+"'>"+
-                            "<i class='fa fa-remove'></i>"+
-                        "</button>"+
-                    "</div>"
-                    );
-
-            $('#btn_delete_modelo'+contador+'').click(function(e){
-              e.preventDefault();
-
-              $('.div_total'+contador+'').remove();
-              contador--;
-            });
-
+        $('#btn_delete_modelo'+contador+'').click(function(e){
+          e.preventDefault();
+          $('#div_campos'+contador+'').remove();
+          contador--;
         });
+
+    });
 
 
         // guardar modelos
@@ -441,7 +197,6 @@
             $.each($('.nombre_modelo2'),function(index, val){
                 name = $(val).val();
                 id_name = $(val).attr('id');
-                campo = this.id;
                 $.each($('.nombre_modelo2'),function(index2, val2){
                      if(name == $(val2).val() && id_name !=  $(val2).attr('id')){
                          err++
@@ -451,21 +206,16 @@
             });
 
             if(err > 0){
-                    $.alert({
-                        title: 'Alerta!',
-                        content: "No pueden nombres iguales en los modelos",
-                        icon: 'fa fa-warning',
-                        theme: 'modern',
-                        type: 'red'
-                    });
-                    return false;
+                mensajes("Alerta!", "No pueden nombres iguales en los modelos", "fa-warning", "red");
+                return false;
             }else{
 
                 var btn = $("#btn_save_mod");
                 var token = $("#token").val();
                 var ruta = '{{ route('modelos.store') }}';
 
-                btn.text("Espere un momento...").addClass("disabled");
+                btn.addClass("disabled");
+                $("#icon-save-modelo").removeClass("fa-save").addClass("fa-spinner fa-spin");
 
                 var form = $(this);
 
@@ -477,19 +227,14 @@
                     data: form.serialize(),
                 })
                 .done(function(data) {
-                    btn.text("Guardado! espere....").removeClass("disabled");
+                    btn.text("Guardado!");
+                    $("#icon-save-modelo").removeClass("fa-spinner fa-spin").addClass("fa-save");
                     location.reload(400);
                 })
                 .fail(function(data) {
                     btn.text("Guardar Modelos");
                     btn.removeClass("disabled");
-                    $.alert({
-                        title: 'Alerta!',
-                        content: "Nombre de modelo ya esta en uso",
-                        icon: 'fa fa-warning',
-                        theme: 'modern',
-                        type: 'red'
-                    });
+                    mensajes("Alerta!", "Nombre de modelo ya esta en uso", "fa-warning", "red");
                 })
                 .always(function() {
                     console.log("complete");
@@ -502,42 +247,35 @@
         $("#form_del_modelos").on("submit", function(e) {
             e.preventDefault();
 
-                var btn = $("#btn_save_mod");
-                var token = $("#token").val();
-                var ruta = '{{ route('modelos.delete') }}';
+            var btn = $("#btn_save_mod");
+            var token = $("#token").val();
+            var ruta = '{{ route('modelos.delete') }}';
 
-                btn.text("Espere un momento...");
-                btn.addClass("disabled");
+            btn.text("Espere un momento...").addClass("disabled");
 
-                var form = $(this);
+            var form = $(this);
 
-                $.ajax({
-                    url: ruta,
-                    headers: {'X-CSRF-TOKEN': token},
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: form.serialize(),
-                })
-                .done(function(data) {
-                    $("#rp").fadeIn(400);
-                    $("#modal_del").modal('toggle');
-                    btn.removeClass("disabled");
-                    location.reload(400);
-                })
-                .fail(function(data) {
-                    btn.text("Eliminar Modelos");
-                    btn.removeClass("disabled");
-                    $.alert({
-                        title: 'Alerta!',
-                        content: "Intente de nuevo",
-                        icon: 'fa fa-warning',
-                        theme: 'modern',
-                        type: 'red'
-                    });
-                })
-                .always(function() {
-                    console.log("complete");
-                });
+            $.ajax({
+                url: ruta,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                $("#rp").fadeIn(400);
+                $("#modal_del").modal('toggle');
+                btn.removeClass("disabled");
+                location.reload(400);
+            })
+            .fail(function(data) {
+                btn.text("Eliminar Modelos");
+                btn.removeClass("disabled");
+                mensajes("Alerta!", "intente de nuevo", "fa-warning", "red");
+            })
+            .always(function() {
+                console.log("complete");
+            });
 
         });
 
@@ -545,42 +283,34 @@
         $("#form_upd_modelos").on("submit", function(e) {
             e.preventDefault();
 
-                var btn = $(".btn_actualizar_modelos");
-                var token = $("#token").val();
-                var ruta = '{{ route('updateAll') }}';
+            var btn = $(".btn_actualizar_modelos");
+            var token = $("#token").val();
+            var ruta = '{{ route('updateAll') }}';
 
-                btn.text("Espere un momento...");
-                btn.addClass("disabled");
+            btn.text("Espere un momento...");
+            btn.addClass("disabled");
 
-                var form = $(this);
+            var form = $(this);
 
-                $.ajax({
-                    url: ruta,
-                    headers: {'X-CSRF-TOKEN': token},
-                    type: 'PUT',
-                    dataType: 'JSON',
-                    data: form.serialize(),
-                })
-                .done(function(data) {
-                    $("#reloadpage").fadeIn(400);
-                    $("#modal_upd").modal('toggle');
-                    btn.removeClass("disabled");
-                    location.reload(400);
-                })
-                .fail(function(data) {
-                    btn.text("Actualizar Modelos");
-                    btn.removeClass("disabled");
-                    $.alert({
-                        title: 'Alerta!',
-                        content: "Intente de nuevo",
-                        icon: 'fa fa-warning',
-                        theme: 'modern',
-                        type: 'red'
-                    });
-                })
-                .always(function() {
-                    console.log("complete");
-                });
+            $.ajax({
+                url: ruta,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'PUT',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                $("#modal_upd").modal('toggle');
+                btn.removeClass("disabled");
+                location.reload(400);
+            })
+            .fail(function(data) {
+                btn.text("Actualizar Modelos").removeClass("disabled");
+                mensajes("Alerta!", "intente de nuevo", "fa-warning", "red");
+            })
+            .always(function() {
+                console.log("complete");
+            });
 
         });
 
@@ -606,25 +336,13 @@
     			    btn.text("Guardar");
     			    btn.removeClass("disabled");
     			    cargarMarcas();
-                    cargarMarcasEnModal();
-                    $.alert({
-                        title: 'Listo!',
-                        content: "Marca añadida a la coleccion",
-                        icon: 'fa fa-check',
-                        theme: 'modern',
-                        type: 'green'
-                    });
+              cargarMarcasEnModal();
+              mensajes("Listo!", "Marca añadida a la coleccion", "fa-check", "green");
     			})
     			.fail(function(data) {
     				btn.text("Guardar");
     				btn.removeClass("disabled");
-                    $.alert({
-                        title: 'Alerta!',
-                        content: "No hay marcas disponibles",
-                        icon: 'fa fa-warning',
-                        theme: 'modern',
-                        type: 'red'
-                    });
+            mensajes("Alerta!", "No se encuentran marcas disponibles, ya fueron añadidas", "fa-warning", "red");
     			})
     			.always(function() {
     				console.log("complete");

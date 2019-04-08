@@ -117,17 +117,8 @@
 
 	  	$.get(ruta, function(response, dir){
 	  		$(".dir_asig").empty();
-	  		for (i = 0; i<response.length; i++) {
-	  			var dist = [];
-	  			if (response[i].distrito != null) {dist = response[i].distrito.distrito}else{dist = "<cite>sin distrito</cite>";}
-
-				$(".dir_asig").append("<option value='"+response[i].id+"'> "+
-									response[i].departamento.departamento+' | '+
-									response[i].provincia.provincia+' | '+
-									dist+' | '+
-									response[i].detalle+
-								"</option>");
-			}
+				$(".dir_asig").append(response);
+			
 	  	});
 	}
 
@@ -186,40 +177,17 @@
 		.done(function(data) {
 			allDir();
 			if (data == 1) {
-				$.alert({
-			        title: 'Error!',
-			        content: "Direccion ya existente, verifique",
-			        icon: 'fa fa-warning',
-			        theme: 'modern',
-			        type: 'red'
-			    });
-			    // $("#modal_create").modal('toggle');
+				mensajes("Alerta!", "Direccion ya existente, intente con otra", "fa-warning", "red");
 				btn.text("Guardar").removeAttr("disabled", 'disabled');
 			}else{
-				$.alert({
-			        title: 'Listo!',
-			        content: "Agregado con exito",
-			        icon: 'fa fa-check',
-			        theme: 'modern',
-			        type: 'green'
-			    });
+				mensajes("Alerta!", "Agregado con exito", "fa-check", "green");
 				$("#modal_create").modal('toggle');
 				btn.text("Guardar").removeAttr("disabled", 'disabled');
 			}
 		})
 		.fail(function(data) {
 			btn.text("Guardar").removeAttr("disabled", 'disabled');
-			msj = data.responseText; 
-			separador = ",";
-			msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-			msj2 = msj.replace(/\,/gi,"\n\n");
-			$.alert({
-		        title: 'Alerta!',
-		        content: msj2.toUpperCase(),
-		        icon: 'fa fa-warning',
-		        theme: 'modern',
-		        type: 'red'
-		    });
+			mensajes("Alerta!", eachErrors(data), "fa-warning", "red");
 		})
 		.always(function() {
 			console.log("complete");

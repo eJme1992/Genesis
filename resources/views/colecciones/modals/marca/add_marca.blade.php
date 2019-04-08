@@ -17,14 +17,14 @@
 									@endforeach
 								</select>
 							</div>
-				            <div class='form-group col-sm-12'>
-				              <label>Ruedas</label>
-				              <select name='rueda' class='form-control' required='' id="ru">
-				                @for($r = 1; $r < 21; $r++)
-				                <option value='{{ $r }}'>{{ $r }}</option>
-				                @endfor
-				              </select>
-				            </div>
+	            <div class='form-group col-sm-12'>
+	              <label>Ruedas</label>
+	              <select name='rueda' class='form-control' required='' id="ru">
+	                @for($r = 1; $r < 21; $r++)
+	                <option value='{{ $r }}'>{{ $r }}</option>
+	                @endfor
+	              </select>
+	            </div>
 						</div>
 					</div>
 				<div class="modal-footer">

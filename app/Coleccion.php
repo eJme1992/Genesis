@@ -53,13 +53,13 @@ class Coleccion extends Model
         $cm->precio_venta_establecido = $request->precio_venta_establecido;
         
         if ($request->precio_venta_establecido < $request->precio_almacen) {
-              return redirect('ver_colecciones')->with([
+              return back()->with([
                 'flash_class'   => 'alert-danger',
                 'flash_message' => 'El precio de venta no puede ser menor al costo de almacen'
               ]);
         }else{
               $cm->save();
-              return redirect('ver_colecciones')->with([
+              return back()->with([
                 'flash_class'   => 'alert-success',
                 'flash_message' => 'Precios añadidos con exito.'
               ]);

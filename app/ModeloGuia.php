@@ -8,7 +8,7 @@ class ModeloGuia extends Model
 {
     protected $table = "modelo_guias";
 
-    protected $fillable = ["guia_remision_id", "modelo_id", "montura"];
+    protected $fillable = ["guia_remision_id", "modelo_id", "montura", "estuche"];
 
     // relaciones
     public function guia_remision(){

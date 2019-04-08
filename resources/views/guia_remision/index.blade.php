@@ -154,7 +154,7 @@ function viewCliente(){
 function allDir(){
   	ruta = '{{ route("allDireccion") }}';
   	$.get(ruta, function(response, dir){
-		$(".dir_asig").empty().append(response);
+			$(".dir_asig").empty().append(response);
   	});
 }
 
@@ -184,9 +184,9 @@ $("#btn_mas_modelos").click(function(event) {
 
 		// eliminar 
 		$('#btn_delete_modelo_'+contar_modelos+'').click(function(e){
-          $('#mas_modelos_'+contar_modelos+'').remove();
-          contar_modelos--;
-        });
+      $('#mas_modelos_'+contar_modelos+'').remove();
+      contar_modelos--;
+    });
 
 
         // clonar los modelos del option a un nuevo select

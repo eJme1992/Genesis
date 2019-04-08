@@ -249,7 +249,7 @@ class MarcaController extends Controller
 
     public function buscarMarcaSinMensaje($coleccion, $marca){
 
-        $col = ColeccionMarca::where("marca_id", $marca)->where("coleccion_id", $coleccion)->first();
+        $col = ColeccionMarca::with("marca")->where("marca_id", $marca)->where("coleccion_id", $coleccion)->first();
         return response()->json($col);
 
     }

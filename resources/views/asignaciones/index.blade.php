@@ -57,9 +57,9 @@
 										<span class="">
 											<form action="{{ route('asignaciones.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
-		              							{{ csrf_field() }}
-		              							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
-		              							</button>
+          							{{ csrf_field() }}
+          							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
+          							</button>
 											</form>
 										</span>
 									</td>

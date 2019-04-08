@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdicionalVenta extends Model
 {
-    protected $table = "adicional_ventas";
+    protected $table = "ref_ventadic";
 
-    protected $fillable = ["venta_id", "factura_id", "item", "fecha", "status_adicional_id"];
+    protected $fillable = [
+      "venta_id", "factura_id", "ref_item_id", 
+      "ref_estadic_id", "fecha_estado"
+    ];
 
     // relaciones
     public function venta(){
