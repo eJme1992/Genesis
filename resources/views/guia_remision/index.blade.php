@@ -40,7 +40,8 @@
 						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Serial-Guia</th>
-								<th class="text-center">Direccion</th>
+								<th class="text-center">Salida</th>
+								<th class="text-center">Llegada</th>
 								<th class="text-center">Motivo</th>
 								<th class="text-center">Vendedor</th>
 								<th class="text-center">Cliente</th>
@@ -53,15 +54,21 @@
 								<tr>
 									<td><b>{{ $d->serial }}</b></td>
 									<td>
-										{{ $d->direccion->departamento->departamento }} |
-										{{ $d->direccion->provincia->provincia }} |
-										{{ $d->direccion->distrito->distrito }} |
-										{{ $d->direccion->detalle }}
+										{{ $d->dirSalida->departamento->departamento }} |
+										{{ $d->dirSalida->provincia->provincia }} |
+										{{ $d->dirSalida->distrito->distrito }} |
+										{{ $d->dirSalida->detalle }}
 										@forelse($d->modeloGuias as $m)
 										<input type="hidden" class="name_mod" value="{{ $m->modelo->name }}">
 										<input type="hidden" class="montura_mod" value="{{ $m->montura }}">
 										@empty
 										@endforelse
+									</td>
+									<td>
+										{{ $d->dirLLegada->departamento->departamento }} |
+										{{ $d->dirLLegada->provincia->provincia }} |
+										{{ $d->dirLLegada->distrito->distrito }} |
+										{{ $d->dirLLegada->detalle }}
 									</td>
 									<td>{{ $d->motivo_guia->nombre }}</td>
 									<td>{{ $d->user->name ?? '' }}</td>
@@ -121,39 +128,24 @@ $(".btn_mg").click(function(e) {
 	$.get(ruta, function(res) {
 		$("#mostrar_mod").empty().append(res.modelo);
 		$("#mostrar_mont").empty().append(res.montura);
-		$(".flecha").empty();
 		for (i = 0; i < res.montura.length; i++) {
-			$(".flecha").append('<i class="fa fa-arrow-right"></i><br>');
+			$(".flecha").empty().append('<i class="fa fa-arrow-right"></i><br>');
 		}
 	});
 });
 
-// mensaje json
-function msj(titulo, contenido, icono, type){
-  $.alert({
-        title: titulo,
-        content: contenido,
-        icon: 'fa fa-'+icono,
-        theme: 'modern',
-        type: type
-    });
-}
-
 // cargar clientes
 function viewCliente(){
-    var ruta = "{{ route('viewClientes') }}";
-    $("#add_cliente").empty()
-    $.get(ruta, function(res){
+    $.get("{{ route('viewClientes') }}", function(res){
         $.each(res, function(index, val) {
-            $("#add_cliente").append("<option value='"+val.id+"'>"+val.nombre_full+"</option>");
+            $("#add_cliente").empty().append("<option value='"+val.id+"'>"+val.nombre_full+"</option>");
         });
     });
 }
 
 // cargar direcciones
 function allDir(){
-  	ruta = '{{ route("allDireccion") }}';
-  	$.get(ruta, function(response, dir){
+  	$.get('{{ route("allDireccion") }}', function(response, dir){
 			$(".dir_asig").empty().append(response);
   	});
 }
@@ -165,7 +157,7 @@ $("#btn_mas_modelos").click(function(event) {
 
 	$("#section_modelos").append(
 				"<div id='mas_modelos_"+contar_modelos+"'>"+
-					"<div class='form-group col-sm-8'>"+
+					"<div class='form-group col-sm-6'>"+
 						"<select class='form-control select_modelo' name='modelo_id[]' required='' id='select_modelo_"+contar_modelos+"' style='width: 100%;' data-valor="+contar_modelos+">"+
 							"<option value=''>...</option>"+
 							
@@ -173,6 +165,10 @@ $("#btn_mas_modelos").click(function(event) {
 					"</div>"+
 					"<div class='form-group col-sm-2'>"+
 						"<select class='form-control select_montura' name='montura[]' required='' id='select_montura_"+contar_modelos+"'>"+
+						"</select>"+
+					"</div>"+
+					"<div class='form-group col-sm-2'>"+
+						"<select class='form-control select_estuche' name='estuche[]' required='' id='select_estuche_"+contar_modelos+"'>"+
 						"</select>"+
 					"</div>"+
 					"<div class='form-group col-sm-1'>"+
@@ -188,16 +184,16 @@ $("#btn_mas_modelos").click(function(event) {
       contar_modelos--;
     });
 
-
-        // clonar los modelos del option a un nuevo select
-	    $("#select_modelo_"+contar_modelos+"").html($("#select_modelo_1").html());
+    // clonar los modelos del option a un nuevo select
+	  $("#select_modelo_"+contar_modelos+"").html($("#select_modelo_1").html());
 });
 
 // busqueda de modelo
-$("#section_modelos").on("change", ".select_modelo, .select_montura",function(event) {
+$("#section_modelos").on("change", ".select_modelo, .select_montura, .select_estuche",function(event) {
 	val = $(this).data("valor");
 	$.get("buscar_modelos_en_asignacion/"+event.target.value+"",function(res, index){
-		$("#select_montura_"+val).empty().append(res);
+		$("#select_montura_"+val).empty().append(res.monturas);
+		$("#select_estuche_"+val).empty().append(res.estuches);
 	});
 });
 
@@ -254,15 +250,11 @@ $("#form_cliente_save").on("submit", function(e) {
 	    btn.text("Guardar").removeClass("disabled");
 	    viewCliente();
 	    form[0].reset();
-        msj('Listo!', "Cliente agregado", 'check', 'green');
+      mensajes('Listo!', "Cliente agregado", 'fa-check', 'green');
 	})
 	.fail(function(data) {
 		btn.text("Guardar").removeClass("disabled");
-        msjs = data.responseText;
-		msjs = msjs.replace(/\{|\}|\"|\[|\]/gi," ");
-		msjs2 = msjs.replace(/\,/gi,"\n\n");
-		btn.text("Guardar").removeClass("disabled");
-		msj('Alerta!', msjs2.toUpperCase(), 'warning', 'red');
+		mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
 	})
 	.always(function() {
 		console.log("complete");
@@ -288,21 +280,18 @@ $(".form_create_direccion").on('submit', function(e) {
 	.done(function(data) {
 		allDir();
 		if (data == 1) {
-		    msj('Error!', 'Direccion ya existente, verifique', 'warning', 'red');
-			btn.text("Guardar").removeAttr("disabled", 'disabled');
+			mensajes('Alerta!', 'Direccion ya existente, verifique', 'fa-warning', 'red');
+			btn.text("Guardar").removeAttr("disabled");
 		}else{
-		    msj('Listo!', 'Agregado con exito', 'check', 'green');
-		    form[0].reset();
+			mensajes('Listo!', 'Agregado con exito', 'fa-check', 'green');	
+		  form[0].reset();
 			$(".modal_create_direccion").modal('toggle');
-			btn.text("Guardar").removeAttr("disabled", 'disabled');
+			btn.text("Guardar").removeAttr("disabled");
 		}
 	})
 	.fail(function(data) {
-		btn.text("Guardar").removeAttr("disabled", 'disabled');
-		msjs = data.responseText;
-		msjs = msjs.replace(/\{|\}|\"|\[|\]/gi," ");
-		msjs2 = msjs.replace(/\,/gi,"\n\n");
-		msj('Alerta!', msjs2.toUpperCase(), 'warning', 'red');
+		btn.text("Guardar").removeAttr("disabled");
+		mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
 	})
 	.always(function() {
 		console.log("complete");
@@ -310,7 +299,7 @@ $(".form_create_direccion").on('submit', function(e) {
 	
 });
 
-// crear guia de remision
+// guardar guia de remision
 $("#form_create_guia").on('submit', function(e) {
 	e.preventDefault();
 	err = 0;
@@ -327,8 +316,8 @@ $("#form_create_guia").on('submit', function(e) {
 	});
 
 	if(err > 0){
-	    msj('Alerta!', "No puede haber modelos iguales", 'warning', 'red');
-		return false;
+			mensajes('Alerta!', 'No pueden haber modelos iguales', 'fa-warning', 'red');
+			return false;
 	}else{
 		btn = $(".btn_save_guia").text("Espere...").attr("disabled", 'disabled');
 		form = $(this);
@@ -343,23 +332,19 @@ $("#form_create_guia").on('submit', function(e) {
 		.done(function(data) {
 			console.log(data)
 			if (data == 1) {
-			    msj('Error!', "Nº Guia repetida, verifique", 'warning', 'red');
-				btn.text("Guardar").removeAttr("disabled", 'disabled');
+				mensajes('Alerta!', 'Nº de Guia repetido, verifique', 'fa-warning', 'red');
+				btn.text("Guardar").removeAttr("disabled");
 			}else{
-			    msj('Listo!', "Creada con exito..... espere", 'check fa fa-spinner fa-spin', 'green');
-			    form[0].reset();
+				mensajes('Listo!', 'Creada con exito..... espere', 'check fa fa-spinner fa-spin', 'green');
+			  form[0].reset();
 				$("#create_guia").modal('toggle');
-				btn.text("Guardar").removeAttr("disabled", 'disabled');
+				btn.text("Guardar").removeAttr("disabled");
 				location.reload();
 			}
 		})
 		.fail(function(data) {
-			console.log(data)
 			btn.text("Guardar").removeAttr("disabled", 'disabled');
-			msjs = data.responseText;
-			msjs = msjs.replace(/\{|\}|\"|\[|\]/gi," ");
-			msjs2 = msjs.replace(/\,/gi,"\n\n");
-			msj('Alerta!', msjs2.toUpperCase(), 'warning', 'red');
+			mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
 		})
 		.always(function() {
 			console.log("complete");

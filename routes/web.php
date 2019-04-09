@@ -11,15 +11,16 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 
 	// rutas resources
 	Route::resources([
-	    'users' 	    => 'UserController',
+	    'users' 	    	=> 'UserController',
 	    'colecciones'   => 'ColeccionController',
 	    'proveedores'   => 'ProveedoresController',
-	    'marcas' 	    => 'MarcaController',
+	    'marcas' 	    	=> 'MarcaController',
 	    'modelos' 	    => 'ModeloController',
 	    'productos'     => 'ProductoController',
 	    'asignaciones'  => 'AsignacionController',
 	    'rutas'         => 'RutasController',
 	    'guiaRemision'  => 'GuiaRemisionController',
+	    'consignacion'  => 'ConsignacionController',
 	    'direcciones'   => 'DireccionController',
 	    'clientes'      => 'ClientesController',
 	    'ventas'        => 'VentasController',

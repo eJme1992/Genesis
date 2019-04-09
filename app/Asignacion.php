@@ -10,7 +10,10 @@ class Asignacion extends Model
 {
     protected $table = "asignaciones";
 
-    protected $fillable = ["modelo_id", "user_id", "fecha", "monturas"];
+    protected $fillable = [
+      "modelo_id", "user_id", "fecha", 
+      "monturas", "estuche"
+    ];
 
     public function modelo(){
     	return $this->belongsTo("App\Modelo", "modelo_id");
@@ -58,13 +61,13 @@ class Asignacion extends Model
 
         		foreach ($m as $mod) {
 
-                    $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
+              $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
 
-                    if ($precios->precio_almacen && $precios->precio_venta_establecido) {
-                        $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
-                    }else{
-                        $precios = "<b>N/A</b><br>";
-                    }
+              if ($precios->precio_almacen && $precios->precio_venta_establecido) {
+                  $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
+              }else{
+                  $precios = "<b>N/A</b><br>";
+              }
 
         			$name = $mod->name;
         			$montura = $mod->montura;
@@ -76,23 +79,24 @@ class Asignacion extends Model
         				$precio_montura = $mod->precio_montura;
         			}
 
-                    $data [] = "<tr>
-                            <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
-                            <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
-                            <td>".$montura."</td>
-                            <td>".$mod->estuche."</td>
-                            <td>
-                                <select class='form-control' name='monturas[]' id='monturas_".$id."'>
-                                <option value=''>...</option>
-                                ".Asignacion::Monturas($montura)."
-                                </select>
-                            </td>
-                        </tr>"; 
+              $data [] = "<tr>
+                      <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
+                      <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
+                      <td>".$montura."</td>
+                      <td>".$mod->estuche."<input type='hidden' value='".$mod->estuche."' name='estuche[]'></td>
+                      <td>
+                          <select class='form-control' name='monturas[]' id='monturas_".$id."'>
+                          <option value=''>...</option>
+                          ".Asignacion::Monturas($montura)."
+                          </select>
+                      </td>
+                  </tr>"; 
         		}
 
-                $model [] = $name."<br>";
-                $precio [] = $precios;
-            }
+            $model [] = $name."<br>";
+            $precio [] = $precios;
+          }
+          
         }else{
             $data [] = "";
             $model [] = "";
@@ -146,6 +150,7 @@ class Asignacion extends Model
                         $asignacion->modelo_id = $request->modelo_id[$i];   
                         $asignacion->user_id = $request->user_id;   
                         $asignacion->monturas = $request->monturas[$i];   
+                        $asignacion->estuche = $request->estuche[$i];   
                         $asignacion->fecha = date("d-m-Y");
 
                         $mod = Modelo::findOrFail($request->modelo_id[$i]);
@@ -286,17 +291,29 @@ class Asignacion extends Model
     // buscar modelo asignado
     public static function buscarModeloAsignado($id)
     {
-        $datos = array();
+        $m = array();
+        $e = array();
         $query = Asignacion::findOrfail($id);
         
         for ($i = 1; $i < $query->monturas + 1; $i++) { 
             if ($i == $query->monturas) {
-                $datos [] = "<option value=".$i." selected>".$i."</option>";
+                $m [] = "<option value=".$i." selected>".$i."</option>";
             }else{
-                $datos [] = "<option value=".$i.">".$i."</option>";
+                $m [] = "<option value=".$i.">".$i."</option>";
+            } 
+        }
+        
+        for ($j = 1; $j < $query->estuche + 1; $j++) { 
+            if ($j == $query->estuche) {
+                $e [] = "<option value=".$j." selected>".$j."</option>";
+            }else{
+                $e [] = "<option value=".$j.">".$j."</option>";
             } 
         }
 
-        return response()->json(join(",",$datos));
+        return response()->json([
+          "monturas" => join(",", $m),
+          "estuches" => join(",", $e),
+        ]);
     }
 }

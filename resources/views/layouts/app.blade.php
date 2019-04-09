@@ -159,6 +159,7 @@
                 <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
                 <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
+                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignacion</a></li>
               </ul>
             </li>
 
