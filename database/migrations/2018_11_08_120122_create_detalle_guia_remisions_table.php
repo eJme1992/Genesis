@@ -18,8 +18,8 @@ class CreateDetalleGuiaRemisionsTable extends Migration
             $table->unsignedInteger('guia_remision_id');
             $table->unsignedInteger('ref_item_id');
             $table->decimal('cantidad', 12, 2)->nullable();
-            $table->decimal('peso', 12, 2)->nullable(); // descripcion de la mercancia
-            $table->text('descripcion')->nullable(); // peso en kg
+            $table->decimal('peso', 12, 2)->nullable(); /// peso en kg
+            $table->text('descripcion')->nullable(); // descripcion de la mercancia
             $table->timestamps();
         });
     }

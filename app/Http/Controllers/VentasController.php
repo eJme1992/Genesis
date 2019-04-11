@@ -15,6 +15,11 @@ class VentasController extends Controller
     {
         return view("ventas.index");
     }
+    
+    public function newVenta()
+    {
+        return view("ventas.nueva_venta");
+    }
 
     /**
      * Show the form for creating a new resource.

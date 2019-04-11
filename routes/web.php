@@ -29,6 +29,9 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'distritos'     => 'DistritoController',
 	]);
 	
+	// Ventas
+	Route::get('nueva_venta', 'VentasController@newVenta')->name('ventas.new');
+	
 	// dashboard
 	Route::get('dashboard', 'LoginController@index')->name('dashboard');
 
