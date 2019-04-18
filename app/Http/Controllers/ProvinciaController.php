@@ -85,8 +85,12 @@ class ProvinciaController extends Controller
 
     public function busProv($id)
     {
-        $prov = Provincia::where("departamento_id", $id)->get();
+        $query = Provincia::where("departamento_id", $id)->get();
 
-        return response()->json($prov);
+        for ($i = 0; $i < $query->count(); $i++) {
+            $data [] = "<option value='".$query[$i]->id."'>".$query[$i]->provincia."</option>";
+        }
+  
+        return response()->json(join(",", $data));
     }
 }

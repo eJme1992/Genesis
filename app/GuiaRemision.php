@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use DB;
+use Auth;
 
 class GuiaRemision extends Model
 {
@@ -44,50 +45,50 @@ class GuiaRemision extends Model
         return $this->hasMany('App\ModeloGuia');
     }
 
+    // detalle de guias
+    public function detalleGuia(){
+        return $this->hasOne('App\DetalleGuiaRemision', 'guia_remision_id');
+    }
+
     public function guias(){
       return $this->belongsToMany('App\GuiaRemision','modelo_guias');
     }
 
     // ------------------- funciones personalizadas ---------------------------
 
-    public static function guiaStore($request){
+    public static function guiaStore($request, $motivo){
 
-        $query = GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count();
-        if ($query > 0) {
-            return response()->json(1);
-        }else{
-            DB::transaction(function() use ($request) {
-                ($request->motivo_guia_id == 2) ? $request->cliente_id = null : $request->cliente_id = $request->cliente_id;//emisor itinerante
-                ($request->motivo_guia_id == 4) ? $user = null : $user = \Auth::user()->id;//devolucion
+        DB::transaction(function() use ($request, $motivo) {
 
-                $data = GuiaRemision::create([
-                    'serial'          => $request->serial.'-'.$request->guia,
-                    'motivo_guia_id'  => $request->motivo_guia_id,
-                    'dir_salida'      => $request->dir_salida,
-                    'dir_llegada'     => $request->dir_llegada,
-                    'cliente_id'      => $request->cliente_id,
-                    'user_id'         => $user,
+            $data = GuiaRemision::create([
+                'serial'          => $request->serial.'-'.$request->guia,
+                'motivo_guia_id'  => $motivo,
+                'dir_salida'      => $request->dir_salida,
+                'dir_llegada'     => $request->dir_llegada,
+                'cliente_id'      => $request->cliente_id,
+                'user_id'         => Auth::id(),
+            ]);
+
+            $data->detalleGuia()->create([
+                'ref_item_id'   => $request->ref_item_id,
+                'cantidad'      => $request->cantidad,
+                'peso'          => $request->peso,
+                'descripcion'   => $request->descripcion,
+            ]);
+
+            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+
+                $data->modeloGuias()->create([
+                    'modelo_id'   => $request->modelo_id[$i],
+                    'montura'     => $request->montura[$i],
+                    'estuche'     => $request->estuche[$i],
                 ]);
 
-                for ($i = 0; $i < count($request->modelo_id) ; $i++) { 
-                    $data->modeloGuias()->create([
-                        'modelo_id'   => Asignacion::findOrfail($request->modelo_id[$i])->modelo_id,
-                        'montura'     => $request->montura[$i],
-                        'estuche'     => $request->estuche[$i],
-                    ]);
+            }
 
-                    $asig = Asignacion::findOrfail($request->modelo_id[$i]);
-                    $asig->monturas = $asig->monturas - $request->montura[$i];
-                    $asig->save();
+            BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
 
-                }
-
-                BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
-
-            });
-        }
-        
-        return response()->json('ok');
+        });
 
     }
 

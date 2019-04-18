@@ -1,12 +1,10 @@
 $(document).ready(function(){
-      	//Eliminar alertas que no contengan la clase alert-important luego de 7seg
-      	// $('div.alert').not('.alert-important').delay(7000).slideUp(300);
-
+    var url = '{{ asset("plugins/datatables/spanish.json") }}';
   	//activar Datatable
     $('.data-table').DataTable({
       responsive: true,
-      language: {
-      	url:'plugins/datatables/spanish.json'
+      lenguaje: {
+        url: 'plugins/datatables/spanish.json'
       }
     });
 
@@ -47,8 +45,9 @@ $(document).ready(function(){
 
     // numeric
     $('.numero').numeric();
+    
     $(".int").numeric({
-      decimal: false,
+      decimal: true,
       negative: false
     }, function() {
       alert("Ingrese solo numeros");
@@ -65,15 +64,15 @@ $(document).ready(function(){
     });
 
     // select2
-    // $('.select2').select2({
-    //   language: {
-    //     noResults: function() {
-    //       return "Sin resultados";
-    //     },
-    //     searching: function() {
-    //       return "Buscando..";
-    //     }
-    //   }
-    // });
+    $('.select2').select2({
+      language: {
+        noResults: function() {
+          return "Sin resultados";
+        },
+        searching: function() {
+          return "Buscando..";
+        }
+      }
+    });
 
 });

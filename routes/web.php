@@ -11,10 +11,10 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 
 	// rutas resources
 	Route::resources([
-	    'users' 	    	=> 'UserController',
+	    'users' 	    => 'UserController',
 	    'colecciones'   => 'ColeccionController',
 	    'proveedores'   => 'ProveedoresController',
-	    'marcas' 	    	=> 'MarcaController',
+	    'marcas' 	    => 'MarcaController',
 	    'modelos' 	    => 'ModeloController',
 	    'productos'     => 'ProductoController',
 	    'asignaciones'  => 'AsignacionController',
@@ -23,14 +23,17 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'consignacion'  => 'ConsignacionController',
 	    'direcciones'   => 'DireccionController',
 	    'clientes'      => 'ClientesController',
-	    'ventas'        => 'VentasController',
+	    'ventas'        => 'VentaController',
 	    'departamentos' => 'DepartamentoController',
 	    'provincias'    => 'ProvinciaController',
 	    'distritos'     => 'DistritoController',
 	]);
 	
+    // consignaciones
+    Route::get('detalleConsig/{id}', 'ConsignacionController@show');
+
 	// Ventas
-	Route::get('nueva_venta', 'VentasController@newVenta')->name('ventas.new');
+	Route::get('nueva_venta', 'VentaController@newVenta')->name('ventas.new');
 	
 	// dashboard
 	Route::get('dashboard', 'LoginController@index')->name('dashboard');
@@ -92,7 +95,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('marDisponible/{id}', 	'ColeccionController@marDisponible');
 	Route::post('editCol', 				'ColeccionController@update')->name("editCol");
 	Route::post('saveCol', 				'ColeccionController@saveCol')->name("saveCol");
-	Route::get('listarcolecciones', 		'ColeccionController@ver')->name("colecciones.ver");
+	Route::get('listarcolecciones', 	'ColeccionController@ver')->name("colecciones.ver");
 	Route::post('savePrecios', 			'ColeccionController@savePrecios')->name("colecciones.savePrecios");
 	Route::post('editPrecios', 			'ColeccionController@editPrecios')->name("colecciones.editPrecios");
 
@@ -101,14 +104,11 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::post('saveP', 	'ProveedoresController@saveP')->name('saveP');
 	
 	// clientes
-	Route::get('/viewClientes', function () { 
-		$data = Cliente::orderBy("id", "DESC")->get();
-		return response()->json($data); 
-	})->name('viewClientes');
+	Route::get('viewClientes', 'ClientesController@allCliente')->name('viewClientes');
 
   	//departamentos, provincias y distritos
-  	Route::get('prov/{id}',	'ProvinciaController@busProv');
-  	Route::get('dist/{id}',	'DistritoController@busDist');
+  	Route::get('prov/{id}',	'ProvinciaController@busProv')->name('allProv');
+  	Route::get('dist/{id}',	'DistritoController@busDist')->name('allDist');
 
   	// foto del usuario
   	Route::get('images/{filename}',function($filename){

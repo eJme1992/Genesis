@@ -85,8 +85,12 @@ class DistritoController extends Controller
 
     public function busDist($id)
     {
-        $distritos = Distrito::where("provincia_id", $id)->get();
+        $query = Distrito::where("provincia_id", $id)->get();
 
-        return response()->json($distritos);
+        for ($i = 0; $i < $query->count(); $i++) {
+            $data [] = "<option value='".$query[$i]->id."'>".$query[$i]->distrito."</option>";
+        }
+  
+        return response()->json(join(",", $data));
     }
 }

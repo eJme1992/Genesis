@@ -59,7 +59,7 @@
 								<th class="text-center">Accion</th>
 							</tr>
 						</thead>
-						<tbody class="text-center">
+						<tbody class="text-center" id="data_clientes">
 							@foreach($clientes as $d)
 								<tr>
 									<td>{{ $d->nombre_full }}</td>
@@ -120,10 +120,6 @@
 @section("script")
 <script>
 
-	$("#create_cliente").draggable({
-	    handle: ".modal-content"
-	}); 
-
 	$(".btn_editar").click(function(e) {
 		ruta = '{{ route("clientes.update",":btn.value") }}';
 		$("#form_edit_cliente").attr("action", ruta.replace(':btn.value', $(this).data("id")));
@@ -151,87 +147,6 @@
 		$("#correo").val($(this).data("correo"));
 		$("#telefono_1").val($(this).data("telefono_1"));
 		$("#telefono_2").val($(this).data("telefono_2"));
-	});
-
-	// mensaje json
-	function msj(titulo, contenido, icono, type){
-	  $.alert({
-	        title: titulo,
-	        content: contenido,
-	        icon: 'fa fa-'+icono,
-	        theme: 'modern',
-	        type: type
-	    });
-	}
-
-	// busqueda de provincias
-	$('.dep').change(function(event) {
-		$(".prov").empty();
-		$(".dist").empty();
-		$(".prov").append("<option value=''>...</option>");
-		$.get("prov/"+event.target.value+"",function(response, dep){
-			for (i = 0; i<response.length; i++) {
-					$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
-			}
-		});
-	});
-
-	// busqueda de distritos
-	$('.prov').change(function(event) {
-		$(".dist").empty();
-		$.get("dist/"+event.target.value+"",function(response, dep){
-			for (i = 0; i<response.length; i++) {
-					$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
-			}
-		});
-	});
-
-	// cargar direcciones
-	function allDir(){
-	  	ruta = '{{ route("allDireccion") }}';
-	  	$.get(ruta, function(response, dir){
-			$(".direccion_id").empty().append(response);
-	  	});
-	}
-
-	// guardar direccion
-	$(".form_create_direccion").on('submit', function(e) {
-		e.preventDefault();
-		btn = $(".btn_create_direccion");
-		btn.text("Espere...").attr("disabled", 'disabled');
-
-		var form = $(this);
-
-		$.ajax({
-			url: '{{ route("direcciones.store") }}',
-			headers: {'X-CSRF-TOKEN': $("#token").val()},
-			type: 'POST',
-			dataType: 'JSON',
-			data: form.serialize(),
-		})
-		.done(function(data) {
-			allDir();
-			if (data == 1) {
-			    msj('Error!', 'Direccion ya existente, verifique', 'warning', 'red');
-				btn.text("Guardar").removeAttr("disabled", 'disabled');
-			}else{
-			    msj('Listo!', 'Agregado con exito', 'check', 'green');
-			    form[0].reset();
-				$(".modal_create_direccion").modal('toggle');
-				btn.text("Guardar").removeAttr("disabled", 'disabled');
-			}
-		})
-		.fail(function(data) {
-			btn.text("Guardar").removeAttr("disabled", 'disabled');
-			msjs = data.responseText;
-			msjs = msjs.replace(/\{|\}|\"|\[|\]/gi," ");
-			msjs2 = msjs.replace(/\,/gi,"\n\n");
-			msj('Alerta!', msjs2.toUpperCase(), 'warning', 'red');
-		})
-		.always(function() {
-			console.log("complete");
-		});
-		
 	});
 	
 </script>

@@ -9,14 +9,17 @@ class Modelo extends Model
 {
     protected $table = "modelos";
 
-    protected $fillable = ["codigo", "name", "descripcion_modelo", "coleccion_id", "marca_id", "montura", "status_id", "estuche"];
+    protected $fillable = [
+      "codigo", "name", "descripcion_modelo", "coleccion_id", 
+      "marca_id", "montura", "status_id", "estuche"
+    ];
 
     // relaciones
     public function coleccion(){
     	return $this->belongsTo("App\Coleccion", "coleccion_id");
     }
 
-	public function marca(){
+	  public function marca(){
     	return $this->belongsTo("App\Marca", "marca_id");
     }
 
@@ -40,6 +43,34 @@ class Modelo extends Model
 
     public function guias(){
       return $this->belongsToMany('App\GuiaRemision','modelo_guias');
+    }
+    
+    public function asignaciones(){
+      return $this->hasMany('App\Asignacion');
+    }
+    
+    //----------------------- funciones personalizadas --------------------------------------------
+    //
+    // modelos a mostrar dependiendo del rol
+    public static function modelosToUser(){
+      if (\Auth::user()->rol_id == 1) {
+        $data = Modelo::where("montura", ">", 0)->get();
+      }else{
+        $data = $this->asignaciones()->where("user_id", \Auth::id())->where("monturas", ">", 0)->get();
+      }
+      return $data;
+    }
+
+    // descontar monturas de los modelos
+    public static function descontarMonturaToModelos($id, $montura){
+        $data = Modelo::findOrFail($id);
+        if (($data->montura - $montura)  == 0) {
+            $data->status_id = 2;
+        }else{
+            $data->status_id = 1;
+        }
+        $data->montura = $data->montura - $montura;
+        return $data->save();
     }
 
     //---------------- metodos propios ------------------------
@@ -121,8 +152,6 @@ class Modelo extends Model
             }
         }
 
-        // guardamos la coleccion en la tabla productos y la almacenamos en la bitacora
-        Producto::savePro($request->id_coleccion);
         BitacoraUser::saveBitacora("Creacion de nuevo(s) modelo(s) para la coleccion (".$coleccion->name.")");
 
         if ($request->ajax()) {

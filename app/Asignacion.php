@@ -61,13 +61,13 @@ class Asignacion extends Model
 
         		foreach ($m as $mod) {
 
-              $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
+                    $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
 
-              if ($precios->precio_almacen && $precios->precio_venta_establecido) {
-                  $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
-              }else{
-                  $precios = "<b>N/A</b><br>";
-              }
+                    if ($precios->precio_almacen && $precios->precio_venta_establecido) {
+                        $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
+                    }else{
+                        $precios = "<b>N/A</b><br>";
+                    }
 
         			$name = $mod->name;
         			$montura = $mod->montura;
@@ -79,18 +79,18 @@ class Asignacion extends Model
         				$precio_montura = $mod->precio_montura;
         			}
 
-              $data [] = "<tr>
-                      <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
-                      <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
-                      <td>".$montura."</td>
-                      <td>".$mod->estuche."<input type='hidden' value='".$mod->estuche."' name='estuche[]'></td>
-                      <td>
-                          <select class='form-control' name='monturas[]' id='monturas_".$id."'>
-                          <option value=''>...</option>
-                          ".Asignacion::Monturas($montura)."
-                          </select>
-                      </td>
-                  </tr>"; 
+                    $data [] = "<tr>
+                          <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
+                          <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
+                          <td>".$montura."</td>
+                          <td>".$mod->estuche."<input type='hidden' value='".$mod->estuche."' name='estuche[]'></td>
+                          <td>
+                              <select class='form-control' name='montura[]' id='monturas_".$id."'>
+                              <option value=''>...</option>
+                              ".Asignacion::Monturas($montura)."
+                              </select>
+                          </td>
+                      </tr>"; 
         		}
 
             $model [] = $name."<br>";
@@ -293,7 +293,7 @@ class Asignacion extends Model
     {
         $m = array();
         $e = array();
-        $query = Asignacion::findOrfail($id);
+        $query = Asignacion::where("modelo_id", $id)->first();
         
         for ($i = 1; $i < $query->monturas + 1; $i++) { 
             if ($i == $query->monturas) {

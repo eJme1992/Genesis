@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Consignacion};
+use App\{Consignacion, Cliente, Modelo, Direccion, Departamento, RefItem, Coleccion};
 
 class ConsignacionController extends Controller
 {
@@ -14,7 +14,9 @@ class ConsignacionController extends Controller
      */
     public function index()
     {
-        return view('consignaciones.index');
+        return view('consignaciones.index',[
+            "consignaciones" => Consignacion::all()
+        ]);
     }
 
     /**
@@ -24,7 +26,13 @@ class ConsignacionController extends Controller
      */
     public function create()
     {
-        //
+        return view('consignaciones.create',[
+            "clientes"       => Cliente::all(),
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "colecciones"    => Coleccion::all(),
+        ]);
     }
 
     /**
@@ -35,7 +43,22 @@ class ConsignacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'cliente_id'     => 'required',
+            'fecha_envio'    => 'required',
+            'serial'         => '',
+            'guia'           => '',
+            'dir_salida'     => '',
+            'dir_llegada'    => '',
+            'cantidad'       => '',
+            'peso'           => '',
+            'descripcion'    => '',
+            'modelo_id'      => 'required',
+            'montura'        => 'required',
+            'estuche'        => '',
+        ]);
+
+        return Consignacion::consigStore($request);
     }
 
     /**
@@ -46,7 +69,7 @@ class ConsignacionController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(Consignacion::with("cliente", "detalleConsignacion.modelo", "guia.detalleGuia.item")->findOrFail($id));
     }
 
     /**

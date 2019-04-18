@@ -17,8 +17,8 @@ class CreateAsignacionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('modelo_id');
-            $table->string('monturas')->nullable();
             $table->unsignedInteger('estuche')->nullable();
+            $table->string('monturas')->nullable();
             $table->string('fecha')->nullable();
 
             $table->foreign('user_id')->references('id')

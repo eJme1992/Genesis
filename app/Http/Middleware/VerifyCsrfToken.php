@@ -13,5 +13,6 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'plugins/datatables/spanish.json',
+        'consignacion/plugins/datatables/spanish.json',
     ];
 }

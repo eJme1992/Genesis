@@ -14,7 +14,10 @@ class Cliente extends Model
     }
 
     public function dir(){
-        return $this->direccion->departamento->departamento.' '.$this->direccion->provincia->provincia.' '.$this->direccion->distrito->distrito.' '.$this->direccion->detalle;
+        return $this->direccion->departamento->departamento.' | '
+        .$this->direccion->provincia->provincia.' | '
+        .$this->direccion->distrito->distrito.' | '
+        .$this->direccion->detalle;
     }
 
     // ---------------- metodos personalizados ------------------

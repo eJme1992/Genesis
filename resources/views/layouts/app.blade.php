@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.css')}}">
-    <!-- <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}"> -->
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}">
 
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/ep.css')}}">
@@ -122,14 +122,13 @@
                 <li><a href="{{ route('proveedores.index') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
                 <li><a href="{{ route('marcas.index') }}"><i class="fa fa-circle-o"></i>Marcas</a></li>
                 <li><a href="{{ route('colecciones.index') }}"><i class="fa fa-circle-o"></i>Colecciones</a></li>
-                <li><a href="{{ route('productos.index') }}"><i class="fa fa-circle-o"></i>Consultas y Modelos</a></li>
               </ul>
             </li>
 
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-arrows-h"></i>
-                <span>Rutas</span>
+                <span>Ubicaciones</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
@@ -156,7 +155,6 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
                 <li><a href="{{ route('ventas.new') }}"><i class="fa fa-circle-o"></i>Nueva venta</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
                 <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
@@ -193,7 +191,7 @@
 
     <!-- Data table -->
     <script src="{{ asset('plugins/datatables/datatables.js') }}"></script>
-    <!-- <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script> -->
+    <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script> 
 
     <!-- fileinput -->
     <script src="{{ asset('plugins/fileinput/js/fileinput.min.js') }}"></script>
@@ -214,42 +212,152 @@
     <!-- select2 -->
     <script src="{{ asset('plugins/select/js/bootstrap-select.min.js') }}"></script>
 
-    <!-- propio script -->
+    <!-- inicializacion de plugins -->
     <script src="{{ asset('js/propio.js') }}"></script>
 
     @yield('script')
 
+    <!------------------------------------------------- funciones para la logica ------------------------------------------------------>
     <script>
-      // mensajes de alerta
-      function mensajes(title, content, icon, type){
-      	$.alert({
-      			title: title,
-      			content: content,
-      			icon: "fa"+icon,
-      			theme: 'modern',
-      			type: type
-      	});
-      }
+        // mensajes de alerta
+        function mensajes(title, content, icon, type){
+            $.alert({
+                title: title,
+                content: content,
+                icon: "fa"+icon,
+                theme: 'modern',
+                type: type
+            });
+        }
 
-      // manipular errores por json
-      function eachErrors(data){
-      	msj = '';
-        
-      	$.each(data.responseJSON.errors, function(index, val) {
-      		msj += "<li class='list-group-item list-group-item-danger'>"+ val +"</li>";
-      	});
+        // manipular errores por json
+        function eachErrors(data){
+            msj = '';
 
-      	return msj;
-      }
-      
-      // validacion para el campo estuche
-      function addEstuches(contador){
-      	if (validarEstuche == 1) {
-      		$('#select_estuche, #select_estuche'+contador+'').removeAttr("disabled").attr('name', 'estuche[]').val(12);
-      	}else{
-      		$('#select_estuche, #select_estuche'+contador+'').attr("disabled", "disabled").removeAttr('name').val(0);
-      	}
-      }
+            $.each(data.responseJSON.errors, function(index, val) {
+                msj += "<li class='list-group-item list-group-item-danger'>"+ val +"</li>";
+            });
+
+            return msj;
+        }
+
+        // validacion para el campo estuche
+        function addEstuches(contador){
+            if (validarEstuche == 1) {
+                $('#select_estuche, #select_estuche'+contador+'').removeAttr("disabled").attr('name', 'estuche[]').val(12);
+            }else{
+                $('#select_estuche, #select_estuche'+contador+'').attr("disabled", "disabled").removeAttr('name').val(0);
+            }
+        }
+
+        // cargar clientes
+        function viewCliente(){
+          $.get("{{ route('viewClientes') }}", function(res){
+              $("#add_cliente").empty().append(res);
+          });
+        }
+
+        // cargar direcciones
+        function allDir(){
+            $.get('{{ route("allDireccion") }}', function(response, dir){
+                    $(".dir_asig").empty().append(response);
+            });
+        }
+
+        // guardar clientes
+        $("#form_cliente_save").on("submit", function(e) {
+            e.preventDefault();
+            btn = $(".btn_create_cliente");
+            btn.addClass("disabled");
+            form = $(this);
+
+            $.ajax({
+                url: '{{ route("clientes.store") }}',
+                headers: {'X-CSRF-TOKEN': $("#token").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: $(this).serialize(),
+            })
+            .done(function(data) {
+                if ($("#data_clientes").length > 0) {
+                    location.reload(400);
+                }
+                viewCliente();
+                form[0].reset();
+                btn.text("Guardar").removeClass("disabled");
+                $("#create_cliente").modal('toggle');
+                mensajes('Listo!', "Cliente agregado", 'fa-check', 'green');
+            })
+            .fail(function(data) {
+                btn.removeClass("disabled");
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
+        });
+
+        // guardar direccion
+        $(".form_create_direccion").on('submit', function(e) {
+            e.preventDefault();
+            btn = $(".btn_create_direccion");
+            btn.attr("disabled", 'disabled');
+            var form = $(this);
+
+            $.ajax({
+                url: "{{ route('direcciones.store') }}",
+                headers: {'X-CSRF-TOKEN': $("#token").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                allDir();
+                if (data == 1) {
+                    mensajes('Alerta!', 'Direccion ya existente, verifique', 'fa-warning', 'red');
+                    btn.text("Guardar").removeAttr("disabled");
+                }else{
+                    if ($("#data_dir").length > 0) {
+                        location.reload(400);
+                    }
+                    mensajes('Listo!', 'Agregado con exito', 'fa-check', 'green');  
+                    form[0].reset();
+                    $(".modal_create_direccion").modal('toggle');
+                    btn.text("Guardar").removeAttr("disabled");
+                }
+            })
+            .fail(function(data) {
+                btn.text("Guardar").removeAttr("disabled");
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
+        });
+
+        // busqueda de provincias
+        $('.dep').change(function(e) {
+            $(".prov, .dist").empty();
+            $(".prov").append("<option value=''>...</option>");
+            ruta = "{{ route('allProv', 'e.target.value') }}";
+            ruta = ruta.replace('e.target.value', e.target.value);
+            $.get(ruta,function(response){
+                $(".prov").append(response);
+            });
+        });
+
+        // busqueda de distritos
+        $('.prov').change(function(e) {
+            ruta = "{{ route('allDist', 'e.target.value') }}";
+            ruta = ruta.replace('e.target.value', e.target.value);
+            $.get(ruta,function(response){
+                $(".dist").empty().append(response);
+            });
+        });
+
     </script>
+    
   </body>
 </html>

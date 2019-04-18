@@ -15,6 +15,18 @@ class ClientesController extends Controller
             "departamentos"  => Departamento::all(),
         ]);
     }
+    
+    public function allCliente(){
+      $query = Cliente::orderBy("id", "DESC")->get();
+      
+  		for ($i = 0; $i < $query->count(); $i++) {
+  				$data [] = "<option value='".$query[$i]->id."'>" 
+                        .$query[$i]->nombre_full.
+  								   "</option>";
+  		}
+  
+  		return response()->json(join(",", $data));
+    }
 
     public function create()
     {

@@ -29,6 +29,10 @@ class Direccion extends Model
         ]);
     }
 
+    public function full_dir(){
+        return $this->departamento->departamento.' | '.$this->provincia->provincia.' | '.$this->distrito->distrito.' | '.$this->detalle;
+    }
+
     public static function saveDir($request){
         
         $dir = new Direccion($request->all());

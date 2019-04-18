@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\DetalleConsignacion;
 use Illuminate\Http\Request;
 
-class VentasController extends Controller
+class DetalleConsignacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,12 +14,7 @@ class VentasController extends Controller
      */
     public function index()
     {
-        return view("ventas.index");
-    }
-    
-    public function newVenta()
-    {
-        return view("ventas.nueva_venta");
+        //
     }
 
     /**
@@ -45,10 +41,10 @@ class VentasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\DetalleConsignacion  $detalleConsignacion
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DetalleConsignacion $detalleConsignacion)
     {
         //
     }
@@ -56,10 +52,10 @@ class VentasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\DetalleConsignacion  $detalleConsignacion
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(DetalleConsignacion $detalleConsignacion)
     {
         //
     }
@@ -68,10 +64,10 @@ class VentasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\DetalleConsignacion  $detalleConsignacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DetalleConsignacion $detalleConsignacion)
     {
         //
     }
@@ -79,10 +75,10 @@ class VentasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\DetalleConsignacion  $detalleConsignacion
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DetalleConsignacion $detalleConsignacion)
     {
         //
     }

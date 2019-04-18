@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->call(MotivoGuiaSeeder::class);
         $this->call(MotivoViajeSeeder::class);
         $this->call(UserTableSeeder::class);
-        $this->call(BancoSeeder::class);
         $this->call(ProtestoSeeder::class);
         $this->call(TipoAbonoSeeder::class);
         $this->call(StatusLetraSeeder::class);
+        $this->call(ItemTableSeeder::class);
     }
 }

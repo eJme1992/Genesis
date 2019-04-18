@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Venta;
+use App\{Venta, Consignacion};
 use Illuminate\Http\Request;
 
 class VentaController extends Controller
@@ -15,6 +15,13 @@ class VentaController extends Controller
     public function index()
     {
         //
+    }
+    
+    public function newVenta()
+    {
+        return view("ventas.nueva_venta",[
+            "consignaciones" => Consignacion::where("status", 1)->get(["id"])
+        ]);
     }
 
     /**
