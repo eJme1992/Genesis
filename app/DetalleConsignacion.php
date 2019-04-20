@@ -29,8 +29,10 @@ class DetalleConsignacion extends Model
             $data = DetalleConsignacion::findOrFail($id);                            
             
             if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                $total_montura  = $data->montura - $request->montura[$i]; // calcular modelos restantes para ser devueltos
                 $data->montura  = $request->montura[$i];
                 $data->status   = 3; // consignado
+                Modelo::descontarMonturaToModelosToConsignacion($request->modelo_id[$i], $total_montura);
             }else{
                 $data->status   = 2; // recibido y devuelto a almacen
                 Modelo::descontarMonturaToModelosToConsignacion($request->modelo_id[$i], $data->montura);

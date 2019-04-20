@@ -76,8 +76,12 @@ class Modelo extends Model
     // descontar consignacion - modelos
     public static function descontarMonturaToModelosToConsignacion($id, $montura){
         $data = Modelo::findOrFail($id);
-        $data->montura = $montura;
-        $data->status_id = 1;
+        if (($data->montura + $montura) == 0) {
+            $data->status_id = 2;
+        }else{
+            $data->status_id = 1;
+        }
+        $data->montura = $data->montura + $montura;
         return $data->save();
     }
 

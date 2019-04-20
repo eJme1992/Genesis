@@ -42,7 +42,8 @@
   								<th class="text-center">Fecha de envio</th>
                                 <th class="text-center">Modelos enviados</th>
                                 <th class="text-center">Modelos consignados</th>
-  								<th class="text-center"><i class="fa fa-cogs"><i></th>
+                                <th class="text-center bg-aqua">Estado</th>
+  								<th class="text-center bg-navy"><i class="fa fa-cogs"><i></th>
   							</tr>
   						</thead>
   						<tbody class="text-center">
@@ -53,6 +54,7 @@
   									<td>{{ $d->fecha_envio }}</td>
                                     <td>{{ $d->detalleConsignacion->count() }}</td>
                                     <td>{{ $d->modelosConsignados($d->id) }}</td>
+                                    <td class="info">{{ $d->status == 1 ? 'En espera' : 'Consignada' }}</td>
   									<td>
                                         <a href="#detalle_consig" class="btn bg-navy btn-xs btn_detalle_consig" data-toggle="modal" data-target="#detalle_consig" title="Datos completos de la consignacion" id="" data-id="{{ $d->id }}">
                                             <i class="fa fa-eye"></i> detalle

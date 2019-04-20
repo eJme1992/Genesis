@@ -33,7 +33,7 @@
                     <section id="section_nota_pedido" style="display: none;">
                         <div class="col-lg-12">
                             <h4 class="padding_1em bg-primary"><i class="fa fa-arrow-right"></i> Nota de Pedido</h4>
-                            @include("ventas.partials.form.form_nota_pedido")
+                            @include("ventas.partials.sections.section_nota_pedido")
                         </div>
                     </section>
 
@@ -212,6 +212,7 @@
         })
         .fail(function(data) {
             btn.removeAttr("disabled");
+            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
             mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
         })
         .always(function() {

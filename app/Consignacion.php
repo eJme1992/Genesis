@@ -95,7 +95,7 @@ class Consignacion extends Model
 
         foreach ($consig->detalleConsignacion as $dc) {
             $data [] = "<tr>
-                            <td>".$dc->id."<input type='hidden' value='".$dc->id."' id='modelo_id_".$dc->id."' name='modelo_id[]'></td>
+                            <td>".$dc->modelo_id."<input type='hidden' value='".$dc->modelo_id."' id='modelo_id_".$dc->modelo_id."' name='modelo_id[]'></td>
                             <td>".$dc->modelo->name."</td>
                             <td>
                                 <select class='form-control montura_modelo' name='montura[]' id='montura_".$dc->id."'>
