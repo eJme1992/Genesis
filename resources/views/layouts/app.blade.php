@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/confirm/jquery-confirm.min.css') }}">
 
     <!-- select 2 -->
-    <link rel="stylesheet" href="{{ asset('plugins/select/css/bootstrap-select.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}" />
 
   	<style type="text/css">
       body, html, div, section, label, span, h1, h2, h3, h4, table, tr, td, select, input, textarea, option{
@@ -155,7 +155,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('ventas.new') }}"><i class="fa fa-circle-o"></i>Nueva venta</a></li>
+                <li><a href="{{ route('ventas.create') }}"><i class="fa fa-circle-o"></i>Nueva venta</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
                 <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
                 <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignacion</a></li>
@@ -210,14 +210,14 @@
     <script src="{{ asset('plugins/confirm/jquery-confirm.min.js') }}"></script>
 
     <!-- select2 -->
-    <script src="{{ asset('plugins/select/js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
 
     <!-- inicializacion de plugins -->
     <script src="{{ asset('js/propio.js') }}"></script>
 
     @yield('script')
 
-    <!------------------------------------------------- funciones para la logica ------------------------------------------------------>
+    <!------------------------------------------------------ funciones para la logica ------------------------------------------------------>
     <script>
         // mensajes de alerta
         function mensajes(title, content, icon, type){
@@ -356,6 +356,27 @@
                 $(".dist").empty().append(response);
             });
         });
+
+        // cargar datos de la consigncaion y modelos
+        function cargarDataConsignacionYModelos(data){
+            $("#id_consig").val(data.consig.id);
+            $("#cliente").text(data.consig.cliente.nombre_full);
+            $("#fecha_envio").text(data.consig.fecha_envio);
+            $("#data_modelos").empty().append(data.data);
+            $(".cliente_id").val(data.consig.cliente_id);
+        }
+
+        // cargar data de la guia
+        function cargarGuia(data){
+            $("#id_guia").val(data.consig.guia.id);
+            $("#serie").text(data.consig.guia.serial);
+            $("#dir_salida").text(data.dir_salida);
+            $("#dir_llegada").text(data.dir_llegada);
+            $("#ref_item_id").text(data.consig.guia.detalle_guia.item.nombre);
+            $("#cantidad").text(data.consig.guia.detalle_guia.cantidad);
+            $("#peso").text(data.consig.guia.detalle_guia.peso);
+            $("#descripcion").text(data.consig.guia.detalle_guia.descripcion);
+        }
 
     </script>
     

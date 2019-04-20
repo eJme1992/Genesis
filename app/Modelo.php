@@ -19,7 +19,7 @@ class Modelo extends Model
     	return $this->belongsTo("App\Coleccion", "coleccion_id");
     }
 
-	  public function marca(){
+	public function marca(){
     	return $this->belongsTo("App\Marca", "marca_id");
     }
 
@@ -70,6 +70,14 @@ class Modelo extends Model
             $data->status_id = 1;
         }
         $data->montura = $data->montura - $montura;
+        return $data->save();
+    }
+
+    // descontar consignacion - modelos
+    public static function descontarMonturaToModelosToConsignacion($id, $montura){
+        $data = Modelo::findOrFail($id);
+        $data->montura = $montura;
+        $data->status_id = 1;
         return $data->save();
     }
 

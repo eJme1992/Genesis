@@ -31,9 +31,6 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	
     // consignaciones
     Route::get('detalleConsig/{id}', 'ConsignacionController@show');
-
-	// Ventas
-	Route::get('nueva_venta', 'VentaController@newVenta')->name('ventas.new');
 	
 	// dashboard
 	Route::get('dashboard', 'LoginController@index')->name('dashboard');

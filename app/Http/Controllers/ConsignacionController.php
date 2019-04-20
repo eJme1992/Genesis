@@ -69,7 +69,7 @@ class ConsignacionController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Consignacion::with("cliente", "detalleConsignacion.modelo", "guia.detalleGuia.item")->findOrFail($id));
+        return Consignacion::showConsig($id);
     }
 
     /**

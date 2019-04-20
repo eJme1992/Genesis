@@ -78,50 +78,22 @@
 
     // mostrar y validar campos en consignacion y guia
     $(".btn_detalle_consig").click(function(e){
-        $("#icon-loading").show();
-        $("#data_modelos").empty();
-        id = $(this).data("id");
-        status = "";
+        $.get('detalleConsig/'+$(this).data("id"), function(data) {
+            $("#icon-loading").show();
+            
+            $('.data-table').DataTable().destroy();
+            cargarDataConsignacionYModelos(data);
+            $('.data-table').DataTable();
 
-        $.get('detalleConsig/'+$(this).data("id"), function(res) {
-
-            $("#cliente").text(res.cliente.nombre_full);
-            $("#fecha_envio").text(res.fecha_envio);
-            $.each(res.detalle_consignacion, function(index, val) {
-
-                if (val.status == 1) {
-                    status = "Enviado";
-                }else if(val.status == 2){
-                    status = "Recibido";
-                }else if(val.status == 3){
-                    status = "Consignado";
-                }
-
-                $("#data_modelos").append(
-                    "<tr>"+
-                          "<td>"+val.id+"</td>"+
-                          "<td>"+val.modelo.name+"</td>"+
-                          "<td>"+val.montura+"</td>"+
-                          "<td>"+val.estuche+"</td>"+
-                          "<td>"+status+"</td>"+
-                    "</tr>"
-                );
-            });
-            if (res.guia == null) {
+            if (data.consig.guia == null) {
                 $("#section_guia").fadeOut(400);
                 $("#guia").empty().append("<i class='fa fa-remove text-danger'></i> Guia de remision");
             }else{
                 $("#section_guia").fadeIn(400);
                 $("#guia").empty().append("<i class='fa fa-check text-success'></i> Guia de remision");
-                $("#serie").text(res.guia.serial);
-                $("#dir_salida").text($("#val_salida"+id).data("v"));
-                $("#dir_llegada").text($("#val_llegada"+id).data("v"));
-                $("#ref_item_id").text(res.guia.detalle_guia.item.nombre);
-                $("#cantidad").text(res.guia.detalle_guia.cantidad);
-                $("#peso").text(res.guia.detalle_guia.peso);
-                $("#descripcion").text(res.guia.detalle_guia.descripcion);
+                cargarGuia(data);
             }
-
+            
             $("#icon-loading").hide();
         });
     });

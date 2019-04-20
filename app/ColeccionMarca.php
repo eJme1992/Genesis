@@ -17,4 +17,11 @@ class ColeccionMarca extends Model
     	return $this->belongsTo('App\Marca', 'marca_id');
     }
 
+    public static function cargarPrecios($coleccion, $marca){
+        return  ColeccionMarca::where([
+                    ["coleccion_id", $coleccion],
+                    ["marca_id", $marca],
+                ])->first(["precio_almacen", "precio_venta_establecido"]);
+    }
+
 }

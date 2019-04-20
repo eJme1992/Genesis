@@ -94,15 +94,18 @@ class GuiaRemision extends Model
 
     // actualizar guia de remision
     public static function guiaUpdate($request, $id){
-        // $guia = GuiaRemision::findOrFail($id);
-        // BitacoraUser::saveBitacora("Eliminacion de guia de remision (".$guia->serial.")");
-        // GuiaRemision::destroy($id);
+        $guia = GuiaRemision::findOrFail($id);
+        $guia->motivo_guia_id = $request->motivo_guia;
+        $guia->save();
+        BitacoraUser::saveBitacora("Guia de remision actualizada (".$guia->serial.")");
+    }
 
-        // return redirect('guiaRemision')->with([
-        //     'flash_class'   => 'alert-success',
-        //     'flash_message' => 'Guia de remision eliminada con exito.'
-        // ]);
-
+    // actualizar motivo guia de remision
+    public static function guiaMotivo($id, $motivo){
+        $guia = GuiaRemision::findOrFail($id);
+        $guia->motivo_guia_id = $motivo;
+        $guia->save();
+        BitacoraUser::saveBitacora("Guia de remision actualizada (".$guia->serial.")");
     }
 
     // eliminar guia de remision

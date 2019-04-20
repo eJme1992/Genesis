@@ -25,6 +25,18 @@
 	background-color: #E9E9E9;
 }
 
+.division_vertical{
+    border-right: solid 1px #ccc;
+    font-size: 35px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.btn_cuadrado{
+    width: 100px !important;
+    height: 100px !important;
+}
+
 /* tipografias para el proyecto */
 
 /* latin */

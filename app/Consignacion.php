@@ -8,7 +8,7 @@ use Auth;
 
 class Consignacion extends Model
 {
-    protected $table = "consignaciones";
+    protected $table    = "consignaciones";
     protected $fillable = ["cliente_id", "user_id", "fecha_envio", "total", "guia_id", "status"];
     
     public function cliente(){
@@ -71,11 +71,66 @@ class Consignacion extends Model
                 GuiaRemision::guiaStore($request, $motivo = 3); // guardar guia
                 Consignacion::saveConsignacionAndDetalle($request, $guia = 1); // guardar consignacion y detalle
             }
-        }else{
+        }else{ 
             Consignacion::saveConsignacionAndDetalle($request, $guia = 0); // consignacion    
         }
 
         return response()->json("ok");
+    }
+
+    //actualizar status en consig;
+    public static function updateStatusConsignacion($id, $status){
+        $consig = Consignacion::findOrFail($id);
+        $consig->status = $status;
+        $consig->save();
+    }
+
+     // cargar datos de la consig
+    public static function showConsig($id){
+        
+        $consig      = Consignacion::with("cliente", "guia.detalleGuia.item")->findOrFail($id);
+        $data        = array();
+        $dir_llegada = ($consig->guia) ? $consig->guia->dirLLegada->full_dir() : 'vacio';
+        $dir_salida  = ($consig->guia) ? $consig->guia->dirSalida->full_dir()  : 'vacio';
+
+        foreach ($consig->detalleConsignacion as $dc) {
+            $data [] = "<tr>
+                            <td>".$dc->id."<input type='hidden' value='".$dc->id."' id='modelo_id_".$dc->id."' name='modelo_id[]'></td>
+                            <td>".$dc->modelo->name."</td>
+                            <td>
+                                <select class='form-control montura_modelo' name='montura[]' id='montura_".$dc->id."'>
+                                    <option value=''>...</option>
+                                    ".Asignacion::Monturas($dc->montura)."
+                                </select>
+                            </td>
+                            <td>".$dc->estuche."<input type='hidden' value='".$dc->estuche."' name='estuche[]'></td>
+                            <td id='td_precio'>
+                                <input type='number' step='0.01' max='999999999999' min='1' value='".ColeccionMarca::cargarPrecios($dc->modelo->coleccion_id, $dc->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$dc->id."'>
+                            </td>
+                            <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
+                            <td>".Consignacion::validarStatusDeModeloEnConsignacion($dc)."</td>
+                        </tr>"; 
+        }
+
+        return response()->json([
+            "consig"        => $consig,
+            "data"          => $data,
+            "dir_llegada"   => $dir_llegada,
+            "dir_salida"    => $dir_salida,
+        ]);
+    }
+
+    // validar status de los modelos en la consignacion
+    public static function validarStatusDeModeloEnConsignacion($data){
+        if ($data->status == 1) {
+            $status = "Enviado";
+        }elseif ($data->status == 2) {
+            $status = "Recibido";
+        }elseif ($data->status == 3) {
+            $status = "Consignado";
+        }
+
+        return $status;
     }
 
 }

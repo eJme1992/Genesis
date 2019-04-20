@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StatusAdicionalVenta extends Model
 {
-    protected $table = "status_adicional_ventas";
+    protected $table = "ref_estadic";
 
     protected $fillable = ["nombre"];
 }
