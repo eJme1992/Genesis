@@ -12,6 +12,10 @@
 	padding: 1em;
 }
 
+.padding_05em{
+    padding: 0.5em;
+}
+
 .badgePer{
 	/* background-color: ; */
 	color: #525ad0;

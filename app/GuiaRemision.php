@@ -58,38 +58,33 @@ class GuiaRemision extends Model
 
     public static function guiaStore($request, $motivo){
 
-        DB::transaction(function() use ($request, $motivo) {
+        $data = GuiaRemision::create([
+            'serial'          => $request->serial.'-'.$request->guia,
+            'motivo_guia_id'  => $motivo,
+            'dir_salida'      => $request->dir_salida,
+            'dir_llegada'     => $request->dir_llegada,
+            'cliente_id'      => $request->cliente_id,
+            'user_id'         => Auth::id(),
+        ]);
 
-            $data = GuiaRemision::create([
-                'serial'          => $request->serial.'-'.$request->guia,
-                'motivo_guia_id'  => $motivo,
-                'dir_salida'      => $request->dir_salida,
-                'dir_llegada'     => $request->dir_llegada,
-                'cliente_id'      => $request->cliente_id,
-                'user_id'         => Auth::id(),
+        $data->detalleGuia()->create([
+            'ref_item_id'   => $request->ref_item_id,
+            'cantidad'      => $request->cantidad,
+            'peso'          => $request->peso,
+            'descripcion'   => $request->descripcion,
+        ]);
+
+        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+
+            $data->modeloGuias()->create([
+                'modelo_id'   => $request->modelo_id[$i],
+                'montura'     => $request->montura[$i],
+                'estuche'     => $request->estuche[$i],
             ]);
 
-            $data->detalleGuia()->create([
-                'ref_item_id'   => $request->ref_item_id,
-                'cantidad'      => $request->cantidad,
-                'peso'          => $request->peso,
-                'descripcion'   => $request->descripcion,
-            ]);
+        }
 
-            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-
-                $data->modeloGuias()->create([
-                    'modelo_id'   => $request->modelo_id[$i],
-                    'montura'     => $request->montura[$i],
-                    'estuche'     => $request->estuche[$i],
-                ]);
-
-            }
-
-            BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
-
-        });
-
+        BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
     }
 
     // actualizar guia de remision

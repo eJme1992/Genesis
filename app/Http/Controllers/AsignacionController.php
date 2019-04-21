@@ -38,7 +38,7 @@ class AsignacionController extends Controller
         $this->validate($request, [
             'modelo_id' => 'required',
             'user_id'   => 'required',
-            'monturas'  => 'required|array',
+            'montura'   => 'required|array',
         ]);
 
         return Asignacion::saveAsignacion($request);        
@@ -57,6 +57,11 @@ class AsignacionController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function cargarAsigModelosToUser($user)
+    {
+        return Asignacion::cargarAsigModelosToUser($user);
     }
 
     public function edit($id)

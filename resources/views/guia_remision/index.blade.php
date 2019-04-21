@@ -30,9 +30,9 @@
 	      		<div class="box-header with-border">
 			        <h3 class="box-title"><i class="fa fa-list-alt"></i> Guias de Remision</h3>
 			        <span class="pull-right">
-						<a href="#create" data-toggle="modal" data-target="#create_guia" class="btn btn-danger" id="modal_guia">
+						{{-- <a href="#create" data-toggle="modal" data-target="#create_guia" class="btn btn-danger" id="modal_guia">
 							<i class="fa fa-plus" aria-hidden="true"></i> Nueva guia
-						</a>
+						</a> --}}
 					</span>
 			    </div>
       			<div class="box-body">
@@ -109,10 +109,10 @@
 			</div>
 		</div>
 	</div>
-	@include("guia_remision.modals.create")
 	@include('guia_remision.modals.modelos')
+	{{-- @include("guia_remision.modals.create")
 	@include('direcciones.modals.modal_create')
-	@include('clientes.modals.createclientes')
+	@include('clientes.modals.createclientes') --}}
 
 @endsection
 @section("script")

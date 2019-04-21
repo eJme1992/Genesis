@@ -18,6 +18,8 @@
     </div>
 </section>
 
+<section id="section_modelos_calcular_precio">
+    
 <div class="col-lg-12">
     <table class="table table-bordered table-striped table-hover data-table">
         <thead class="bg-navy disabled">
@@ -41,9 +43,10 @@
             <i class="fa fa-info-circle"></i> Seleccione solo las monturas consignadas.
         </p>    
         <label class="">Total S/</label>
-        <input type="text" id="total_venta" class="form-control" readonly="" name="total">
-        <button type="button" class="btn btn-flat btn-primary" id="btn_calcular_total_venta" data-toggle="tooltip" title="Calcular total por modelo y total venta">
+        <input type="text" class="form-control total_venta" readonly="" name="total">
+        <button type="button" class="btn btn-flat btn-primary" id="btn_calcular_total_venta" data-toggle="tooltip" title="Calcular total por modelo y total venta" onclick="calcularMontoTotal();">
             <i class="fa fa-arrow-right"></i> Calcular
         </button>
     <hr>
 </div> 
+</section>

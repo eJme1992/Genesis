@@ -50,15 +50,9 @@ class Modelo extends Model
     }
     
     //----------------------- funciones personalizadas --------------------------------------------
-    //
     // modelos a mostrar dependiendo del rol
     public static function modelosToUser(){
-      if (\Auth::user()->rol_id == 1) {
-        $data = Modelo::where("montura", ">", 0)->get();
-      }else{
-        $data = $this->asignaciones()->where("user_id", \Auth::id())->where("monturas", ">", 0)->get();
-      }
-      return $data;
+      return $data = Modelo::where("montura", ">", 0)->get();
     }
 
     // descontar monturas de los modelos
@@ -75,6 +69,18 @@ class Modelo extends Model
 
     // descontar consignacion - modelos
     public static function descontarMonturaToModelosToConsignacion($id, $montura){
+        $data = Modelo::findOrFail($id);
+        if (($data->montura + $montura) == 0) {
+            $data->status_id = 2;
+        }else{
+            $data->status_id = 1;
+        }
+        $data->montura = $data->montura + $montura;
+        return $data->save();
+    }
+
+    // descontar asignacion - modelos
+    public static function descontarMonturaToModelosToAsignacion($id, $montura){
         $data = Modelo::findOrFail($id);
         if (($data->montura + $montura) == 0) {
             $data->status_id = 2;
@@ -169,6 +175,42 @@ class Modelo extends Model
         if ($request->ajax()) {
             return response()->json($modelo);
         }
+    }
+
+    // cargar tabla para manipula los datos
+    public static function cargarTabla($coleccion, $marca){
+        
+        $data = array();
+        $modelos = Modelo::where("coleccion_id", $coleccion)
+                          ->where("marca_id", $marca)
+                          ->where("status_id",  1)
+                          ->get();
+
+        if ($modelos->count() > 0) {
+            foreach ($modelos as $m) {
+
+                $data [] = "
+                    <tr>
+                        <td>".$m->id."<input type='hidden' value='".$m->id."' id='modelo_id_".$m->id."' name='modelo_id[]'></td>
+                        <td>".$m->name."</td>
+                        <td>
+                            <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->id."'>
+                                <option value=''>...</option>
+                                ".Asignacion::Monturas($m->montura)."
+                            </select>
+                        </td>
+                        <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
+                        <td id='td_precio'>
+                            <input type='number' step='0.01' max='999999999999' min='1' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
+                        </td>
+                        <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
+                    </tr>"; 
+          }
+        }else{
+            $data [] = "";
+        }                  
+
+        return response()->json($data);
     }
 
 }

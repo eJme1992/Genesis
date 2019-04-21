@@ -8,6 +8,9 @@
 	</ol>
 @endsection
 @section('content')
+
+        @include('partials.flash')
+        
 		<!-- Formulario -->
 		<div class="row">
 			<div class="col-sm-12">
@@ -78,26 +81,26 @@
 							</div>
 
 							@if (count($errors) > 0)
-							<div class="col-sm-12">	
-			          <div class="alert alert-danger alert-important">
-			          	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				          <ul>
-				            @foreach($errors->all() as $error)
-				              <li>{{$error}}</li>
-				            @endforeach
-				          </ul>  
-			          </div>
-			        </div> 
-			        @endif
+        						<div class="col-sm-12">	
+            			             <div class="alert alert-danger alert-important">
+            			          	  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            				            <ul>
+            				            @foreach($errors->all() as $error)
+            				              <li>{{$error}}</li>
+            				            @endforeach
+            				            </ul>  
+            			             </div>
+            			        </div> 
+        			        @endif
 
-							<div class="form-group text-right col-sm-12">
-								<hr><br>
-					        	<em class="pull-left"><i class="fa fa-info-circle"></i> Seleccione solo las monturas de los modelos que desea asignar</em>
-					        	<a class="btn btn-flat btn-default" href="{{route('asignaciones.index')}}"><i class="fa fa-reply"></i> Atras</a>
-								<button class="btn btn-success" type="submit" onclick="return confirm('Desea Asignar estos datos al usuario?');">
-									<i class="fa fa-save"></i> Guardar
-								</button>
-							</div>
+        					<div class="form-group text-right col-sm-12">
+        						<hr><br>
+        			        	<em class="pull-left"><i class="fa fa-info-circle"></i> Seleccione solo las monturas de los modelos que desea asignar</em>
+        			        	<a class="btn btn-flat btn-default" href="{{route('asignaciones.index')}}"><i class="fa fa-reply"></i> Atras</a>
+        						<button class="btn btn-success" type="submit" onclick="return confirm('Desea Asignar estos datos al usuario?');">
+        							<i class="fa fa-save"></i> Guardar
+        						</button>
+        					</div>
 						</form>
 					</div>
 				</div>

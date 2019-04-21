@@ -114,4 +114,8 @@ class ModeloController extends Controller
         
         return Modelo::deleteAll($request);
     }
+
+    public function cargarTabla($coleccion, $marca){
+        return Modelo::cargarTabla($coleccion, $marca);
+    }
 }

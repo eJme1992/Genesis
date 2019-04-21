@@ -34,11 +34,24 @@ class DetalleConsignacion extends Model
                 $data->status   = 3; // consignado
                 Modelo::descontarMonturaToModelosToConsignacion($request->modelo_id[$i], $total_montura);
             }else{
-                $data->status   = 2; // recibido y devuelto a almacen
+                $data->status    = 2; // recibido y devuelto a almacen
+                $data->montura   = 0;
                 Modelo::descontarMonturaToModelosToConsignacion($request->modelo_id[$i], $data->montura);
             }
 
             $data->save();
+        }
+        
+        $dc = DetalleConsignacion::where("consignacion_id", $request->id_consig)
+                                    ->whereNotIn("modelo_id", $request->modelo_id)->get();
+        if (count($dc) > 0) {
+            for ($m = 0; $m < count($dc); $m++) { 
+                $data2 = DetalleConsignacion::findOrFail($dc[$m]->id);  
+                Modelo::descontarMonturaToModelosToConsignacion($dc[$m]->modelo_id, $data2->montura);
+                $data2->status   = 2; // recibido y devuelto a almacen
+                $data2->montura  = 0;
+                $data2->save();
+            }
         }
    }
 }

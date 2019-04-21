@@ -155,10 +155,28 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('ventas.create') }}"><i class="fa fa-circle-o"></i>Nueva venta</a></li>
-                <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
+                <li class="treeview">
+                  <a href="#"><i class="fa fa-circle-o"></i> Nueva venta
+                      <i class="fa fa-angle-left pull-right"></i>
+                  </a>
+                  <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('create_venta_directa') }}"><i class="fa fa-circle-o"></i> Venta directa</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('create_venta_asignacion') }}"><i class="fa fa-circle-o"></i> Venta por asignacion</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('create_venta_consignacion') }}"><i class="fa fa-circle-o"></i> Venta por consignacion</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Notas de Pedido (Ventas)</a></li>
+                <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
+                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
+                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
                 <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
-                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignacion</a></li>
+                <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
               </ul>
             </li>
 

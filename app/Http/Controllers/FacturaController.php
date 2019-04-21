@@ -14,7 +14,9 @@ class FacturaController extends Controller
      */
     public function index()
     {
-        //
+        return view("facturas.index",[
+            "facturas" => Factura::all()
+        ]);
     }
 
     /**

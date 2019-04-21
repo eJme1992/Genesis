@@ -12,7 +12,7 @@ class Asignacion extends Model
 
     protected $fillable = [
       "modelo_id", "user_id", "fecha", 
-      "monturas", "estuche"
+      "monturas", "estuche", "status"
     ];
 
     public function modelo(){
@@ -129,7 +129,7 @@ class Asignacion extends Model
     public static function saveAsignacion($request){
 
     	// validamos que exitan monturas en la peticion
-    	if (array_filter($request->monturas) == null) {
+    	if (array_filter($request->montura) == null) {
     		
             return redirect("asignaciones")->with([
                 'flash_message' => 'No se selecciono ninguna montura.',
@@ -139,32 +139,18 @@ class Asignacion extends Model
         }else{
 
         	// recorremos la cantidad seleccionada de monturas
-            for ($i=0; $i < count($request->monturas); $i++) { 
+            for ($i=0; $i < count($request->montura); $i++) { 
 
-                if ($request->monturas[$i] == null) {
-                    // no hacemos nada
-                }else{
+                if ($request->montura[$i] != null) {
+                    $asignacion = new Asignacion;
+                    $asignacion->modelo_id = $request->modelo_id[$i];   
+                    $asignacion->user_id = $request->user_id;   
+                    $asignacion->monturas = $request->montura[$i];   
+                    $asignacion->estuche = $request->estuche[$i];   
+                    $asignacion->fecha = date("d-m-Y");
+                    $asignacion->save();
 
-                    	// instanciamos y guardamos
-                        $asignacion = new Asignacion;
-                        $asignacion->modelo_id = $request->modelo_id[$i];   
-                        $asignacion->user_id = $request->user_id;   
-                        $asignacion->monturas = $request->monturas[$i];   
-                        $asignacion->estuche = $request->estuche[$i];   
-                        $asignacion->fecha = date("d-m-Y");
-
-                        $mod = Modelo::findOrFail($request->modelo_id[$i]);
-                        
-                        if (($mod->montura - $request->monturas[$i])  == 0) {
-                            $mod->status_id = 2;
-                        }else{
-                            $mod->status_id = 1;
-                        }
-                        
-                        $mod->montura = $mod->montura - $request->monturas[$i];
-                        $mod->save();
-                        $asignacion->save();
-                    // }  
+                    Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
                 }
             }
 
@@ -203,7 +189,71 @@ class Asignacion extends Model
         }
     }
 
-    //----------------------- Rutas asignadas a usuarios ----------------------------
+    public static function cargarAsigModelosToUser($user){
+        $modelos = Asignacion::where("user_id", $user)->where("status", 1)->get();
+        $data = array();
+
+        if ($modelos->count() > 0) {
+            foreach ($modelos as $m) {
+
+                $data [] = "
+                    <tr>
+                        <td>".$m->modelo_id."
+                            <input type='hidden' value='".$m->modelo_id."' id='modelo_id_".$m->modelo_id."' name='modelo_id[]'>
+                            <input type='hidden' value='".$m->id."' name='asignacion_id[]'>
+                        </td>
+                        <td>".$m->modelo->name."</td>
+                        <td>
+                            <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->modelo_id."'>
+                                <option value=''>...</option>
+                                ".Asignacion::Monturas($m->monturas)."
+                            </select>
+                        </td>
+                        <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
+                        <td>
+                            <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->modelo->coleccion_id, $m->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->modelo_id."'>
+                        </td>
+                        <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
+                    </tr>"; 
+          }
+        }else{
+            $data [] = "";
+        }                  
+
+        return response()->json($data);
+    }
+
+    public static function modeloRetornadoOrAsignados($request){
+        
+        for ($i = 0; $i < count($request->asignacion_id) ; $i++) {
+            $data = Asignacion::findOrFail($request->asignacion_id[$i]);                            
+            
+            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                Modelo::descontarMonturaToModelosToAsignacion($request->modelo_id[$i], $data->monturas - $request->montura[$i]);
+                $data->monturas  = 0; // calcular modelos restantes para ser devueltos;
+                $data->status    = 3;
+            }else{
+                Modelo::descontarMonturaToModelosToAsignacion($request->modelo_id[$i], $data->monturas);
+                $data->monturas  = 0;
+                $data->status    = 2;
+            }
+
+            $data->save();
+        }
+   }
+
+   public function nombreStatus(){
+    if ($this->status == 1) {
+        $this->status = "Asignado";
+    }elseif($this->status == 2){
+        $this->status = "Devuelto a almacen";
+    }elseif ($this->status == 3) {
+        $this->status = "Vendido";
+    }
+    return $this->status;
+   }
+
+    //-------------------------------------------- Rutas asignadas a usuarios ----------------------------
 
     // Asignacion de rutas a users
     public static function saveAsigRutasStore($request)

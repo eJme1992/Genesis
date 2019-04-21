@@ -28,18 +28,18 @@ class GuiaRemisionController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'serial'         => 'required',
-            'guia'           => 'required',
-            'cliente_id'     => '',
-            'dir_salida'     => 'required',
-            'dir_llegada'    => 'required',
-            'motivo_guia_id' => 'required',
-            'modelo_id'      => 'required',
-            'montura'        => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'serial'         => 'required',
+        //     'guia'           => 'required',
+        //     'cliente_id'     => '',
+        //     'dir_salida'     => 'required',
+        //     'dir_llegada'    => 'required',
+        //     'motivo_guia_id' => 'required',
+        //     'modelo_id'      => 'required',
+        //     'montura'        => 'required',
+        // ]);
 
-        return GuiaRemision::guiaStore($request);
+        // return GuiaRemision::guiaStore($request);
     }
 
     public function show($id)

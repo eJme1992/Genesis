@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta};
+use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User};
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateVentaRequest;
 
 class VentaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view("ventas.index",[
             "ventas" => Venta::all(),
         ]);
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        return view("ventas.create",[
+    
+    }
+
+    public function createConsignacion()
+    {
+        return view("ventas.create_venta_consignacion",[
             "consignaciones" => Consignacion::where("status", 1)->get(["id"]),
             "direcciones"    => Direccion::all(),
             "departamentos"  => Departamento::all(),
@@ -35,74 +32,63 @@ class VentaController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {   
-        $this->validate($request, [
-            'cliente_id'        => 'required',
-            'direccion_id'      => 'required',
-            'total'             => 'required',
-            'modelo_id'         => 'required',
-            'montura'           => 'required',
-            'estuche'           => '',
-            'precio_montura'    => 'required',
-            'precio_modelo'     => 'required',
-            'num_factura'       => 'required|unique:facturas',
-            'subtotal'          => 'required',
-            'impuesto'          => 'required',
-            'total_neto'        => 'required',
-            'ref_item_id'       => 'required',
-            'ref_estadic_id'    => 'required|in:1,2,3',
+    public function createAsignacion()
+    {
+        return view("ventas.create_venta_asignacion",[
+            "consignaciones" => Consignacion::where("status", 1)->get(["id"]),
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "clientes"       => Cliente::all(),
+            "users"          => User::all(),
         ]);
-        
+    }
+
+    public function createDirecta()
+    {
+        return view("ventas.create_venta_directa",[
+            "consignaciones" => Consignacion::where("status", 1)->get(["id"]),
+            "direcciones"    => Direccion::all(),
+            "colecciones"    => Coleccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "clientes"       => Cliente::all(),
+        ]);
+    }
+
+
+    public function storeVentaDirecta(CreateVentaRequest $request)
+    {   
+        return Venta::storeVentaDirecta($request);
+    }
+
+    public function storeVentaAsignacion(CreateVentaRequest $request)
+    {   
+        return Venta::storeVentaAsignacion($request);
+    }
+
+    public function storeVentaConsignacion(CreateVentaRequest $request)
+    {   
         return Venta::storeVenta($request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
     public function show(Venta $venta)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Venta $venta)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Venta $venta)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Venta $venta)
     {
         //

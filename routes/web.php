@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'direcciones'   => 'DireccionController',
 	    'clientes'      => 'ClientesController',
 	    'ventas'        => 'VentaController',
+        'facturas'      => 'FacturaController',
+        'notacredito'   => 'NotaCreditoController',
 	    'departamentos' => 'DepartamentoController',
 	    'provincias'    => 'ProvinciaController',
 	    'distritos'     => 'DistritoController',
@@ -59,6 +61,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::post('marcas/{marca}/{coleccion}/destroy', 		'MarcaController@destroyMarCol');
 
 	// modelos
+    Route::get('cargarTabla/{coleccion}/{marca}',       'ModeloController@cargarTabla');
 	Route::get('bus_mol/{id}', 							'ModeloController@busMol');
 	Route::post('editMol', 								'ModeloController@update')->name("editMol");
 	Route::post('delete', 							 	'ModeloController@delete')->name("modelos.delete");
@@ -78,6 +81,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('modelosAll/{coleccion}/{marca}', 	'AsignacionController@modelosAll');
 	Route::get('asignacionesRutas', 				'AsignacionController@rutasIndex')->name("indexrutas");
 	Route::get('asigRutaCreate', 					'AsignacionController@asigRutaCreate')->name("asigRutaCreate");
+    Route::get('cargarAsigModelosToUser/{user}',    'AsignacionController@cargarAsigModelosToUser')->name("cargarAsigModelosToUser");
 	Route::post('asignacionesRutasStore', 			'AsignacionController@asigRutasStore')->name("asignacion_rutas.store");
 	Route::delete('asignacionesRutasDelete/{id}', 	'AsignacionController@asigRutasDestroy')->name("asig_ruta.destroy");
 	Route::put('asigRutasUpdate/{id}', 				'AsignacionController@asigRutasUpdate')->name("asignacion_rutas.update");
@@ -97,8 +101,8 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::post('editPrecios', 			'ColeccionController@editPrecios')->name("colecciones.editPrecios");
 
 	// proveedores
-	Route::get('allP', 		'ProveedoresController@allP')->name('allP');
-	Route::post('saveP', 	'ProveedoresController@saveP')->name('saveP');
+	Route::get('allP', 	   'ProveedoresController@allP')->name('allP');
+	Route::post('saveP',   'ProveedoresController@saveP')->name('saveP');
 	
 	// clientes
 	Route::get('viewClientes', 'ClientesController@allCliente')->name('viewClientes');
@@ -106,6 +110,14 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
   	//departamentos, provincias y distritos
   	Route::get('prov/{id}',	'ProvinciaController@busProv')->name('allProv');
   	Route::get('dist/{id}',	'DistritoController@busDist')->name('allDist');
+
+    // ventas
+    Route::get('create_venta_consignacion', 'VentaController@createConsignacion')->name('create_venta_consignacion');
+    Route::get('create_venta_asignacion', 'VentaController@createAsignacion')->name('create_venta_asignacion');
+    Route::get('create_venta_directa', 'VentaController@createDirecta')->name('create_venta_directa');
+    Route::post('storeVentaDirecta', 'VentaController@storeVentaDirecta')->name('ventas.storeVentaDirecta');
+    Route::post('storeVentaConsignacion', 'VentaController@storeVentaConsignacion')->name('ventas.storeVentaConsignacion');
+    Route::post('storeVentaAsignacion', 'VentaController@storeVentaAsignacion')->name('ventas.storeVentaAsignacion');
 
   	// foto del usuario
   	Route::get('images/{filename}',function($filename){

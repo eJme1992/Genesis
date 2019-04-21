@@ -38,27 +38,25 @@ class Consignacion extends Model
     // guardar consignacion
     public static function saveConsignacionAndDetalle($request, $guia){
 
-        DB::transaction(function() use ($request, $guia) {
-            $consignacion = Consignacion::create([
-                'cliente_id'  => $request->cliente_id,
-                'fecha_envio' => $request->fecha_envio,
-                'user_id'     => Auth::id(),
-                'guia_id'     => ($guia == 1) ? GuiaRemision::orderBy("id", "DESC")->value("id") : null,
+        $consignacion = Consignacion::create([
+            'cliente_id'  => $request->cliente_id,
+            'fecha_envio' => $request->fecha_envio,
+            'user_id'     => Auth::id(),
+            'guia_id'     => ($guia == 1) ? GuiaRemision::orderBy("id", "DESC")->value("id") : null,
+            'status'      => 1,
+        ]);
+
+        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+            $consignacion->detalleConsignacion()->create([
+                'modelo_id'   => $request->modelo_id[$i],
+                'montura'     => $request->montura[$i],
+                'estuche'     => $request->estuche[$i],
                 'status'      => 1,
             ]);
+            Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+        }
 
-            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-                $consignacion->detalleConsignacion()->create([
-                    'modelo_id'   => $request->modelo_id[$i],
-                    'montura'     => $request->montura[$i],
-                    'estuche'     => $request->estuche[$i],
-                    'status'      => 1,
-                ]);
-                Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
-            }
-
-            BitacoraUser::saveBitacora("Consignacion creada");
-        });
+        BitacoraUser::saveBitacora("Consignacion creada");
     }
 
     // validar si la consignacion tiene o no guia
@@ -103,7 +101,7 @@ class Consignacion extends Model
                                     ".Asignacion::Monturas($dc->montura)."
                                 </select>
                             </td>
-                            <td>".$dc->estuche."<input type='hidden' value='".$dc->estuche."' name='estuche[]'></td>
+                            <td>".$dc->estuche."<input type='hidden' value='".$dc->estuche."' name='estuche[]' class='estuches'></td>
                             <td id='td_precio'>
                                 <input type='number' step='0.01' max='999999999999' min='1' value='".ColeccionMarca::cargarPrecios($dc->modelo->coleccion_id, $dc->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$dc->id."'>
                             </td>
@@ -123,9 +121,9 @@ class Consignacion extends Model
     // validar status de los modelos en la consignacion
     public static function validarStatusDeModeloEnConsignacion($data){
         if ($data->status == 1) {
-            $status = "Enviado";
+            $status = "Enviado a cliente";
         }elseif ($data->status == 2) {
-            $status = "Recibido";
+            $status = "En almacen";
         }elseif ($data->status == 3) {
             $status = "Consignado";
         }

@@ -19,6 +19,7 @@ class CreateVentasTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('cliente_id')->nullable();
             $table->unsignedInteger('direccion_id')->nullable();
+            $table->unsignedInteger('estado_entrega_estuche')->nullable();
             $table->decimal('total', 12, 2)->nullable();// monto total de venta
             $table->string('fecha')->nullable(); //fecha del registro del pedido
 

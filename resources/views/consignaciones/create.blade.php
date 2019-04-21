@@ -48,7 +48,6 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="ruta_consig" value="{{ route('consignacion.index') }}">
 @include('direcciones.modals.modal_create')
 @include('clientes.modals.createclientes')        
 @endsection
@@ -129,10 +128,10 @@
                 btn.removeAttr("disabled");
                 return false;
             }else{
-                mensajes('Listo!', 'Consignacion generada con exito', 'fa-check', 'green');  
+                mensajes('Listo!', 'Consignacion generada con exito, espere mientras es redireccionado...', 'fa-check', 'green');  
                 form[0].reset();
-                btn.text("espere mientras es redireccionado...");
-                window.location = $("#ruta_consig").val();
+                //window.location = $("#ruta_consig").val();
+                setTimeout("location.reload(true);", 2000);
             }
         })
         .fail(function(data) {

@@ -1,6 +1,6 @@
 <!-- guia de remision -->
     <div class="col-lg-12">
-        <h4 class="padding_1em bg-navy"><i class="fa fa-list-alt"></i> Datos de la Guia</h4>
+        <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos de la Guia</h4>
     </div>
 
     <div class="form-group col-lg-6">
