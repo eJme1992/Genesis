@@ -22,8 +22,12 @@ class AdicionalVenta extends Model
     	return $this->belongsTo("App\Factura", "factura_id");
     }
 
-    public function status_adicional(){
-    	return $this->belongsTo("App\StatusAdicionalVenta", "status_adicional_id");
+    public function statusAdicional(){
+    	return $this->belongsTo("App\StatusAdicionalVenta", "ref_estadic_id");
+    }
+
+    public function item(){
+        return $this->belongsTo("App\RefItem", "ref_item_id");
     }
 
     //nota: la fecha cambia cuando el estado cambia

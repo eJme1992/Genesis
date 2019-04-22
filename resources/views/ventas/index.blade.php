@@ -34,36 +34,40 @@
                     <table class="table data-table table-bordered table-hover">
                         <thead class="label-danger">
                             <tr>
-                                <th class="text-center">Vendedor (Usuario)</th>
                                 <th class="text-center">Cliente</th>
                                 <th class="text-center">Direccion</th>
-                                <th class="text-center">Modelos</th>
                                 <th class="text-center">Total</th>
                                 <th class="text-center">Fecha</th>
-                                <th class="text-center bg-navy">Estado</th>
-                                {{-- <th class="text-center bg-navy">Acciones</th> --}}
+                                <th class="text-center bg-navy" width="100px">Estado Fact.</th>
+                                <th class="text-center bg-navy">Estado Estu.</th>
+                                <th class="text-center bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             @foreach($ventas as $d)
                                 <tr>
-                                    <td class="text-capitalize"><strong>{{ $d->user->name }} {{ $d->user->ape }}</strong></td>
                                     <td>{{ $d->cliente->nombre_full }}</td>
                                     <td>{{ $d->direccion->full_dir() }}</td>
-                                    <td>{{ $d->movimientoVenta->count() }}</td>
                                     <td>{{ 'S/ '.$d->total }}</td>
                                     <td>{{ $d->fecha }}</td>
-                                    <td>{{ $d->adicionalVenta->factura_id ? 'Factura entregada' : 'No entregada' }}</td>
-                                    {{-- <td>
-                                        <span class="">
-                                            <form action="{{ route('asignaciones.destroy', $d->id) }}" method="POST">
-                                                {{ method_field( 'DELETE' ) }}
-                                                {{ csrf_field() }}
-                                                <button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
+                                    <td class="{{ $d->adicionalVenta->factura_id ? 'success' : 'warning' }}">
+                                        @if($d->adicionalVenta->factura_id)
+                                            <span class="">Factura entregada</span>
+                                        @else
+                                            <span class="col-lg-6">No entregada</span>
+                                            <span class="col-lg-6">
+                                                <button type="button" class="btn btn-default btn-xs bg-green">
+                                                    <i class="fa fa-plus"></i>
                                                 </button>
-                                            </form>
-                                        </span>
-                                    </td> --}}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $d->estatusEstuche() }}</td>
+                                    <td>
+                                        <a href="{{ route('ventas.show', $d->id) }}" class="btn bg-navy btn-xs">
+                                            <i class="fa fa-eye"></i> Detalles
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

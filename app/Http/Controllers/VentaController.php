@@ -74,12 +74,14 @@ class VentaController extends Controller
         return Venta::storeVenta($request);
     }
 
-    public function show(Venta $venta)
+    public function show($id)
     {
-        //
+        return view("ventas.show",[
+            "venta" => Venta::findOrFail($id),
+        ]);
     }
 
-    public function edit(Venta $venta)
+    public function edit(Venta $id)
     {
         //
     }

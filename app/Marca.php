@@ -52,9 +52,23 @@ class Marca extends Model
 
 
     public function mc($coleccion, $marca){
-        $query = Modelo::where("coleccion_id", $coleccion)->where("marca_id", $marca)->where("status_id", "<>", 5)->get()->groupBy("name");
-        $data = $query->count();
-        return $data;
+        $query = Modelo::where("coleccion_id", $coleccion)
+                        ->where("marca_id", $marca)
+                        ->where("status_id", "<>", 5)
+                        ->get()
+                        ->groupBy("name");
+        
+        return $query->count();
+    }
+
+    public function modelosDisponibles($coleccion, $marca){
+        $query = Modelo::where("coleccion_id", $coleccion)
+                        ->where("marca_id", $marca)
+                        ->where("status_id", 1)
+                        ->get()
+                        ->groupBy("name");
+        
+        return $query->count();
     }
 
 }

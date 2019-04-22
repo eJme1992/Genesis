@@ -21,7 +21,8 @@
                 <span>
                     <strong data-toggle="tooltip" data-placement="top" title="Precio de almacen">[PA]</strong> 
                     S/ {{ $marcas->precio_almacen }} 
-                </span> | 
+                </span> |
+                <i class="fa fa-arrow-right"></i> 
                 <span>
                     <strong data-toggle="tooltip" data-placement="top" title="Precio de venta establecido">[PVE]</strong> 
                     S/ {{ $marcas->precio_venta_establecido }}
@@ -64,6 +65,11 @@
                     </button>
                 </div>
               @endif
+          </div>
+
+          <div class="col-lg-12 text-success">
+                <i class="fa fa-arrow-right"></i> Modelos disponibles {{ $marcas->marca->modelosDisponibles($coleccion->id, $marcas->marca->id) }}
+                <br> 
           </div>
         </div>
       </span>

@@ -130,8 +130,7 @@
             }else{
                 mensajes('Listo!', 'Consignacion generada con exito, espere mientras es redireccionado...', 'fa-check', 'green');  
                 form[0].reset();
-                //window.location = $("#ruta_consig").val();
-                setTimeout("location.reload(true);", 2000);
+                setTimeout(window.location = "../consignacion", 2000);
             }
         })
         .fail(function(data) {

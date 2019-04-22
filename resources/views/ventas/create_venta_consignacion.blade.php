@@ -183,7 +183,7 @@
             if (data == 1) {
                 $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
                 mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-                setTimeout("location.reload(true);", 2000);
+                setTimeout(window.location = "ventas", 2000);
             }else{
                 mensajes('Alerta!', "ocurrio un error en el servidor, recargue la pagina e intente de nuevo", 'fa-warning', 'red');
             }

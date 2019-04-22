@@ -35,7 +35,7 @@ class Venta extends Model
         return $this->hasOne("App\AdicionalVenta");
     }
 
-    public static function saveVenta($request, $estuche){
+    public static function saveVenta($request){
         
         $factura = "";
         
@@ -54,7 +54,7 @@ class Venta extends Model
             'cliente_id'                => $request->cliente_id,
             'direccion_id'              => $request->direccion_id,
             'total'                     => $request->total,
-            'estado_entrega_estuche'    => $estuche,
+            'estado_entrega_estuche'    => Venta::estadoEstuche($request),
             'fecha'                     => date("d-m-Y"),
         ]);
 
@@ -92,7 +92,7 @@ class Venta extends Model
                 Factura::saveFactura($request); // guardar factura
             }
 
-            Venta::saveVenta($request, Venta::estadoEstuche($request)); // guardar venta
+            Venta::saveVenta($request); // guardar venta
 
             Consignacion::updateStatusConsignacion($request->id_consig, $status = 2); // status 2 = consignacion procesada
 
@@ -140,7 +140,7 @@ class Venta extends Model
                 }
             }
             
-            Venta::saveVenta($request, Venta::estadoEstuche($request)); // guardar venta
+            Venta::saveVenta($request); // guardar venta
         });
 
         if (is_null($db)) { // fue todo correcto
@@ -158,7 +158,7 @@ class Venta extends Model
     public static function storeVentaAsignacion($request){
         
         $db = DB::transaction(function() use ($request) {
-            $venta = Venta::saveVenta($request, Venta::estadoEstuche($request)); // guardar venta
+            $venta = Venta::saveVenta($request); // guardar venta
             Asignacion::modeloRetornadoOrAsignados($request); // descontar modelos vendidos asignados
         });
 
@@ -175,16 +175,25 @@ class Venta extends Model
 
     // comprobar el estado del estuche
     public static function estadoEstuche($request){
-        return $request->status_estuche ? $request->status_estuche = $request->status_estuche : $request->status_estuche = null;
+        return isset($request->status_estuche) ? $request->status_estuche : $request->status_estuche = null;
     }
 
     // setear el status de los estuches
     public function estatusEstuche(){
-        if ($this->estado_entrega_estuche == 1) {
+        if ($this->estado_entrega_estuche == "1") {
+
             $this->estado_entrega_estuche = "Entregados";
-        }else{
+
+        }elseif ($this->estado_entrega_estuche == "0"){
+
             $this->estado_entrega_estuche = "No entregados";
+
+        }elseif ($this->estado_entrega_estuche == null){
+
+            $this->estado_entrega_estuche = "No posee estuches";
+
         }
+
         return $this->estado_entrega_estuche;
     }
 

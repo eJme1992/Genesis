@@ -210,7 +210,7 @@
             $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
             if (data == 1) {
                 mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-                setTimeout("location.reload(true);", 2000);
+                setTimeout(window.location = "ventas", 2000);
             }else if(data == 2){
                 mensajes('Alerta!', "Este serial ya ha sido tomado, verifique", 'fa-warning', 'red');
             }else if (data == 0){
