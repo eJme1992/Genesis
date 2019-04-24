@@ -35,20 +35,28 @@ class Venta extends Model
         return $this->hasOne("App\AdicionalVenta");
     }
 
-    public static function saveVenta($request){
-        
-        $factura = "";
-        
-        if ($request->checkbox_factura == 1) {
-            if ($request->ref_estadic_id == 3) {
-                $factura = Factura::orderBy("id", "desc")->value("id");
-            }else{
-                $factura = null;
+    // generar factura que no ha sido creada
+    public static function generarFactura($request){
+
+        $db = DB::transaction(function() use ($request) {
+            $fact = Factura::saveFactura($request);
+            AdicionalVenta::saveAV($request->venta_id, $fact->id, $request);
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
             }
-        }else{
-            $factura = null;
+        }else{ // fallo la operacion en algun sitio
+            if ($request->ajax()) {
+                return response()->json("0");
+            }
         }
-        
+    }
+
+    // guardar datos de la venta
+    public static function saveVenta($request){
+
         $v = Venta::create([
             'user_id'                   => Auth::id(),
             'cliente_id'                => $request->cliente_id,
@@ -56,13 +64,6 @@ class Venta extends Model
             'total'                     => $request->total,
             'estado_entrega_estuche'    => Venta::estadoEstuche($request),
             'fecha'                     => date("d-m-Y"),
-        ]);
-
-        $v->adicionalVenta()->create([
-            'factura_id'            => $factura,
-            'ref_item_id'           => $request->ref_item_id_factura,
-            'ref_estadic_id'        => $request->ref_estadic_id,
-            'fecha_estado'          => $factura != null ? date("d-m-Y") : null,
         ]);
 
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
@@ -88,11 +89,14 @@ class Venta extends Model
 
         $db = DB::transaction(function() use ($request) {
             
-            if ($request->checkbox_factura == 1) {
-                Factura::saveFactura($request); // guardar factura
+            $v = Venta::saveVenta($request); // guardar venta
+            
+            if ($request->checkbox_factura) {
+                if ($request->checkbox_factura == 1) {
+                    $factura = Factura::saveFactura($request); // guardar factura
+                    AdicionalVenta::saVeAV($v->id, $factura->id, $request);
+                }
             }
-
-            Venta::saveVenta($request); // guardar venta
 
             Consignacion::updateStatusConsignacion($request->id_consig, $status = 2); // status 2 = consignacion procesada
 
@@ -120,13 +124,16 @@ class Venta extends Model
 
         $db = DB::transaction(function() use ($request) {
 
+            $v = Venta::saveVenta($request); // guardar venta
+
             for ($i = 0; $i < count($request->modelo_id) ; $i++) {
                 Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]); // descontar modelos vendidos
             }
             
             if ($request->checkbox_factura) {
                 if ($request->checkbox_factura == 1) {
-                    Factura::saveFactura($request); // guardar factura
+                    $factura = Factura::saveFactura($request); // guardar factura
+                    AdicionalVenta::saVeAV($v->id, $factura->id, $request);
                 }
             }
 
@@ -140,7 +147,6 @@ class Venta extends Model
                 }
             }
             
-            Venta::saveVenta($request); // guardar venta
         });
 
         if (is_null($db)) { // fue todo correcto
@@ -160,6 +166,45 @@ class Venta extends Model
         $db = DB::transaction(function() use ($request) {
             $venta = Venta::saveVenta($request); // guardar venta
             Asignacion::modeloRetornadoOrAsignados($request); // descontar modelos vendidos asignados
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
+            }
+        }else{ // fallo la operacion en algun sitio
+            if ($request->ajax()) {
+                return response()->json("0");
+            }
+        }
+    }
+
+
+     // actualizar estado de la factura
+    public static function updateEstadoFactura($request){
+
+        $db = DB::transaction(function() use ($request) {
+            $fact = AdicionalVenta::actualizarEstado($request);
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
+            }
+        }else{ // fallo la operacion en algun sitio
+            if ($request->ajax()) {
+                return response()->json("0");
+            }
+        }
+    }
+
+    // logica para actualizar estuches
+    public static function updateEstadoEstuche($request){
+        
+        $db = DB::transaction(function() use ($request) {
+            $venta = Venta::findOrFail($request->venta_id);
+            $venta->estado_entrega_estuche = $request->estado_entrega_estuche;
+            $venta->save();
         });
 
         if (is_null($db)) { // fue todo correcto

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User};
+use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User, Factura, TipoAbono, Pago};
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateVentaRequest;
 
@@ -12,7 +12,10 @@ class VentaController extends Controller
     public function index()
     {
         return view("ventas.index",[
-            "ventas" => Venta::all(),
+            "ventas"        => Venta::all(),
+            "items"         => RefItem::all(),
+            "status_av"     => StatusAdicionalVenta::all(),
+            "tipo_abono"    => TipoAbono::all(),
         ]);
     }
 
@@ -29,6 +32,7 @@ class VentaController extends Controller
             "departamentos"  => Departamento::all(),
             "items"          => RefItem::all(),
             "status_av"      => StatusAdicionalVenta::all(),
+            "tipo_abono"     => TipoAbono::all(),
         ]);
     }
 
@@ -42,6 +46,7 @@ class VentaController extends Controller
             "status_av"      => StatusAdicionalVenta::all(),
             "clientes"       => Cliente::all(),
             "users"          => User::all(),
+            "tipo_abono"     => TipoAbono::all(),
         ]);
     }
 
@@ -55,6 +60,7 @@ class VentaController extends Controller
             "items"          => RefItem::all(),
             "status_av"      => StatusAdicionalVenta::all(),
             "clientes"       => Cliente::all(),
+            "tipo_abono"     => TipoAbono::all(),
         ]);
     }
 
@@ -72,6 +78,43 @@ class VentaController extends Controller
     public function storeVentaConsignacion(CreateVentaRequest $request)
     {   
         return Venta::storeVenta($request);
+    }
+
+    public function generarFactura(Request $request)
+    {   
+        $this->validate($request, [
+            'cliente_id'            => 'required',
+            'num_factura'           => 'required|unique:facturas',
+            'venta_id'              => 'required',
+            'ref_item_id_factura'   => 'required|in:1,2,3,4',
+            'ref_estadic_id'        => 'required|in:1,2,3',
+            'subtotal'              => 'required',
+            'impuesto'              => 'required',
+            'total_neto'            => 'required',
+        ]);
+
+        return Venta::generarFactura($request);
+    }
+
+    public function updateEstadoFactura(Request $request)
+    {   
+        $this->validate($request, [
+            'num_factura'           => '',
+            'adicional_id'          => 'required',
+            'ref_estadic_id'        => 'required|in:1,2,3',
+        ]);
+
+        return Venta::updateEstadoFactura($request);
+    }
+
+    public function updateEstadoEstuche(Request $request)
+    {   
+        $this->validate($request, [
+            'venta_id'                => '',
+            'estado_entrega_estuche'  => 'required',
+        ]);
+        
+        return Venta::updateEstadoEstuche($request);
     }
 
     public function show($id)

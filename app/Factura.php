@@ -34,6 +34,8 @@ class Factura extends Model
         ]);
         
         BitacoraUser::saveBitacora("Nueva factura registrada [".$factura->num_fact."] correctamente");
+
+        return $factura;
     }
 
 }

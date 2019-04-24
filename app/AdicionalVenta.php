@@ -30,5 +30,22 @@ class AdicionalVenta extends Model
         return $this->belongsTo("App\RefItem", "ref_item_id");
     }
 
+    public static function actualizarEstado($request){
+        $data = AdicionalVenta::findOrFail($request->adicional_id);
+        $data->ref_estadic_id =  $request->ref_estadic_id;
+        $data->save();
+    }
+
+      // guardar los datos adicionales de la venta y factura
+    public static function saveAV($venta, $factura, $request){
+        AdicionalVenta::create([
+            'venta_id'              => $venta,
+            'factura_id'            => $factura,
+            'ref_item_id'           => $request->ref_item_id_factura,
+            'ref_estadic_id'        => $request->ref_estadic_id,
+            'fecha_estado'          => $factura != null ? date("d-m-Y") : null,
+        ]);
+    }
+
     //nota: la fecha cambia cuando el estado cambia
 }

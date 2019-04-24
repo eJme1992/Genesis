@@ -19,7 +19,7 @@
                         <i class="fa fa-arrow-right"></i> Venta [{{ $venta->id }}] 
                     </h3>
 
-                    <div class="list-group col-lg-6">
+                    <div class="list-group col-lg-4">
                         <b>Cliente</b>
                         <p class="list-group-item">{{ $venta->cliente->nombre_full }}</p>
                     </div>
@@ -29,44 +29,17 @@
                         <p class="list-group-item">{{ $venta->direccion->full_dir() }}</p>
                     </div>
 
-                    <div class="list-group col-lg-3">
+                    <div class="list-group col-lg-2">
                         <b>Fecha inicio de venta</b>
                         <p class="list-group-item">{{ $venta->fecha }}</p>
                     </div>
-
-                    <div class="list-group col-lg-3">
-                        <b>Tipo de item</b>
-                        <p class="list-group-item">
-                            {{ $venta->adicionalVenta->item ? $venta->adicionalVenta->item->nombre : 'Factura no generada' }}
-                        </p>
-                    </div>
-
+                    
                     <div class="list-group col-lg-3">
                         <b>Estado de los estuches</b>
                         <p class="list-group-item">
                             {{ $venta->estatusEstuche() }}
                         </p>
-                    </div>
-
-                    <div class="list-group col-lg-3">
-                        <b>Estado Factura</b>
-                        <p class="list-group-item list-group-item-{{ $venta->adicionalVenta->factura_id ? 'success' : 'warning' }}">
-                            {{ $venta->adicionalVenta->statusAdicional ? $venta->adicionalVenta->statusAdicional->nombre : 'Factura no generada' }}
-                        </p>
-                    </div>
-
-                    <div class="list-group col-lg-3">
-                        <b>Fecha estado de entrega Factura</b>
-                        <p class="list-group-item">
-                            {{ $venta->adicionalVenta->fecha_estado ? $venta->adicionalVenta->fecha_estado : 'No entregada' }}
-                        </p>
-                    </div>
-                    
-                    <div class="list-group col-lg-3">
-                        <b>Modelos Vendidos</b>
-                        <p class="list-group-item list-group-item-info">{{ $venta->movimientoVenta->count() }}</p>
-                        <hr>
-                    </div>
+                    </div>                    
 
                     <h3 class="bg-navy padding_05em col-lg-12">
                         <i class="fa fa-arrow-right"></i> Modelos vendidos 
@@ -102,7 +75,7 @@
                         <hr>
                     </div>
 
-                    @if($venta->adicionalVenta->factura_id)
+                    @if($venta->adicionalVenta)
                         <h3 class="bg-green padding_05em col-lg-12">
                             <i class="fa fa-arrow-right"></i> Factura 
                         </h3>
@@ -133,11 +106,34 @@
                             </p>
                         <hr>
                         </div>
+
+                        <div class="list-group col-lg-3">
+                            <b>Fecha estado de entrega Factura</b>
+                            <p class="list-group-item list-group-item-info">
+                                {{ $venta->adicionalVenta->ref_estadic_id == 3 ? $venta->adicionalVenta->fecha_estado : 'Factura no entregada'}}
+                            </p>
+                        </div>
+
+                        <div class="list-group col-lg-3">
+                            <b>Tipo de item</b>
+                            <p class="list-group-item list-group-item-{{ $venta->adicionalVenta ? 'info' : 'danger' }}">
+                                {{ $venta->adicionalVenta->item->nombre  }}
+                            </p>
+                        </div>
+
+                        <div class="list-group col-lg-3">
+                            <b>Estado Factura</b>
+                            <p class="list-group-item list-group-item-{{ $venta->adicionalVenta->ref_estadic_id == 3 ? 'success' : 'danger' }}">
+                                {{ $venta->adicionalVenta->statusAdicional->nombre }}
+                            </p>
+                        </div>
+
+                        <div class="list-group col-lg-3"></div>
                     @endif
 
-                    <a class="btn btn-flat btn-default" href="{{ url()->previous() }}"><i class="fa fa-reply"></i> Atras</a>
                 </div>
             </div>
+                <a class="btn btn-flat btn-default" href="{{ url()->previous() }}"><i class="fa fa-reply"></i> Atras</a>
         </div>
     </div>
 @endsection

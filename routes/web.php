@@ -118,6 +118,9 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
     Route::post('storeVentaDirecta', 'VentaController@storeVentaDirecta')->name('ventas.storeVentaDirecta');
     Route::post('storeVentaConsignacion', 'VentaController@storeVentaConsignacion')->name('ventas.storeVentaConsignacion');
     Route::post('storeVentaAsignacion', 'VentaController@storeVentaAsignacion')->name('ventas.storeVentaAsignacion');
+    Route::post('generarFactura', 'VentaController@generarFactura')->name('ventas.generarFactura');
+    Route::post('updateEstadoFactura', 'VentaController@updateEstadoFactura')->name('ventas.updateEstadoFactura');
+    Route::post('updateEstadoEstuche', 'VentaController@updateEstadoEstuche')->name('ventas.updateEstadoEstuche');
 
   	// foto del usuario
   	Route::get('images/{filename}',function($filename){

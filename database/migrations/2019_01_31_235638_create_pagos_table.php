@@ -16,11 +16,11 @@ class CreatePagosTable extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('venta_id')->unsigned()->nullable();//venta relacionada con el pago
+            $table->integer('tipo_bono_id')->unsigned()->nullable(); 
             $table->decimal('total', 12, 2)->nullable(); //total de la deuda
             $table->decimal('abono', 12, 2)->nullable(); 
             $table->decimal('restante', 12, 2)->nullable(); 
-            $table->integer('tipo_bono_id')->unsigned()->nullable(); 
-            $table->string('fecha')->nullable(); //fecha de registro del abono
+            $table->string('fecha_cacelacion')->nullable(); //fecha de cacelacion del pago
 
             $table->foreign('venta_id')->references('id')
                                         ->on('ventas')

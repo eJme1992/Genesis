@@ -15,6 +15,7 @@ class CreateTipoAbonosTable extends Migration
     {
         Schema::create('tipo_abonos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('codigo');
             $table->string('nombre');
             $table->timestamps();
         });

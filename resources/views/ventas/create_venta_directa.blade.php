@@ -34,9 +34,22 @@
     reiniciarMontoTotal();
     
     var total = 0; var error_cal = false;
-    $("#checkbox_factura, #checkbox_guia").prop('checked', false);
+    $("#checkbox_factura, #checkbox_guia, #checkbox_pago").prop('checked', false);
     $("#btn_guardar_all").attr('disabled', 'disabled');
     $("#select_coleccion").val('').prop('selected', true);
+
+    $("#checkbox_pago").click(function(e) {
+        var bool = this.checked;
+        if(bool === true){
+            $("#section_pago").animate({height: "toggle"}, 400);
+            $("#checkbox_pago").val(1);
+            $("#tipo_abono_id, #abono, #restante").prop('required', true);
+        }else{
+            $("#section_pago").animate({height: "toggle"}, 400);
+            $("#checkbox_pago").val(0);
+            $("#tipo_abono_id, #abono, #restante").prop('required', false);
+        }
+    });
 
     $("#checkbox_guia").click(function(e) {
         var bool = this.checked;
@@ -81,6 +94,15 @@
             }
             $("#data_modelos_venta_directa").empty();
         });
+    });
+
+    // escuchando el evento tipo de abono para letras
+    $('#tipo_abono_id').change(function(event) {
+        if ($('#tipo_abono_id').val() == 1) {
+            $('#section_letra').show();
+        }else{
+            $('#section_letra').hide();
+        }
     });
 
 

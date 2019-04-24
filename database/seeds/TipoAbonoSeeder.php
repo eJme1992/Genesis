@@ -12,13 +12,13 @@ class TipoAbonoSeeder extends Seeder
     public function run()
     {
         $tipo_abono = array(
-	        array('nombre' => 'LETRA'),
-	        array('nombre' => 'CHEQUE'),
-	        array('nombre' => 'TDD'),
-	        array('nombre' => 'TDC'),
-	        array('nombre' => 'TRANSFERENCIA'),
-	        array('nombre' => 'EFECTIVO'),
-	        array('nombre' => 'DEPOSITO'),
+	        array('codigo' => 'LTR', 'nombre' => 'LETRA'),
+	        array('codigo' => 'CHQ', 'nombre' => 'CHEQUE'),
+	        array('codigo' => 'TDD', 'nombre' => 'Tarjeta de Debito'),
+	        array('codigo' => 'TDC', 'nombre' => 'Tarjeta de Credito'),
+	        array('codigo' => 'TRA', 'nombre' => 'TRANSFERENCIA'),
+	        array('codigo' => 'EFE', 'nombre' => 'EFECTIVO'),
+	        array('codigo' => 'DEP', 'nombre' => 'DEPOSITO'),
 	    );
       	
       	//insert manual a una base de datos con array
