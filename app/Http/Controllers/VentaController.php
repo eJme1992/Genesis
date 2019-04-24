@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User, Factura, TipoAbono, Pago};
+use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User, Factura, TipoAbono, Pago, Letra, StatusLetra, ProtestoLetra};
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateVentaRequest;
 
@@ -61,6 +61,8 @@ class VentaController extends Controller
             "status_av"      => StatusAdicionalVenta::all(),
             "clientes"       => Cliente::all(),
             "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
         ]);
     }
 

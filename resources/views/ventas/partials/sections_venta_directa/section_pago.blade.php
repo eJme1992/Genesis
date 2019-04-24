@@ -17,7 +17,7 @@
 
 <div class="form-group col-lg-3">
     <label for="">Abono *</label>
-    <input type="text" class="form-control" name="abono" id="abono">
+    <input type="number" min="1" max="99999999999" step="0.01" class="form-control" name="abono" id="abono" onkeyup="calcularRestante(this);">
 </div>
 
 <div class="form-group col-lg-3">

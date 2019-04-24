@@ -35,6 +35,7 @@
     
     var total = 0; var error_cal = false;
     $("#checkbox_factura, #checkbox_guia, #checkbox_pago").prop('checked', false);
+    $("#tipo_abono_id").val(0).prop('selected', true);
     $("#btn_guardar_all").attr('disabled', 'disabled');
     $("#select_coleccion").val('').prop('selected', true);
 
@@ -100,8 +101,10 @@
     $('#tipo_abono_id').change(function(event) {
         if ($('#tipo_abono_id').val() == 1) {
             $('#section_letra').show();
+            $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', true);
         }else{
             $('#section_letra').hide();
+            $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', false);
         }
     });
 
@@ -132,6 +135,11 @@
         subtotal = $("#subtotal").val();
         calculo =  (parseFloat(subtotal) * parseFloat(porcentaje.value)) / 100;
         $("#total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
+    }
+
+    // calcular impuesto
+    function calcularRestante(monto){
+        $("#restante").val((parseFloat($("#total_deuda").val()) - parseFloat(monto.value)));
     }
 
     // cargar modelos en la tabla para calcular
@@ -210,7 +218,7 @@
             }
         }
 
-        $(".total_venta, .subtotal").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+        $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
     }
 
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------
