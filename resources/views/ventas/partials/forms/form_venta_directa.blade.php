@@ -91,6 +91,9 @@
             <h4 class="padding_1em bg-primary"><i class="fa fa-arrow-right"></i> Pago</h4>
         </div>
         @include("ventas.partials.sections_venta_directa.section_pago")
+        <section id="section_letra" style="display: none">
+            @include("ventas.partials.sections_venta_directa.section_letra")
+        </section>
     </section>
 
     <div class="form-group col-lg-12">
