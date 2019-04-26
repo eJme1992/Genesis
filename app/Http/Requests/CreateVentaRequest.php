@@ -26,15 +26,16 @@ class CreateVentaRequest extends FormRequest
         return [
             'checkbox_factura'      => '',
             'checkbox_guia'         => '',
+            'checkbox_pago'         => '',
             'cliente_id'            => 'required',
             'direccion_id'          => 'required',
             'status_estuche'        => '',
-            'total'                 => 'required',
+            'total'                 => 'required|numeric|between:1,999999999999.99',
             'modelo_id'             => 'required',
-            'montura'               => 'required',
+            'montura'               => '',
             'estuche'               => '',
-            'precio_montura'        => 'required',
-            'precio_modelo'         => 'required',
+            'precio_montura'        => 'required|between:0,999999999999.99',
+            'precio_modelo'         => 'required|between:0,999999999999.99',
             'num_factura'           => 'required_if:checkbox_factura, 1|unique:facturas',
             'ref_item_id_factura'   => 'required_if:checkbox_factura, 1|in:1,2,3,4',
             'ref_estadic_id'        => 'required_if:checkbox_factura, 1|in:1,2,3',
@@ -49,13 +50,25 @@ class CreateVentaRequest extends FormRequest
             'cantidad'              => 'required_if:checkbox_guia, 1',
             'peso'                  => 'required_if:checkbox_guia, 1',
             'descripcion'           => '',
+            'tipo_abono_id'         => 'required_if:checkbox_pago,1|in:1,2,3,4,5,6,7',
+            'abono'                 => 'required_if:checkbox_pago,1',
+            'restante'              => 'required_if:checkbox_pago,1',
+            'estatus_id'            => 'required_if:tipo_abono_id,1|in:1,2,3,4',
+            'protesto_id'           => 'required_if:tipo_abono_id,1|in:1,2',
+            'numero_unico'          => 'required_if:tipo_abono_id,1',
+            'monto_inicial'         => 'required_if:tipo_abono_id,1',
+            'monto_final'           => 'required_if:tipo_abono_id,1',
+            'fecha_inicial'         => 'required_if:tipo_abono_id,1',
+            'fecha_final'           => 'required_if:tipo_abono_id,1',
+            'fecha_pago'            => 'required_if:tipo_abono_id,1',
+            'no_adeudado'           => 'required_if:tipo_abono_id,1|string',
         ];
     }
 
     public function messages()
     {
         return [
-
+            'restante.numeric'  => "el campo restante debe ser un numero positivo",
         ];
     }
 }

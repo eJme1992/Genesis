@@ -75,13 +75,13 @@ class GuiaRemision extends Model
         ]);
 
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-
-            $data->modeloGuias()->create([
-                'modelo_id'   => $request->modelo_id[$i],
-                'montura'     => $request->montura[$i],
-                'estuche'     => $request->estuche[$i],
-            ]);
-
+            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                $data->modeloGuias()->create([
+                    'modelo_id'   => $request->modelo_id[$i],
+                    'montura'     => $request->montura[$i],
+                    'estuche'     => $request->estuche[$i],
+                ]);
+            }
         }
 
         BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");

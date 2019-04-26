@@ -98,10 +98,15 @@ class Venta extends Model
                 }
             }
 
+            if ($request->checkbox_pago) {
+                if ($request->checkbox_pago == 1) {
+                    $factura = Pago::savePago($request, $v); // guardar pago
+                }
+            }
+
             Consignacion::updateStatusConsignacion($request->id_consig, $status = 2); // status 2 = consignacion procesada
 
             DetalleConsignacion::modeloRetornadoOrConsignado($request); // sumar y retornar el modelo al almacen
-
 
             if ($request->id_guia != null) {
                 GuiaRemision::guiaMotivo($request->id_guia, $motivo = 4); // actualizar motivo guia
@@ -144,6 +149,12 @@ class Venta extends Model
                     }else{
                         GuiaRemision::guiaStore($request, $motivo = 1); // guardar guia
                     }
+                }
+            }
+
+            if ($request->checkbox_pago) {
+                if ($request->checkbox_pago == 1) {
+                    $factura = Pago::savePago($request, $v); // guardar pago
                 }
             }
             

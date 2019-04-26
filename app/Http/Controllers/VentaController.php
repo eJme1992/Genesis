@@ -69,6 +69,8 @@ class VentaController extends Controller
 
     public function storeVentaDirecta(CreateVentaRequest $request)
     {   
+
+        // dd($request->all());
         return Venta::storeVentaDirecta($request);
     }
 

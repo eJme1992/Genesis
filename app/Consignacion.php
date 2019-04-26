@@ -103,7 +103,7 @@ class Consignacion extends Model
                             </td>
                             <td>".$dc->estuche."<input type='hidden' value='".$dc->estuche."' name='estuche[]' class='estuches'></td>
                             <td id='td_precio'>
-                                <input type='number' step='0.01' max='999999999999' min='1' value='".ColeccionMarca::cargarPrecios($dc->modelo->coleccion_id, $dc->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$dc->id."'>
+                                <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($dc->modelo->coleccion_id, $dc->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$dc->id."'>
                             </td>
                             <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
                             <td>".Consignacion::validarStatusDeModeloEnConsignacion($dc)."</td>

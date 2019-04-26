@@ -39,8 +39,12 @@
             <h4 class="padding_1em bg-primary"><i class="fa fa-arrow-right"></i> Nota de Pedido</h4>
         </div>
         @include("ventas.partials.sections_venta_directa.section_crear_nota_pedido")
-        <div class="form-group col-lg-3 text-uppercase">
-            <label for="">Guia de remision</label> <br>
+    </section>
+    
+    <section class="container-fluid">
+        <hr>
+        <div class="form-group col-lg-4 text-uppercase">
+            <label for="">Guia de remision</label>
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="checkbox_guia" value="0" id="checkbox_guia">
@@ -48,15 +52,8 @@
                 </label>
             </div>
         </div>
-    </section>
 
-     {{-- GUIA DE REMISION --}}
-    <section id="section_guia" class="container-fluid" style="display: none;">
-        @include("consignaciones.partials.formGuia")
-    </section>
-    
-    <section class="container-fluid">
-        <div class="form-group col-lg-6 text-uppercase">
+        <div class="form-group col-lg-4 text-uppercase">
             <label for="">FACTURA</label>
             <div class="checkbox">
                 <label>
@@ -66,7 +63,7 @@
             </div>
         </div>
 
-        <div class="form-group col-lg-6 text-uppercase">
+        <div class="form-group col-lg-4 text-uppercase">
             <label for="">Pago</label>
             <div class="checkbox">
                 <label>
@@ -75,6 +72,11 @@
                 </label>
             </div>
         </div>
+    </section>
+
+    {{-- GUIA DE REMISION --}}
+    <section id="section_guia" class="container-fluid" style="display: none;">
+        @include("consignaciones.partials.formGuia")
     </section>
 
     {{-- SECCION FACTURA --}}
@@ -87,15 +89,19 @@
 
     {{-- SECCION PAGO --}}
     <section style="display: none;" id="section_pago" class="container-fluid">
+
         <div class="form-group col-lg-12">
             <h4 class="padding_1em bg-primary"><i class="fa fa-arrow-right"></i> Pago</h4>
         </div>
         @include("ventas.partials.sections_venta_directa.section_pago")
+
+        {{-- section letra --}}
         <section id="section_letra" style="display: none" class="padding_1em">
             <div class="col-lg-12 well">
             @include("ventas.partials.sections_venta_directa.section_letra")
             </div>
         </section>
+
     </section>
 
     <div class="form-group col-lg-12">

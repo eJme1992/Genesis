@@ -108,8 +108,7 @@
         }
     });
 
-
-    // evitar el siguiente si se cambia cualquier valor en los modelos - consignacion
+     // evitar el siguiente si se cambia cualquier valor en los modelos - consignacion
     $('#section_mostrar_datos_cargados').on("change", ".montura_modelo, .costo_modelo", function(e) {
         $("#btn_guardar_all").attr("disabled", "disabled");
     });
@@ -127,7 +126,7 @@
     
     // reiniciar el campo total venta
     function reiniciarMontoTotal(){
-        $(".total_venta, .subtotal").val('');
+        $(".total_venta, .subtotal, #abono, #restante, #monto_inicial, #monto_inicial, #fecha_inicial, #fecha_final, #fecha_pago").val('');
     }
 
     // calcular impuesto
@@ -224,6 +223,12 @@
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------
     // guardar direccion
     $("#form_venta_directa").on('submit', function(e) {
+        
+        if ($('#restante').val() < 0) {
+            mensajes("Alerta!", "El restante no puede ser negativo, verifique", "fa-warning", "red");
+            return false;
+        }
+
         e.preventDefault();
         btn = $("#btn_guardar_all"); btn.attr("disabled", 'disabled');
         $("#icon-guardar-all").removeClass("fa-save").addClass('fa-spinner fa-pulse');

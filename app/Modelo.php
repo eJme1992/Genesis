@@ -201,7 +201,7 @@ class Modelo extends Model
                         </td>
                         <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
                         <td id='td_precio'>
-                            <input type='number' step='0.01' max='999999999999' min='1' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
+                            <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
                         </td>
                         <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
                     </tr>"; 
