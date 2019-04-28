@@ -223,4 +223,51 @@ class Venta extends Model
         return $this->pagos()->orderBy("id", "DESC")->value("restante");
     }
 
+     // cargar tabla para manipula los datos
+    public static function cargarTablaVenta($venta){
+        
+        $data       = array();
+        $user       = "";
+        $cliente    = "";
+        $direccion  = "";
+        
+        if ($venta->movimientoVenta->count() > 0) {
+
+            $user       = $venta->user->name.' '.$venta->user->ape;
+            $cliente    = $venta->cliente->nombre_full;
+            $direccion  = $venta->direccion->full_dir();
+
+            foreach ($venta->movimientoVenta as $m) {
+
+                $data [] = "<tr>
+                    <td>".$m->modelo_id."<input type='hidden' value='".$m->modelo_id."' name='modelo_id[]'></td>
+                    <td>".$m->modelo->name."</td>
+                    <td>
+                        <select class='form-control montura_modelo' name='montura[]'>
+                            <option value=''>...</option>
+                            ".Asignacion::Monturas($m->monturas)."
+                        </select>
+                    </td>
+                    <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' name='estuche[]' class='estuches'></td>
+                    <td>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."' name='precio_montura[]' class='form-control numero precio_montura'>
+                    </td>
+                    <td><input type='number' name='precio_modelo[]' class='preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'></td>
+                </tr>"; 
+            }
+        }else{
+            $data []    = "";
+            $user       = "";
+            $cliente    = "";
+            $direccion  = "";
+        }                  
+
+        return response()->json([
+            "data"      => $data,
+            "user"      => $user,
+            "cliente"   => $cliente,
+            "direccion" => $direccion,
+        ]);
+    }
+
 }

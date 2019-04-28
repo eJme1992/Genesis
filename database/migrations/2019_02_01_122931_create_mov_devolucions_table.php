@@ -15,10 +15,11 @@ class CreateMovDevolucionsTable extends Migration
     {
         Schema::create('mov_devoluciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('devolucion_id')->unsigned()->nullable();
-            $table->integer('notacredito_id')->unsigned()->nullable();
-            $table->integer('modelo_id')->unsigned()->nullable();
-            $table->integer('monturas')->unsigned()->nullable();
+            $table->unsignedInteger('devolucion_id')->nullable();
+            $table->unsignedInteger('notacredito_id')->nullable();
+            $table->unsignedInteger('modelo_id')->nullable();
+            $table->unsignedInteger('monturas')->nullable();
+            $table->unsignedInteger('estuches')->nullable();
 
             $table->foreign('devolucion_id')->references('id')
                                         ->on('devoluciones')

@@ -119,6 +119,11 @@ class VentaController extends Controller
         ]);
     }
 
+    public function cargarTablaVenta($id)
+    {
+        return Venta::cargarTablaVenta(Venta::findOrFail($id));
+    }
+
     public function edit(Venta $id)
     {
         //

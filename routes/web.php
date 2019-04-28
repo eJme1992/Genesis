@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
         'pagos'         => 'PagoController',
         'facturas'      => 'FacturaController',
         'notacredito'   => 'NotaCreditoController',
+        'devoluciones'  => 'DevolucionController',
 	    'departamentos' => 'DepartamentoController',
 	    'provincias'    => 'ProvinciaController',
 	    'distritos'     => 'DistritoController',
@@ -116,6 +117,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
     Route::get('create_venta_consignacion', 'VentaController@createConsignacion')->name('create_venta_consignacion');
     Route::get('create_venta_asignacion', 'VentaController@createAsignacion')->name('create_venta_asignacion');
     Route::get('create_venta_directa', 'VentaController@createDirecta')->name('create_venta_directa');
+    Route::get('cargarTablaVenta/{id}', 'VentaController@cargarTablaVenta')->name('cargarTablaVenta');
     Route::post('storeVentaDirecta', 'VentaController@storeVentaDirecta')->name('ventas.storeVentaDirecta');
     Route::post('storeVentaConsignacion', 'VentaController@storeVentaConsignacion')->name('ventas.storeVentaConsignacion');
     Route::post('storeVentaAsignacion', 'VentaController@storeVentaAsignacion')->name('ventas.storeVentaAsignacion');

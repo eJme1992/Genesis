@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Devolucion;
+use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Direccion, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra};
 use Illuminate\Http\Request;
 
 class DevolucionController extends Controller
@@ -14,7 +14,9 @@ class DevolucionController extends Controller
      */
     public function index()
     {
-        //
+        return view("devoluciones.index",[
+            "devoluciones" => Devolucion::all()
+        ]);
     }
 
     /**
@@ -24,7 +26,17 @@ class DevolucionController extends Controller
      */
     public function create()
     {
-        //
+        return view("devoluciones.create",[
+            "ventas"         => Venta::all(),
+            "colecciones"    => Coleccion::all(),
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
+        ]);
     }
 
     /**
