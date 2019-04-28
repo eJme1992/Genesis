@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    var url = '{{ asset("plugins/datatables/spanish.json") }}';
   	//activar Datatable
     $('.data-table').DataTable({
       responsive: true,
@@ -41,7 +40,10 @@ $(document).ready(function(){
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
     // datapicker
-    $(".fecha").datepicker();
+    $(".fecha").datepicker({
+      changeMonth: true,
+      changeYear: true
+    });
 
     // numeric
     $('.numero').numeric();

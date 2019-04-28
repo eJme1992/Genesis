@@ -3,13 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Pago extends Model
 {
     protected $table = "pagos";
     protected $fillable = [
         "venta_id", "tipo_abono_id", "total", 
-        "abono", "restante", "fecha_cacelacion"
+        "abono", "restante", "fecha_cancelacion"
     ];
 
     public function venta(){
@@ -26,8 +27,8 @@ class Pago extends Model
 
     public static function savePago($request, $venta){
         $p = Pago::create([
-            'venta_id'         => $venta->id,
-            'tipo_abono_id'     => $request->tipo_abono_id,
+            'venta_id'         => $venta,
+            'tipo_abono_id'    => $request->tipo_abono_id,
             'total'            => $request->total_deuda,
             'abono'            => $request->abono,
             'restante'         => $request->restante,
@@ -35,8 +36,8 @@ class Pago extends Model
         ]);
 
         if ($request->tipo_abono_id == 1) {
-            $p->letra()->create([
-                'status_id'     => $request->status_id,
+            $l = $p->letra()->create([
+                'status_id'     => $request->estatus_id,
                 'protesto_id'   => $request->protesto_id,
                 'numero_unico'  => $request->numero_unico,
                 'monto_inicial' => $request->monto_inicial,
@@ -46,8 +47,25 @@ class Pago extends Model
                 'fecha_pago'    => $request->fecha_pago,
                 'no_adeudado'   => $request->no_adeudado,
             ]);
+            BitacoraUser::saveBitacora("Nueva letra registrada [".$l->id."] correctamente");
         }
 
-        BitacoraUser::saveBitacora("Nueva pago registrado [".$p->id."] correctamente");
+        BitacoraUser::saveBitacora("Nuevo pago registrado [".$p->id."] correctamente");
+    }
+
+    public static function storePago($request){
+        $db = DB::transaction(function() use ($request) {
+            Pago::savePago($request, $request->venta_id);
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
+            }
+        }else{ // fallo la operacion en algun sitio
+            if ($request->ajax()) {
+                return response()->json("0");
+            }
+        }
     } 
 }

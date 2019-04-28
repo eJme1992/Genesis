@@ -36,13 +36,26 @@
     </span>
 </div>
 
-<div class="form-group col-lg-12 text-uppercase">
+<div class="col-lg-12">
     <hr>
+</div>
+
+<div class="form-group col-lg-6 text-uppercase">
     <label for="">FACTURA</label>
     <div class="checkbox">
         <label>
             <input type="checkbox" name="checkbox_factura" value="0" id="checkbox_factura">
             <b>Entregar factura?</b>
+        </label>
+    </div>
+</div>
+
+<div class="form-group col-lg-6 text-uppercase">
+    <label for="">Pago</label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="checkbox_pago" value="0" id="checkbox_pago">
+            Proceder al pago?
         </label>
     </div>
 </div>

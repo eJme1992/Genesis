@@ -15,9 +15,6 @@
     <div class="col-lg-12">
         <div class="box box-danger box-solid">
             <div class="box-body">
-                <h4 class="padding_1em bg-navy container-fluid">
-                    <i class="fa fa-arrow-right"></i> Datos para la venta de asignacion
-                </h4>
                 @include("ventas.partials.forms.form_asig")
             </div>
         </div>
@@ -30,8 +27,6 @@
 
 @section("script")
 <script>
-    
-    reiniciarMontoTotal();
     
     var total = 0; var error_cal = false;
     $("#btn_guardar_all").attr('disabled', 'disabled');
@@ -122,11 +117,6 @@
         }
 
         $(".total_venta").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
-    }
-
-    // reiniciar el campo total venta
-    function reiniciarMontoTotal(){
-        $(".total_venta").val('');
     }
 
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------

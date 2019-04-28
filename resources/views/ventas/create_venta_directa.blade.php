@@ -10,29 +10,22 @@
 @section('content')
 
 <div class="row">
-
-    {{-- panel left - datos --}}
     <div class="col-lg-12">
-        <div class="box box-danger box-solid">
+        <div class="box box-primary box-solid">
             <div class="box-body">
-                <h4 class="padding_1em bg-navy container-fluid">
-                    <i class="fa fa-arrow-right"></i> Datos para la venta directa
-                </h4>
                 @include("ventas.partials.forms.form_venta_directa")
             </div>
         </div>
     </div>
-           
 </div>
 @include('direcciones.modals.modal_create')    
 @include('clientes.modals.createclientes') 
+
 @endsection
 
 @section("script")
 <script>
 
-    reiniciarMontoTotal();
-    
     var total = 0; var error_cal = false;
     $("#checkbox_factura, #checkbox_guia, #checkbox_pago").prop('checked', false);
     $("#tipo_abono_id").val(0).prop('selected', true);
@@ -97,23 +90,12 @@
         });
     });
 
-    // escuchando el evento tipo de abono para letras
-    $('#tipo_abono_id').change(function(event) {
-        if ($('#tipo_abono_id').val() == 1) {
-            $('#section_letra').show();
-            $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', true);
-        }else{
-            $('#section_letra').hide();
-            $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', false);
-        }
-    });
-
      // evitar el siguiente si se cambia cualquier valor en los modelos - consignacion
     $('#section_mostrar_datos_cargados').on("change", ".montura_modelo, .costo_modelo", function(e) {
         $("#btn_guardar_all").attr("disabled", "disabled");
     });
 
-    // evitar el siguiente si se cambia cualquier valor en los modelos - venta directa
+    // evitar el siguiente si se cambia cualquier valor en la carga de modelos
     $('#section_cargar_modelos').on("change", "#select_marca, #select_coleccion", function(e) {
         $("#btn_guardar_all").attr("disabled", "disabled");
         $("#data_modelos_venta_directa").empty();
@@ -122,24 +104,7 @@
         reiniciarMontoTotal();
     });
 
-    //-------------------------------------------- funciones ---------------------------------------------------------
-    
-    // reiniciar el campo total venta
-    function reiniciarMontoTotal(){
-        $(".total_venta, .subtotal, #abono, #restante, #monto_inicial, #monto_inicial, #fecha_inicial, #fecha_final, #fecha_pago").val('');
-    }
-
-    // calcular impuesto
-    function calcularImpuesto(porcentaje){
-        subtotal = $("#subtotal").val();
-        calculo =  (parseFloat(subtotal) * parseFloat(porcentaje.value)) / 100;
-        $("#total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
-    }
-
-    // calcular impuesto
-    function calcularRestante(monto){
-        $("#restante").val((parseFloat($("#total_deuda").val()) - parseFloat(monto.value)));
-    }
+    //-------------------------------------------------------- funciones ---------------------------------------------------------
 
     // cargar modelos en la tabla para calcular
     function cargarModelos(){

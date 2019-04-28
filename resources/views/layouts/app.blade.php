@@ -20,8 +20,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/AdminLTE.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/glyphicons.css')}}">
 
-    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/Responsive-2.2.2/css/responsive.bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/datatables/datatables.min.css')}}">
 
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/ep.css')}}">
@@ -30,7 +29,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/fileinput/css/fileinput.min.css') }}">
 
     <!-- Datepicker Files -->
-    <link rel="stylesheet" href="{{ asset('plugins/jquery_datepicker/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/jquery_datepicker/jquery-ui.min.css') }}">
 
     <!-- confirm - jquery -->
     <link rel="stylesheet" href="{{ asset('plugins/confirm/jquery-confirm.min.css') }}">
@@ -114,7 +113,7 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-archive"></i>
+                <i class="fa fa-database"></i>
                 <span>Inventario</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
@@ -127,18 +126,7 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-arrows-h"></i>
-                <span>Ubicaciones</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-list-alt"></i>
+                <i class="fa fa-file-archive-o"></i>
                 <span>Asignaciones</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
@@ -150,13 +138,14 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-file-o"></i>
+                <i class="fa fa-file-text-o"></i>
                 <span>Procesos</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
                 <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
+                <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
               </ul>
             </li>
 
@@ -219,8 +208,7 @@
     <script src="{{asset('js/app.min.js')}}"></script>
 
     <!-- Data table -->
-    <script src="{{ asset('plugins/datatables/datatables.js') }}"></script>
-    <script src="{{ asset('plugins/datatables/Responsive-2.2.2/js/responsive.bootstrap.js')}}"></script> 
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
 
     <!-- fileinput -->
     <script src="{{ asset('plugins/fileinput/js/fileinput.min.js') }}"></script>
@@ -233,7 +221,7 @@
     <script src="{{ asset('plugins/numberformat/input-number-format.jquery.js') }}"></script>
 
     <!-- datapicker -->
-    <script src="{{ asset('plugins/jquery_datepicker/jquery-ui.js') }}"></script>
+    <script src="{{ asset('plugins/jquery_datepicker/jquery-ui.min.js') }}"></script>
 
     <!-- confirm - jquery -->
     <script src="{{ asset('plugins/confirm/jquery-confirm.min.js') }}"></script>
@@ -405,6 +393,36 @@
             $("#cantidad").text(data.consig.guia.detalle_guia.cantidad);
             $("#peso").text(data.consig.guia.detalle_guia.peso);
             $("#descripcion").text(data.consig.guia.detalle_guia.descripcion);
+        }
+
+        // calcular restante de la venta
+        function calcularRestante(monto){
+            valor = (monto.value < 0) ? monto.value = 0 : monto.value = monto.value;
+            $("#restante").val((parseFloat($("#total_deuda").val()) - parseFloat(valor)));
+        }
+
+        // escuchando el evento tipo de abono para letras
+        $('#tipo_abono_id').change(function(event) {
+            if ($('#tipo_abono_id').val() == 1) {
+                $('#section_letra').show();
+                $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', true);
+            }else{
+                $('#section_letra').hide();
+                $("#estatus_id, #protesto_id, #numero_unico, #monto_inicial, #monto_final, #fecha_inicial, #fecha_final, #fecha_pago, #no_adeudado").prop('required', false);
+            }
+        });
+
+        // calcular impuesto de factura
+        function calcularImpuesto(porcentaje){
+            subtotal = $("#subtotal").val();
+            valor = (porcentaje.value < 0) ? porcentaje.value = 0 : porcentaje.value = porcentaje.value;
+            calculo =  (parseFloat(subtotal) * parseFloat(valor)) / 100;
+            $("#total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
+        }
+
+        // reiniciar el campos de venta, factura, pago, etc
+        function reiniciarMontoTotal(){
+            $(".total_venta, .subtotal, #abono, #restante, #monto_inicial, #monto_inicial, #fecha_inicial, #fecha_final, #fecha_pago").val('');
         }
 
     </script>

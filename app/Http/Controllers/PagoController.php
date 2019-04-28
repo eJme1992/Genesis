@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Pago;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreatePagoRequest;
 
 class PagoController extends Controller
 {
@@ -33,9 +34,9 @@ class PagoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePagoRequest $request)
     {
-        //
+        return Pago::storePago($request);
     }
 
     /**

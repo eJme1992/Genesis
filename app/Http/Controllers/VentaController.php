@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\{Venta, Consignacion, Direccion, Departamento, RefItem, StatusAdicionalVenta, Coleccion, Cliente, User, Factura, TipoAbono, Pago, Letra, StatusLetra, ProtestoLetra};
+use App\{
+    Venta, Consignacion, Direccion, Departamento, RefItem, 
+    StatusAdicionalVenta, Coleccion, Cliente, User, Factura, 
+    TipoAbono, Pago, Letra, StatusLetra, ProtestoLetra, AdicionalVenta
+};
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateVentaRequest;
+use App\Http\Requests\CreateFacturaRequest;
 
 class VentaController extends Controller
 {
@@ -12,27 +17,26 @@ class VentaController extends Controller
     public function index()
     {
         return view("ventas.index",[
-            "ventas"        => Venta::all(),
-            "items"         => RefItem::all(),
-            "status_av"     => StatusAdicionalVenta::all(),
-            "tipo_abono"    => TipoAbono::all(),
+            "ventas"         => Venta::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
         ]);
-    }
-
-    public function create()
-    {
-    
     }
 
     public function createConsignacion()
     {
         return view("ventas.create_venta_consignacion",[
-            "consignaciones" => Consignacion::where("status", 1)->get(["id"]),
+            "consignaciones" => Consignacion::where("status", 1)->get(["id", "created_at"]),
             "direcciones"    => Direccion::all(),
             "departamentos"  => Departamento::all(),
             "items"          => RefItem::all(),
             "status_av"      => StatusAdicionalVenta::all(),
             "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
         ]);
     }
 
@@ -69,8 +73,6 @@ class VentaController extends Controller
 
     public function storeVentaDirecta(CreateVentaRequest $request)
     {   
-
-        // dd($request->all());
         return Venta::storeVentaDirecta($request);
     }
 
@@ -81,26 +83,15 @@ class VentaController extends Controller
 
     public function storeVentaConsignacion(CreateVentaRequest $request)
     {   
-        return Venta::storeVenta($request);
+        return Venta::storeVentaConsignacion($request);
     }
 
-    public function generarFactura(Request $request)
+    public function generarFactura(CreateFacturaRequest $request)
     {   
-        $this->validate($request, [
-            'cliente_id'            => 'required',
-            'num_factura'           => 'required|unique:facturas',
-            'venta_id'              => 'required',
-            'ref_item_id_factura'   => 'required|in:1,2,3,4',
-            'ref_estadic_id'        => 'required|in:1,2,3',
-            'subtotal'              => 'required',
-            'impuesto'              => 'required',
-            'total_neto'            => 'required',
-        ]);
-
-        return Venta::generarFactura($request);
+        return Factura::generarFactura($request);
     }
 
-    public function updateEstadoFactura(Request $request)
+    public function updateEstadoFactura(Request $request) // actualizar factura
     {   
         $this->validate($request, [
             'num_factura'           => '',
@@ -108,10 +99,10 @@ class VentaController extends Controller
             'ref_estadic_id'        => 'required|in:1,2,3',
         ]);
 
-        return Venta::updateEstadoFactura($request);
+        return AdicionalVenta::updateEstadoFactura($request);
     }
 
-    public function updateEstadoEstuche(Request $request)
+    public function updateEstadoEstuche(Request $request) // actualizar estuche
     {   
         $this->validate($request, [
             'venta_id'                => '',

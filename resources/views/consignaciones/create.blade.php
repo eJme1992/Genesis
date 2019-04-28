@@ -24,6 +24,9 @@
                     @include("consignaciones.partials.formConsignacion")
 
                     <section id="section_guia" style="display:none;">
+                        <div class="col-lg-12">
+                            <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos de la Guia</h4>
+                        </div>
                         @include("consignaciones.partials.formGuia")
                     </section> 
 

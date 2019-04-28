@@ -48,8 +48,9 @@
                                 <th class="text-center">Cliente</th>
                                 <th class="text-center">Total</th>
                                 <th class="text-center">Fecha</th>
-                                <th class="text-center bg-navy" width="140px">Estado Fact.</th>
-                                <th class="text-center bg-navy">Estado Estu.</th>
+                                <th class="text-center bg-navy" width="140px">Estado Factura</th>
+                                <th class="text-center bg-navy">Estado Estuche</th>
+                                <th class="text-center bg-navy">Pagos</th>
                                 <th class="text-center bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
@@ -62,22 +63,22 @@
                                     <td>{{ $d->fecha }}</td>
 
                                     {{-- Estado factura --}}
-                                    <td class="{{ $d->adicionalVenta ? 'info' : 'danger' }}">
+                                    <td class="{{ $d->adicionalVenta ? 'info' : 'danger' }} text-nowrap">
                                         @if($d->adicionalVenta)
                                             @if($d->adicionalVenta->ref_estadic_id == 3)
-                                                <span class="text-center">Entregada</span>
+                                                <span>Entregada</span>
                                             @else
-                                                <span class="text-center">{{ $d->adicionalVenta->statusAdicional->nombre }}</span>
-                                                <span class="pull-right">
-                                                    <button type="button" class="btn btn-default btn-sm btn_update_estado_factura" data-toggle="modal" role="tooltip" data-target="#update_estado_factura" title="Actualizar estado de la factura" value="{{ $d->adicionalVenta->id }}" data-numfactura="{{ $d->adicionalVenta->factura->num_factura }}">
+                                                <span>{{ $d->adicionalVenta->statusAdicional->nombre }}</span>
+                                                <span data-toggle="modal" data-target="#update_estado_factura">
+                                                    <button type="button" class="btn btn-default btn-sm btn_update_estado_factura" data-toggle="tooltip" title="Actualizar estado de la factura" value="{{ $d->adicionalVenta->id }}" data-numfactura="{{ $d->adicionalVenta->factura->num_factura }}">
                                                         <i class="fa fa-plus-square"></i>
                                                     </button>
                                                 </span>
                                             @endif
                                         @else
-                                            <span class="text-nowrap">Factura no generada</span>
-                                            <span class="pull-right">
-                                                <button type="button" class="btn btn-default btn-sm btn_realizar_factura" data-toggle="modal" role="tooltip" data-target="#create_factura" title="Realizar factura" value="{{ $d->id }}" data-subtotal="{{ $d->total }}" data-subtotal="{{ $d->total }}" data-cliente="{{ $d->cliente_id }}">
+                                            <span>Factura no generada</span>
+                                            <span data-toggle="modal" data-target="#create_factura">
+                                                <button type="button" class="btn btn-default btn-sm btn_realizar_factura" data-toggle="tooltip" title="Realizar factura" value="{{ $d->id }}" data-subtotal="{{ $d->total }}" data-subtotal="{{ $d->total }}" data-cliente="{{ $d->cliente_id }}">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </span>
@@ -85,13 +86,13 @@
                                     </td>
 
                                     {{-- Estado estuche --}}
-                                    <td>
+                                    <td class="text-nowrap">
                                         @if($d->estado_entrega_estuche == "1")
                                             <span class="text-success">{{ $d->estatusEstuche() }} <i class="fa fa-check"></i></span>
                                         @elseif($d->estado_entrega_estuche == "0")
                                             <span class="text-info">{{ $d->estatusEstuche() }} <i class="fa fa-info-circle"></i></span>
-                                            <span class="pull-right">
-                                                <button type="button" class="btn btn-default btn-sm btn_update_estado_estuche" data-toggle="modal" role="tooltip" data-target="#update_estado_estuche" title="Estado  de los estuches" value="{{ $d->id }}">
+                                            <span data-toggle="modal" data-target="#update_estado_estuche">
+                                                <button type="button" class="btn btn-default btn-sm btn_update_estado_estuche" data-toggle="tooltip" title="Estado  de los estuches" value="{{ $d->id }}">
                                                     <i class="fa fa-plus-square"></i>
                                                 </button>
                                             </span>
@@ -100,8 +101,29 @@
                                         @endif
                                     </td>
 
+                                    {{-- pagos --}}
+                                    <td class="text-nowrap">
+                                        @if($d->totaldeuda() == "0")
+                                            <span>Deuda Cancelada <i class="fa fa-check text-success"></i></span>
+                                        @elseif($d->totaldeuda() == "")
+                                            <span>Ningun pago registrado <i class="fa fa-info-circle text-info"></i></span>
+                                            <span data-toggle="modal" data-target="#add_pago">
+                                                <button type="button" class="btn btn-default btn-sm btn_add_pago" rel="tooltip" data-toggle="tooltip" title="Añadir un nuevo pago" value="{{ $d->id }}" data-totaldeuda="{{ $d->totaldeuda() }}" data-subtotal="{{ $d->total }}">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                            </span>
+                                        @else
+                                            <span>Deuda por cancelar <i class="fa fa-warning text-warning"></i></span>
+                                            <span data-toggle="modal" data-target="#add_pago">
+                                                <button type="button" class="btn btn-default btn-sm btn_add_pago" rel="tooltip" data-toggle="tooltip" title="Añadir un nuevo pago" value="{{ $d->id }}" data-totaldeuda="{{ $d->totaldeuda() }}" data-subtotal="{{ $d->total }}">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                            </span>
+                                        @endif
+                                    </td>
+
                                     <td>
-                                        <a href="{{ route('ventas.show', $d->id) }}" class="btn bg-navy btn-xs">
+                                        <a href="{{ route('ventas.show', $d->id) }}" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles de la venta">
                                             <i class="fa fa-eye"></i> Detalles
                                         </a>
                                     </td>
@@ -116,6 +138,7 @@
     @include('ventas.modals.create_factura') 
     @include('ventas.modals.update_estado_factura') 
     @include('ventas.modals.update_estado_estuche') 
+    @include('ventas.modals.add_pago') 
 @endsection
 
 @section("script")
@@ -137,12 +160,16 @@
         $("#venta_id").val($(this).val());
     })
 
-    // calcular impuesto
-    function calcularImpuesto(porcentaje){
-        subtotal = $("#subtotal").val();
-        calculo =  (parseFloat(subtotal) * parseFloat(porcentaje.value)) / 100;
-        $("#total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
-    }
+    $(".btn_add_pago").click(function(){
+        $("#form_add_pago")[0].reset();
+        $('#section_letra').hide();
+        $("#venta_id_pago").val($(this).val());
+        if ($(this).data('totaldeuda') == '') {
+            $("#total_deuda").val($(this).data('subtotal'));
+        }else{
+            $("#total_deuda").val($(this).data('totaldeuda'));
+        }
+    })
 
     $("#form_create_factura").submit(function(e){
         e.preventDefault();
@@ -210,6 +237,32 @@
         })
         .done(function(data) {
             mensajes('Listo!', 'Estuches actualizados, espere mientras es redireccionado...', 'fa-check', 'green');
+            setTimeout(window.location = "ventas", 3000);
+        })
+        .fail(function(data) {
+            btn.removeAttr("disabled");
+            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
+    });
+
+    $("#form_add_pago").submit(function(e){
+        e.preventDefault();
+        btn = $(".btn_ap"); btn.attr("disabled", 'disabled');
+        form = $(this);
+
+        $.ajax({
+            url: "{{ route('pagos.store') }}",
+            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+            type: 'POST',
+            dataType: 'JSON',
+            data: form.serialize(),
+        })
+        .done(function(data) {
+            mensajes('Listo!', 'Nuevo pago añadido, espere mientras es redireccionado...', 'fa-check', 'green');
             setTimeout(window.location = "ventas", 3000);
         })
         .fail(function(data) {

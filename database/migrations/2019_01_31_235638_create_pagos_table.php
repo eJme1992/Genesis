@@ -20,7 +20,7 @@ class CreatePagosTable extends Migration
             $table->decimal('total', 12, 2)->nullable(); //total de la deuda
             $table->decimal('abono', 12, 2)->nullable(); 
             $table->decimal('restante', 12, 2)->nullable(); 
-            $table->string('fecha_cacelacion')->nullable(); //fecha de cacelacion del pago
+            $table->string('fecha_cancelacion')->nullable(); //fecha de cacelacion del pago
 
             $table->foreign('venta_id')->references('id')
                                         ->on('ventas')

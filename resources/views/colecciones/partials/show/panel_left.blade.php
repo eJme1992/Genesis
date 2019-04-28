@@ -67,7 +67,7 @@
               @endif
           </div>
 
-          <div class="col-lg-12 text-success">
+          <div class="col-lg-12 text-{{ $marcas->marca->modelosDisponibles($coleccion->id, $marcas->marca->id) > 0 ? 'success' : 'danger' }}">
                 <i class="fa fa-arrow-right"></i> Modelos disponibles {{ $marcas->marca->modelosDisponibles($coleccion->id, $marcas->marca->id) }}
                 <br> 
           </div>

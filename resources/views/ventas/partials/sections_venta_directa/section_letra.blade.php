@@ -1,4 +1,9 @@
-<div class="form-group col-lg-3">
+<div class="form-group col-lg-4">
+    <label for="">Numero unico *</label>
+    <input type="text" class="form-control" id="numero_unico" name="numero_unico">
+</div>
+
+<div class="form-group col-lg-4">
     <label for="">Estado letra * </label>
     <select class="form-control" name="estatus_id" id="estatus_id">
         <option value="">seleccione...</option>
@@ -10,7 +15,7 @@
     </select>
 </div>
 
-<div class="form-group col-lg-3">
+<div class="form-group col-lg-4">
     <label for="">Protesto letra * </label>
     <select class="form-control" name="protesto_id" id="protesto_id">
         <option value="">seleccione...</option>
@@ -22,11 +27,6 @@
     </select>
 </div>
             
-<div class="form-group col-lg-3">
-    <label for="">Numero unico *</label>
-    <input type="text" class="form-control" id="numero_unico" name="numero_unico">
-</div>
-
 <div class="form-group col-lg-3">
     <label for="">Monto inicial *</label>
     <input type="text" class="form-control" name="monto_inicial" id="monto_inicial">

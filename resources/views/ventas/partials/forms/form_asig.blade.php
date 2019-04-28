@@ -2,6 +2,10 @@
     {{ csrf_field() }}
 
     <section id="section_vendedor" class="container-fluid">
+        <div class="col-lg-12">
+            <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos para la venta de asignacion</h4>
+        </div>
+
         <div class="col-lg-4">
             <label for="">Vendedor (usuario) </label>
             <select class="form-control" name="user_id" required="" id="user_id">
@@ -26,7 +30,7 @@
     {{-- NOTA DE PEDIDO --}}
     <section id="section_crear_nota_pedido" class="container-fluid">
         <div class="col-lg-12">
-            <h4 class="padding_1em bg-primary"><i class="fa fa-arrow-right"></i> Nota de Pedido</h4>
+            <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Nota de Pedido</h4>
         </div>
         @include("ventas.partials.sections_venta_directa.section_crear_nota_pedido")
     </section>

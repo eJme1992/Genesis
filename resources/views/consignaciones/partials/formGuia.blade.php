@@ -1,8 +1,4 @@
 <!-- guia de remision -->
-    <div class="col-lg-12">
-        <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos de la Guia</h4>
-    </div>
-
     <div class="form-group col-lg-6">
         <label>Nº Serie *</label> 
         <input type="text" name="serial" class="form-control" placeholder="Nª de serie..." id="serial">

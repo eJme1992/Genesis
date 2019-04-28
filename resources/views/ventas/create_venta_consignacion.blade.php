@@ -15,9 +15,6 @@
     <div class="col-lg-12">
         <div class="box box-danger box-solid">
             <div class="box-body">
-                <h4 class="padding_1em bg-navy container-fluid">
-                    <i class="fa fa-arrow-right"></i> Datos asociados a la consignacion
-                </h4>
                 @include("ventas.partials.forms.form_consig")
             </div>
         </div>
@@ -30,10 +27,9 @@
 @section("script")
 <script>
 
-    reiniciarMontoTotal();
-    
     var total = 0; var error_cal = false;
-    $("#checkbox_factura").prop('checked', false);
+    $("#checkbox_factura, #checkbox_pago").prop('checked', false);
+    $("#tipo_abono_id").val(0).prop('selected', true);
 
     $("#checkbox_factura").click(function(e) {
         var bool = this.checked;
@@ -45,6 +41,19 @@
             $("#section_factura").animate({height: "toggle"}, 400);
             $("#checkbox_factura").val(0);
             $("#num_factura, #item, #status_av, #subtotal, #impuesto, #total_neto").prop('required', false);
+        }
+    });
+
+    $("#checkbox_pago").click(function(e) {
+        var bool = this.checked;
+        if(bool === true){
+            $("#section_pago").animate({height: "toggle"}, 400);
+            $("#checkbox_pago").val(1);
+            $("#tipo_abono_id, #abono, #restante").prop('required', true);
+        }else{
+            $("#section_pago").animate({height: "toggle"}, 400);
+            $("#checkbox_pago").val(0);
+            $("#tipo_abono_id, #abono, #restante").prop('required', false);
         }
     });
 
@@ -119,18 +128,6 @@
 
     //-------------------------------------------- funciones ---------------------------------------------------------
     
-    // reiniciar el campo total venta
-    function reiniciarMontoTotal(){
-        $(".total_venta, .subtotal").val('');
-    }
-
-    // calcular impuesto
-    function calcularImpuesto(porcentaje){
-        subtotal = $("#subtotal").val();
-        calculo =  (parseFloat(subtotal) * parseFloat(porcentaje.value)) / 100;
-        $("#total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
-    }
-
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = error_cal;
@@ -161,12 +158,18 @@
             $(".btn_siguiente").removeAttr("disabled");
         }
 
-        $(".total_venta, .subtotal").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+        $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
     }
 
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------
-    // guardar direccion
+    // guardar venta
     $("#form_venta_factura").on('submit', function(e) {
+
+        if ($('#restante').val() < 0) {
+            mensajes("Alerta!", "El restante no puede ser negativo, verifique", "fa-warning", "red");
+            return false;
+        }
+        
         e.preventDefault();
         btn = $("#btn_guardar_all"); btn.attr("disabled", 'disabled');
         $("#icon-guardar-all").removeClass("fa-save").addClass('fa-spinner fa-pulse');

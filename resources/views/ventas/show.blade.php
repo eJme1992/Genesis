@@ -62,8 +62,8 @@
                                     <td>{{ $mov->modelo->name }}</td>
                                     <td>{{ $mov->monturas}}</td>
                                     <td>{{ $mov->estuches }}</td>
-                                    <td>{{ $mov->precio_montura }}</td>
-                                    <td>{{ $mov->precio_modelo }}</td>
+                                    <td><b>S/ </b>{{ $mov->precio_montura }}</td>
+                                    <td><b>S/ </b>{{ $mov->precio_modelo }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -109,7 +109,7 @@
 
                         <div class="list-group col-lg-3">
                             <b>Fecha estado de entrega Factura</b>
-                            <p class="list-group-item list-group-item-info">
+                            <p class="list-group-item list-group-item-{{ $venta->adicionalVenta->ref_estadic_id == 3 ? 'success' : 'danger'}}">
                                 {{ $venta->adicionalVenta->ref_estadic_id == 3 ? $venta->adicionalVenta->fecha_estado : 'Factura no entregada'}}
                             </p>
                         </div>
@@ -131,9 +131,54 @@
                         <div class="list-group col-lg-3"></div>
                     @endif
 
+                    @if(count($venta->pagos) > 0)
+                        <h3 class="bg-green padding_05em col-lg-12">
+                            <i class="fa fa-arrow-right"></i> Pagos 
+                        </h3>
+
+                        <table class="table table-hover table-striped table-bordered">
+                            <thead class="bg-navy disabled">
+                                <tr>
+                                    <th>Tipo de abono</th>
+                                    <th>Total</th>
+                                    <th>Abono</th>
+                                    <th>Restante</th>
+                                    <th class="bg-blue">Fecha</th>
+                                    <th class="bg-blue">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($venta->pagos as $pago)
+                                <tr>
+                                    <td>
+                                        {{ $pago->tipoAbono->codigo.' / '.$pago->tipoAbono->nombre }}
+                                        @if($pago->tipo_abono_id == 1)
+                                            <span data-toggle="modal" data-target="#modal_showletra_{{ $pago->id }}">
+                                                <button type="button" class="btn btn-xs bg-navy pull-right" data-toggle="tooltip" title="Detalles de la letra"> 
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </span>
+                                            @include("ventas.modals.showLetra")
+                                        @endif
+                                    </td>
+                                    <td><b>S/ </b>{{ $pago->total }}</td>
+                                    <td><b>S/ </b>{{ $pago->abono }}</td>
+                                    <td><b>S/ </b>{{ $pago->restante }}</td>
+                                    <td>{{ $pago->created_at->format('d-m-Y') }}</td>
+                                    <td>
+                                        <i class="fa fa-{{ $pago->restante == 0 ? 'check text-success' : 'warning text-warning' }}"></i>
+                                        {{ $pago->restante == 0 ? 'Cancelada '.$pago->fecha_cancelacion : 'Pendiente' }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+
+                    @endif
+
                 </div>
             </div>
-                <a class="btn btn-flat btn-default" href="{{ url()->previous() }}"><i class="fa fa-reply"></i> Atras</a>
+            <a class="btn btn-flat btn-default" href="{{ url()->previous() }}"><i class="fa fa-reply"></i> Atras</a>
         </div>
     </div>
 @endsection

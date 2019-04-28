@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'direcciones'   => 'DireccionController',
 	    'clientes'      => 'ClientesController',
 	    'ventas'        => 'VentaController',
+        'pagos'         => 'PagoController',
         'facturas'      => 'FacturaController',
         'notacredito'   => 'NotaCreditoController',
 	    'departamentos' => 'DepartamentoController',

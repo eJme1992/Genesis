@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class AdicionalVenta extends Model
 {
@@ -45,6 +46,24 @@ class AdicionalVenta extends Model
             'ref_estadic_id'        => $request->ref_estadic_id,
             'fecha_estado'          => $factura != null ? date("d-m-Y") : null,
         ]);
+    }
+
+    // actualizar estado de la factura
+    public static function updateEstadoFactura($request){
+
+        $db = DB::transaction(function() use ($request) {
+            $fact = AdicionalVenta::actualizarEstado($request);
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
+            }
+        }else{ // fallo la operacion en algun sitio
+            if ($request->ajax()) {
+                return response()->json("0");
+            }
+        }
     }
 
     //nota: la fecha cambia cuando el estado cambia

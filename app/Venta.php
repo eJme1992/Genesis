@@ -35,23 +35,8 @@ class Venta extends Model
         return $this->hasOne("App\AdicionalVenta");
     }
 
-    // generar factura que no ha sido creada
-    public static function generarFactura($request){
-
-        $db = DB::transaction(function() use ($request) {
-            $fact = Factura::saveFactura($request);
-            AdicionalVenta::saveAV($request->venta_id, $fact->id, $request);
-        });
-
-        if (is_null($db)) { // fue todo correcto
-            if ($request->ajax()) {
-                return response()->json("1");
-            }
-        }else{ // fallo la operacion en algun sitio
-            if ($request->ajax()) {
-                return response()->json("0");
-            }
-        }
+    public function pagos(){
+        return $this->hasMany("App\Pago");
     }
 
     // guardar datos de la venta
@@ -84,47 +69,7 @@ class Venta extends Model
 
     }
 
-    // logica para guardar ventas y facturas
-    public static function storeVenta($request){
-
-        $db = DB::transaction(function() use ($request) {
-            
-            $v = Venta::saveVenta($request); // guardar venta
-            
-            if ($request->checkbox_factura) {
-                if ($request->checkbox_factura == 1) {
-                    $factura = Factura::saveFactura($request); // guardar factura
-                    AdicionalVenta::saVeAV($v->id, $factura->id, $request);
-                }
-            }
-
-            if ($request->checkbox_pago) {
-                if ($request->checkbox_pago == 1) {
-                    $factura = Pago::savePago($request, $v); // guardar pago
-                }
-            }
-
-            Consignacion::updateStatusConsignacion($request->id_consig, $status = 2); // status 2 = consignacion procesada
-
-            DetalleConsignacion::modeloRetornadoOrConsignado($request); // sumar y retornar el modelo al almacen
-
-            if ($request->id_guia != null) {
-                GuiaRemision::guiaMotivo($request->id_guia, $motivo = 4); // actualizar motivo guia
-            }
-        });
-
-        if (is_null($db)) { // fue todo correcto
-            if ($request->ajax()) {
-                return response()->json("1");
-            }
-        }else{ // fallo la operacion en algun sitio
-            if ($request->ajax()) {
-                return response()->json("0");
-            }
-        }
-    }
-
-    // logica para guardar ventas y facturas - venta directa
+    // logica para guardar venta directa
     public static function storeVentaDirecta($request){
 
         $db = DB::transaction(function() use ($request) {
@@ -154,7 +99,7 @@ class Venta extends Model
 
             if ($request->checkbox_pago) {
                 if ($request->checkbox_pago == 1) {
-                    $factura = Pago::savePago($request, $v); // guardar pago
+                    $factura = Pago::savePago($request, $v->id); // guardar pago
                 }
             }
             
@@ -171,12 +116,33 @@ class Venta extends Model
         }
     }
 
-    // logica para guardar ventas y facturas - venta asignacion
-    public static function storeVentaAsignacion($request){
-        
+    // logica para guardar ventas y facturas
+    public static function storeVentaConsignacion($request){
+
         $db = DB::transaction(function() use ($request) {
-            $venta = Venta::saveVenta($request); // guardar venta
-            Asignacion::modeloRetornadoOrAsignados($request); // descontar modelos vendidos asignados
+            
+            $v = Venta::saveVenta($request); // guardar venta
+            
+            if ($request->checkbox_factura) {
+                if ($request->checkbox_factura == 1) {
+                    $factura = Factura::saveFactura($request); // guardar factura
+                    AdicionalVenta::saVeAV($v->id, $factura->id, $request);
+                }
+            }
+
+            if ($request->checkbox_pago) {
+                if ($request->checkbox_pago == 1) {
+                    $factura = Pago::savePago($request, $v->id); // guardar pago
+                }
+            }
+
+            Consignacion::updateStatusConsignacion($request->id_consig, $status = 2); // status 2 = consignacion procesada
+
+            DetalleConsignacion::modeloRetornadoOrConsignado($request); // sumar y retornar el modelo al almacen
+
+            if ($request->id_guia != null) {
+                GuiaRemision::guiaMotivo($request->id_guia, $motivo = 4); // actualizar motivo guia
+            }
         });
 
         if (is_null($db)) { // fue todo correcto
@@ -190,12 +156,12 @@ class Venta extends Model
         }
     }
 
-
-     // actualizar estado de la factura
-    public static function updateEstadoFactura($request){
-
+    // logica para guardar  venta asignacion
+    public static function storeVentaAsignacion($request){
+        
         $db = DB::transaction(function() use ($request) {
-            $fact = AdicionalVenta::actualizarEstado($request);
+            $venta = Venta::saveVenta($request); // guardar venta
+            Asignacion::modeloRetornadoOrAsignados($request); // descontar modelos vendidos asignados
         });
 
         if (is_null($db)) { // fue todo correcto
@@ -251,6 +217,10 @@ class Venta extends Model
         }
 
         return $this->estado_entrega_estuche;
+    }
+
+    public function totaldeuda(){
+        return $this->pagos()->orderBy("id", "DESC")->value("restante");
     }
 
 }
