@@ -232,10 +232,11 @@ class Venta extends Model
         $direccion  = "";
         
         if ($venta->movimientoVenta->count() > 0) {
-
-            $user       = $venta->user->name.' '.$venta->user->ape;
-            $cliente    = $venta->cliente->nombre_full;
-            $direccion  = $venta->direccion->full_dir();
+            $user       = $venta->user;
+            $cliente    = $venta->cliente;
+            $direccion  = $venta->direccion_id;
+            $dir        = $venta->direccion->full_dir();
+            $tf         = array_sum($venta->movimientoVenta->pluck("precio_modelo")->toArray());
 
             foreach ($venta->movimientoVenta as $m) {
 
@@ -250,9 +251,11 @@ class Venta extends Model
                     </td>
                     <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' name='estuche[]' class='estuches'></td>
                     <td>
-                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."' name='precio_montura[]' class='form-control numero precio_montura'>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."' name='precio_montura[]' class='form-control numero precio_montura' readonly=''>
                     </td>
-                    <td><input type='number' name='precio_modelo[]' class='preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'></td>
+                    <td>
+                        <input type='number' name='precio_modelo[]' class='form-control preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
+                    </td>
                 </tr>"; 
             }
         }else{
@@ -260,6 +263,8 @@ class Venta extends Model
             $user       = "";
             $cliente    = "";
             $direccion  = "";
+            $dir        = "";
+            $tf         = "";
         }                  
 
         return response()->json([
@@ -267,6 +272,8 @@ class Venta extends Model
             "user"      => $user,
             "cliente"   => $cliente,
             "direccion" => $direccion,
+            "dir"       => $dir,
+            "tf"        => $tf,
         ]);
     }
 

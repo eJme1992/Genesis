@@ -47,6 +47,11 @@
                     <h3 class="padding_05em bg-green col-lg-12"><i class="fa fa-arrow-right"></i> Datos de la venta</h3>
                     @include("devoluciones.partials.section_venta")
                     @include("devoluciones.partials.tabla_modelos_venta")
+
+                    <div class="form-group col-lg-3">
+                        <label>Total a facturar</label>
+                        <input type="number" name="total_facturar" class="form-control" readonly="" id="total_facturar" step='0.01' max='999999999999' min='1'>
+                    </div>
                 </section>
                 
                 <section id="section_coleccion_marca">
@@ -93,10 +98,14 @@
                 $('.data-table').DataTable().destroy();
 
                 $("#data_modelos_venta").empty().append(data.data);
-                $("#user_id").val(data.user);
-                $("#cliente_id").val(data.cliente);
-                $("#direccion_id").val(data.direccion);
+                $("#user_id").val(data.user.name+' '+data.user.ape);
+                $("#user").val(data.user.id);
+                $("#cliente_id").val(data.cliente.nombre_full);
+                $("#cliente").val(data.cliente.id);
+                $("#direccion_id").val(data.dir);
+                $("#direccion").val(data.direccion);
                 $("#venta_id").val($("#venta").val());
+                $("#total_facturar").val(data.tf);
                 
                 $('.data-table').DataTable({responsive: true});
                 
@@ -126,9 +135,9 @@
     });
 
      // evitar el siguiente si se cambia cualquier valor en los modelos - consignacion
-    $('#section_mostrar_datos_cargados').on("change", ".montura_modelo, .costo_modelo", function(e) {
-        $("#btn_guardar_all").attr("disabled", "disabled");
-    });
+    // $('#section_mostrar_datos_cargados').on("change", ".montura_modelo, .precio_montura, .preciototal", function(e) {
+    //     $("#btn_guardar_all").attr("disabled", "disabled");
+    // });
 
     // evitar el siguiente si se cambia cualquier valor en la carga de modelos
     $('#section_coleccion_marca').on("change", "#select_marca, #select_coleccion", function(e) {
@@ -146,13 +155,13 @@
         $("#icon-cargar-modelos").show();
         if ($("#select_coleccion").val() && $("#select_marca").val()) {
             $.get("../cargarTabla/"+$("#select_coleccion").val()+"/"+$("#select_marca").val()+"",function(response, dep){
+
                 $('.data-table').DataTable().destroy();
                 $("#data_modelos_venta_directa").empty().html(response);
                 $('.data-table').DataTable({responsive: true});
 
                 $("#btn_cargar_modelos").removeAttr("disabled");
                 $("#icon-cargar-modelos").hide();
-                validarEstuche();
             });
         }else{
             mensajes("Alerta!", "Nada para mostrar, debe llenar todos los campos", "fa-warning", "red");
@@ -164,7 +173,7 @@
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = error_cal;
-        $.each($(".table > tbody > tr"), function(index, val) {
+        $.each($("#data_modelos_venta_directa > tr"), function(index, val) {
             montura = parseInt($(this).find('.montura_modelo').val());
             precio  = parseFloat($(this).find('.costo_modelo').val());
 

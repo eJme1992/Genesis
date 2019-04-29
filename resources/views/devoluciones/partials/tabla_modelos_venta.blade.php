@@ -1,4 +1,11 @@
 <div class="col-lg-12">
+    <div class="alert bg-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="fa fa-info-circle text-info"></i> Nota</h4>
+        <p class="text-left blockquote">
+             Seleccione solo los modelos a ser <strong>devueltos</strong> (dejar las monturas en 0)
+        </p>
+    </div>
     <table class="table data-table table-bordered table-striped table-hover">
         <thead class="bg-green">
             <tr>
