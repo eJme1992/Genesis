@@ -83,6 +83,7 @@
     var total = 0; var error_cal = false;
     $("#btn_guardar_all").attr('disabled', 'disabled');
     $("#select_coleccion").val('').prop('selected', true);
+    $("#total_facturar").val('');
 
     // buscar y cargar la venta
     $("#btn_buscar_venta").click(function(e){
@@ -138,6 +139,40 @@
     // $('#section_mostrar_datos_cargados').on("change", ".montura_modelo, .precio_montura, .preciototal", function(e) {
     //     $("#btn_guardar_all").attr("disabled", "disabled");
     // });
+
+    $('#section_venta').on("change", ".venta_montura_modelo", function(e) {
+        total = 0; costo = 0; err = false;
+        $.each($("#data_modelos_venta > tr"), function(index, val) {
+            montura = parseInt($(this).find('.venta_montura_modelo').val());
+            precio  = parseFloat($(this).find('.venta_precio_montura').val());
+            precio_total  = parseFloat($(this).find('.venta_preciototal').val());
+
+            if (!Number(montura)) {
+                costo = parseFloat($("#total_facturar").val()) - precio_total;
+                $(this).find('.venta_preciototal').val(0);
+            }else{
+                vpt = parseFloat($(this).find('.venta_preciototal').val(montura * precio));
+                costo = parseFloat($("#total_facturar").val()) - (montura * precio);
+            }
+        });
+        
+        total = costo;
+
+        if (err) {
+            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+            $("#btn_guardar_all").prop("disabled", true);
+            return false;
+        }else{
+            if (Number(total) || total > 0) {
+                $("#btn_guardar_all").removeAttr("disabled");
+            }else{
+                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                $("#btn_guardar_all").prop("disabled", true);
+            }
+        }
+
+        $("#total_facturar").val(total).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
+    });
 
     // evitar el siguiente si se cambia cualquier valor en la carga de modelos
     $('#section_coleccion_marca').on("change", "#select_marca, #select_coleccion", function(e) {
