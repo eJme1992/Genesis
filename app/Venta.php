@@ -241,20 +241,20 @@ class Venta extends Model
             foreach ($venta->movimientoVenta as $m) {
 
                 $data [] = "<tr>
-                    <td>".$m->modelo_id."<input type='hidden' value='".$m->modelo_id."' name='modelo_id[]'></td>
+                    <td>".$m->modelo_id."<input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'></td>
                     <td>".$m->modelo->name."</td>
                     <td>
-                        <select class='form-control montura_modelo' name='montura[]'>
+                        <select class='form-control venta_montura_modelo'>
                             <option value=''>...</option>
                             ".Asignacion::Monturas($m->monturas)."
                         </select>
                     </td>
-                    <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' name='estuche[]' class='estuches'></td>
+                    <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' class='venta_estuches'></td>
                     <td>
-                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."' name='precio_montura[]' class='form-control numero precio_montura' readonly=''>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."'  class='form-control venta_precio_montura' readonly='' data-valor='".$m->precio_montura."'>
                     </td>
                     <td>
-                        <input type='number' name='precio_modelo[]' class='form-control preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
+                        <input type='number' class='form-control venta_preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
                     </td>
                 </tr>"; 
             }

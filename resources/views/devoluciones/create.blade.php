@@ -68,7 +68,13 @@
                 <section id="section_devolucion">
                     @include("devoluciones.partials.section_devolucion")
                 </section>
-
+                
+                <div class="form-group col-lg-12"><hr>
+                    <a class="btn btn-flat btn-default" href="{{ url()->previous() }}"><i class="fa fa-reply"></i> Atras</a>
+                    <button type="submit" class="btn btn-success btn-flat" id="btn_guardar_all">
+                        <i class="fa fa-save" id="icon-guardar-all"></i> Procesar Venta
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -80,9 +86,10 @@
 @section("script")
 <script>
 
-    var total = 0; var error_cal = false;
+    var totalFacturar = 0, error_cal = false, btnGuardarTodo = $("#btn_guardar_all");
     $("#btn_guardar_all").attr('disabled', 'disabled');
     $("#select_coleccion").val('').prop('selected', true);
+    $("#total_facturar").val('');
 
     // buscar y cargar la venta
     $("#btn_buscar_venta").click(function(e){
@@ -105,7 +112,7 @@
                 $("#direccion_id").val(data.dir);
                 $("#direccion").val(data.direccion);
                 $("#venta_id").val($("#venta").val());
-                $("#total_facturar").val(data.tf);
+                $("#total_facturar").val(0);
                 
                 $('.data-table').DataTable({responsive: true});
                 
@@ -139,9 +146,32 @@
     //     $("#btn_guardar_all").attr("disabled", "disabled");
     // });
 
+    $('#section_venta').on("change", ".venta_montura_modelo", function(e) {
+        montura         = parseInt($(this).parents("tr").find('.venta_montura_modelo').val());
+        precio_montura  = parseFloat($(this).parents("tr").find('.venta_precio_montura').val());
+        precio_total    = parseFloat($(this).parents("tr").find('.venta_preciototal').val());
+
+        if (!Number(montura)) {
+            totalFacturar = parseFloat($("#total_facturar").val()) + precio_total;
+            $(this).parents("tr").find('.venta_preciototal').val(0);
+        }else{
+            totalFacturar = parseFloat($("#total_facturar").val()) + (precio_total - (montura * precio_montura));
+            parseFloat($(this).parents("tr").find('.venta_preciototal').val(montura * precio_montura));
+        }
+
+        if (Number(totalFacturar) || totalFacturar > 0) {
+            btnGuardarTodo.removeAttr("disabled");
+        }else{
+            mensajes("Alerta!", "El total a facturar es incorrecto, verifique", "fa-remove", "red");
+            btnGuardarTodo.prop("disabled", true);
+        }
+
+        $("#total_facturar").val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
+    });
+
     // evitar el siguiente si se cambia cualquier valor en la carga de modelos
     $('#section_coleccion_marca').on("change", "#select_marca, #select_coleccion", function(e) {
-        $("#btn_guardar_all").attr("disabled", "disabled");
+        btnGuardarTodo.attr("disabled", "disabled");
         $("#data_modelos_venta_directa").empty();
         $("#span_select_estuche, #span_info_estuche").hide(400);
         reiniciarMontoTotal();
