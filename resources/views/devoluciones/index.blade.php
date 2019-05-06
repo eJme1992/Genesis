@@ -36,10 +36,10 @@
                     <table class="table data-table table-bordered table-hover">
                         <thead class="label-danger">
                             <tr>
-                                <th>Venta</th>
+                                <th>Cod. Venta</th>
                                 <th>Motivo</th>
                                 <th>Fecha</th>
-                                <th>Modelos</th>
+                                <th>Modelos Devueltos</th>
                                 <th class="bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
@@ -51,6 +51,9 @@
                                     <td>{{ $d->fecha }}</td>
                                     <td>{{ $d->movDevolucion->count() }}</td>
                                     <td>
+                                        <a href="{{ route('devoluciones.show', $d->id) }}" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles de la devolucion">
+                                            <i class="fa fa-eye"></i> Detalles
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

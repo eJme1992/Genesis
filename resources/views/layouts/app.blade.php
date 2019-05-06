@@ -170,9 +170,9 @@
                     <li>
                         <a href="{{ route('create_venta_consignacion') }}"><i class="fa fa-circle-o"></i> Venta por consignacion</a>
                     </li>
+                    <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Notas de Pedido (Ventas)</a></li>
                   </ul>
                 </li>
-                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Notas de Pedido (Ventas)</a></li>
                 <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
                 <li><a href="{{ route('devoluciones.index') }}"><i class="fa fa-circle-o"></i>Devoluciones</a></li>
                 <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>

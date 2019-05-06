@@ -244,7 +244,7 @@ class Venta extends Model
                     <td>".$m->modelo_id."<input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'></td>
                     <td>".$m->modelo->name."</td>
                     <td>
-                        <select class='form-control venta_montura_modelo'>
+                        <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>
                             <option value=''>...</option>
                             ".Asignacion::Monturas($m->monturas)."
                         </select>

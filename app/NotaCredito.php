@@ -13,4 +13,19 @@ class NotaCredito extends Model
     public function factura(){
         return $this->belongsTo("App\Factura", "factura_id");
     }
+
+    public static function saveNotaCredito($request, $factura){
+        $nt = NotaCredito::create([
+            'factura_id'    => $factura,
+            'n_serie'       => $request->n_serie,
+            'n_nota'        => $request->n_nota,
+            'subtotal'      => $request->subtotal,
+            'impuesto'      => $request->impuesto,
+            'total'         => $request->total
+        ]);
+
+        BitacoraUser::saveBitacora("Nueva Nota de credito registrada [".$nt->id."] correctamente");
+
+        return $nt;
+    }
 }

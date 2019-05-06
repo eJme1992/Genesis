@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Direccion, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra};
+use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Direccion, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra, NotaCredito, MovDevolucion};
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateDevolucionRequest;
+use DB;
 
 class DevolucionController extends Controller
 {
@@ -45,9 +47,9 @@ class DevolucionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateDevolucionRequest $request)
     {
-        //
+        return Devolucion::storeDev($request);
     }
 
     /**
@@ -56,9 +58,11 @@ class DevolucionController extends Controller
      * @param  \App\Devolucion  $devolucion
      * @return \Illuminate\Http\Response
      */
-    public function show(Devolucion $devolucion)
+    public function show($id)
     {
-        //
+        return view('devoluciones.show',[
+            'devolucion' => Devolucion::findOrFail($id)
+        ]);
     }
 
     /**
