@@ -14,6 +14,10 @@ class NotaCredito extends Model
         return $this->belongsTo("App\Factura", "factura_id");
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
     public static function saveNotaCredito($request, $factura){
         $nt = NotaCredito::create([
             'factura_id'    => $factura,

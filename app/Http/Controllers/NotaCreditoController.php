@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\NotaCredito;
+use App\{NotaCredito, Factura};
 use Illuminate\Http\Request;
 
 class NotaCreditoController extends Controller
@@ -14,7 +14,9 @@ class NotaCreditoController extends Controller
      */
     public function index()
     {
-        //
+        return view("notacredito.index",[
+            "notacreditos" => NotaCredito::all()
+        ]);
     }
 
     /**

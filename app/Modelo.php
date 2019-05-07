@@ -49,7 +49,8 @@ class Modelo extends Model
       return $this->hasMany('App\Asignacion');
     }
     
-    //----------------------- funciones personalizadas --------------------------------------------
+    //-------------------------------------- funciones personalizadas --------------------------------------------
+
     // modelos a mostrar dependiendo del rol
     public static function modelosToUser(){
       return $data = Modelo::where("montura", ">", 0)->get();
@@ -91,7 +92,7 @@ class Modelo extends Model
         return $data->save();
     }
 
-    //---------------- metodos propios ------------------------
+    //------------------------------------------- metodos propios --------------------------------------------------------------
 
     // eliminar varios modelo a la vez
     public static function deleteAll($request){

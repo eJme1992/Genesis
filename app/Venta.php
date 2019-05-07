@@ -39,6 +39,29 @@ class Venta extends Model
         return $this->hasMany("App\Pago");
     }
 
+     // comprobar el estado del estuche
+    public static function estadoEstuche($request){
+        return isset($request->status_estuche) ? $request->status_estuche : $request->status_estuche = null;
+    }
+
+    // setear el status de los estuches
+    public function estatusEstuche(){
+        if ($this->estado_entrega_estuche == "1") {
+            $this->estado_entrega_estuche = "Entregados";
+        }elseif ($this->estado_entrega_estuche == "0"){
+            $this->estado_entrega_estuche = "No entregados";
+        }elseif ($this->estado_entrega_estuche == null){
+            $this->estado_entrega_estuche = "No posee estuches";
+        }
+
+        return $this->estado_entrega_estuche;
+    }
+
+    // totals restante
+    public function totaldeuda(){
+        return $this->pagos()->orderBy("id", "DESC")->value("restante");
+    }
+
     // guardar datos de la venta
     public static function saveVenta($request){
 
@@ -195,34 +218,6 @@ class Venta extends Model
         }
     }
 
-    // comprobar el estado del estuche
-    public static function estadoEstuche($request){
-        return isset($request->status_estuche) ? $request->status_estuche : $request->status_estuche = null;
-    }
-
-    // setear el status de los estuches
-    public function estatusEstuche(){
-        if ($this->estado_entrega_estuche == "1") {
-
-            $this->estado_entrega_estuche = "Entregados";
-
-        }elseif ($this->estado_entrega_estuche == "0"){
-
-            $this->estado_entrega_estuche = "No entregados";
-
-        }elseif ($this->estado_entrega_estuche == null){
-
-            $this->estado_entrega_estuche = "No posee estuches";
-
-        }
-
-        return $this->estado_entrega_estuche;
-    }
-
-    public function totaldeuda(){
-        return $this->pagos()->orderBy("id", "DESC")->value("restante");
-    }
-
      // cargar tabla para manipula los datos
     public static function cargarTablaVenta($venta){
         
@@ -241,7 +236,11 @@ class Venta extends Model
             foreach ($venta->movimientoVenta as $m) {
 
                 $data [] = "<tr>
-                    <td>".$m->modelo_id."<input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'></td>
+                    <td>
+                        ".$m->modelo_id."
+                        <input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'>
+                        <input type='hidden' value='".$m->id."' name='mov_venta_id[]'>
+                    </td>
                     <td>".$m->modelo->name."</td>
                     <td>
                         <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>

@@ -32,6 +32,9 @@ class MovDevolucion extends Model
                     'monturas'          => $request->venta_montura_modelo[$i],
                     'estuches'          => $request->estuche[$i]
                 ]);
+
+                Modelo::descontarMonturaToModelosToAsignacion($request->venta_modelo_id[$i], $request->venta_montura_modelo[$i]);
+                MovimientoVenta::descontarModelosVenta($request->mov_venta_id[$i]);
             }
         }
     }

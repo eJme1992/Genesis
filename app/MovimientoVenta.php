@@ -21,4 +21,9 @@ class MovimientoVenta extends Model
     public function modelo(){
     	return $this->belongsTo("App\Modelo", "modelo_id");
     }
+
+    // descontar modelos - venta
+    public static function descontarModelosVenta($id){
+        return MovimientoVenta::destroy($id);
+    }
 }
