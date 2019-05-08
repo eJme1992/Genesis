@@ -72,8 +72,8 @@
 										<br> 
 										{{ 'Movil: +51'.$d->telefono_2 }}
 									</td>
-									<td>
-										<span class="col-sm-6">	
+									<td class="text-nowrap">
+										<span class="col-sm-4" data-toggle="tooltip" title="Editar cliente">	
 											<a 
 											href="#edit" 
 											data-toggle="modal" 
@@ -90,18 +90,23 @@
 											data-correo="{{ $d->correo }}"
 											data-telefono_1="{{ $d->telefono_1 }}"
 											data-telefono_2="{{ $d->telefono_2 }}"
-											class="btn btn-warning btn-sm btn_editar" 
-											>
+											class="btn btn-warning btn-xs btn_editar"											>
 												<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
 											</a>
 										</span>
-										<span class="col-sm-6">
+										<span class="col-sm-4">
 											<form action="{{ route('clientes.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
 		              							{{ csrf_field() }}
-		              							<button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Desea eliminar el cliente con todas sus dependencias S/N?');"><i class="fa fa-trash"></i></button>
+		              							<button class="btn btn-xs btn-danger" type="submit" onclick="return confirm('Desea eliminar el cliente con todas sus dependencias S/N?');"><i class="fa fa-trash" data-toggle="tooltip" title="Eliminar cliente"></i></button>
 											</form>
 										</span>
+
+                                        <span class="col-sm-4">
+                                            <a href="{{ route('clientes.show', $d->id) }}" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles del cliente desde el comienzo">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
 									</td>
 								</tr>
 							@endforeach

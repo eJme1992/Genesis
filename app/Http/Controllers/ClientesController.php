@@ -51,7 +51,9 @@ class ClientesController extends Controller
 
     public function show($id)
     {
-        //
+        return view("clientes.show",[
+            "cliente" => Cliente::findOrFail($id),
+        ]);
     }
 
     public function edit($id)

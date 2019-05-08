@@ -57,4 +57,21 @@ class Factura extends Model
         return $factura;
     }
 
+    public static function updateFactura($request, $id){
+        $nt = Factura::findorFail($id);
+        $nt->fill($request->all());
+        $nt->save();
+
+        BitacoraUser::saveBitacora("Factura [".$id."] actualizada correctamente");
+
+        if ($request->ajax()) {
+            return response()->json(1);
+        }else{
+            return back()->with([
+                'flash_message' => 'Factura actualizada.',
+                'flash_class' => 'alert-success'
+            ]);
+        }
+    }
+
 }

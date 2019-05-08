@@ -51,9 +51,14 @@
                                     <td>{{ $d->impuesto }}</td>
                                     <td>{{ $d->total }}</td>
                                     <td>
-                                        <a href="{{ route('facturas.edit', $d->id) }}" class="btn bg-orange btn-xs" data-toggle="tooltip" title="Editar factura">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
+
+                                        {{-- editar devolucion --}}
+                                        <span data-toggle="modal" data-target="#editar_factura">
+                                            <button type="button" class="btn bg-orange btn-xs bf" data-toggle="tooltip" title="Editar factura" data-id="{{ $d->id }}" data-nfactura="{{ $d->num_factura }}" data-cliente="{{ $d->cliente->nombre_full }}" data-subtotal="{{ $d->subtotal }}" data-impuesto="{{ $d->impuesto }}" data-total="{{ $d->total }}">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </span>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,10 +68,21 @@
             </div>
         </div>
     </div>
+    @include("facturas.modals.edit_factura")
 @endsection
 
 @section("script")
 <script>
+    $(".bf").click(function(e) {
+        ruta = '{{ route("facturas.update",":value") }}';
+        $("#form_edit_factura").attr("action", ruta.replace(':value', $(this).data("id")));
 
+        $("#n_factura, #cliente, #subtotal, #impuesto, #total").val("");
+        $("#n_factura").val($(this).data("nfactura"));
+        $("#cliente").val($(this).data("cliente"));
+        $("#subtotal").val($(this).data("subtotal"));
+        $("#impuesto").val($(this).data("impuesto"));
+        $("#total_neto").val($(this).data("total"));
+    });
 </script>
 @endsection

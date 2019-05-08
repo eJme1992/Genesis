@@ -22,6 +22,10 @@ class Devolucion extends Model
         return $this->created_at->format("d-m-Y");
     }
 
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
     public static function saveDevolucion($request){
         $d = Devolucion::create([
             'venta_id'  => $request->venta_id,
@@ -60,6 +64,23 @@ class Devolucion extends Model
             if ($request->ajax()) {
                 return response()->json("0");
             }
+        }
+    }
+
+    public static function updateDevolucion($request, $id){
+        $nt = Devolucion::findorFail($id);
+        $nt->fill($request->all());
+        $nt->save();
+
+        BitacoraUser::saveBitacora("Devolucion [".$id."] actualizada  correctamente");
+
+        if ($request->ajax()) {
+            return response()->json(1);
+        }else{
+            return back()->with([
+                'flash_message' => 'Devolucion actualizada.',
+                'flash_class'   => 'alert-success'
+            ]);
         }
     }
 }

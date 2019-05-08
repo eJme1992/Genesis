@@ -176,7 +176,6 @@
                 <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
                 <li><a href="{{ route('devoluciones.index') }}"><i class="fa fa-circle-o"></i>Devoluciones</a></li>
                 <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
-                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Pagos</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
               </ul>
             </li>

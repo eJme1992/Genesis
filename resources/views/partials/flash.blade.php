@@ -9,3 +9,18 @@
 	  </div>
 	</div>
 @endif
+
+@if (count($errors) > 0)
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-danger alert-important">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <ul>
+            @foreach($errors->all() as $error)
+              <li>{{$error}}</li>
+            @endforeach
+            </ul>
+        </div>
+    </div>
+</div>
+@endif

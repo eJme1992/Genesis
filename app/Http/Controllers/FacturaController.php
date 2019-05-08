@@ -69,9 +69,16 @@ class FacturaController extends Controller
      * @param  \App\Factura  $factura
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Factura $factura)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'num_factura'   => 'required|unique:facturas,num_factura,'.$id.',id',
+            'subtotal'  => 'required',
+            'impuesto'  => 'required',
+            'total'     => 'required',
+        ]);
+
+        return Factura::updateFactura($request, $id);
     }
 
     /**

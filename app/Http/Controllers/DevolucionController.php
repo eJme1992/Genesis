@@ -83,9 +83,13 @@ class DevolucionController extends Controller
      * @param  \App\Devolucion  $devolucion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Devolucion $devolucion)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'motivo' => 'required',
+        ]);
+
+        return Devolucion::updateDevolucion($request, $id);
     }
 
     /**

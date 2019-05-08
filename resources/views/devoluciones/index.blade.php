@@ -33,27 +33,40 @@
                     </span>
                 </div>
                 <div class="box-body">
-                    <table class="table data-table table-bordered table-hover">
+                    <table class="table data-table table-bordered table-hover text-center">
                         <thead class="label-danger">
                             <tr>
                                 <th>Cod. Venta</th>
                                 <th>Motivo</th>
                                 <th>Fecha</th>
-                                <th>Modelos Devueltos</th>
+                                <th>Ultima act.</th>
+                                <th>Modelos</th>
                                 <th class="bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
-                        <tbody class="">
+                        <tbody>
                             @foreach($devoluciones as $d)
                                 <tr>
-                                    <td>{{ $d->venta_id }}</td>
+                                    <td>[{{ $d->venta_id }}]</td>
                                     <td>{{ $d->motivo }}</td>
                                     <td>{{ $d->fecha }}</td>
+                                    <td>{{ $d->updateF() }}</td>
                                     <td>{{ $d->movDevolucion->count() }}</td>
                                     <td>
-                                        <a href="{{ route('devoluciones.show', $d->id) }}" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles de la devolucion">
-                                            <i class="fa fa-eye"></i> Detalles
-                                        </a>
+
+                                        {{-- editar devolucion --}}
+                                        <span data-toggle="modal" data-target="#editar_devolucion">
+                                            <button type="button" class="btn bg-orange btn-xs bd" data-toggle="tooltip" title="Editar la devolucion" data-id="{{ $d->id }}" data-motivo="{{ $d->motivo }}">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </span>
+
+                                        {{-- detalles de la devolucion --}}
+                                        <span data-toggle="modal" data-target="#show_devolucion_{{ $d->id }}">
+                                            <button type="button" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles de la devolucion" data-id="{{ $d->id }}">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,9 +76,19 @@
             </div>
         </div>
     </div>
+    @include("devoluciones.modals.edit_devolucion")
+    @foreach($devoluciones as $d)
+        @include("devoluciones.modals.show_devolucion")
+    @endforeach
 @endsection
 @section("script")
 <script>
+    $(".bd").click(function(e) {
+        ruta = '{{ route("devoluciones.update",":value") }}';
+        $("#form_edit_devolucion").attr("action", ruta.replace(':value', $(this).data("id")));
 
+        $("#motivo_dev").val("");
+        $("#motivo_dev").val($(this).data("motivo"));
+    });
 </script>
 @endsection

@@ -69,9 +69,17 @@ class NotaCreditoController extends Controller
      * @param  \App\NotaCredito  $notaCredito
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NotaCredito $notaCredito)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'n_serie'   => 'required|unique:nota_creditos,n_serie,'.$id.',id',
+            'n_nota'    => 'required|unique:nota_creditos,n_nota,'.$id.',id',
+            'subtotal'  => 'required',
+            'impuesto'  => 'required',
+            'total'     => 'required',
+        ]);
+
+        return NotaCredito::updateNotaCredito($request, $id);
     }
 
     /**
