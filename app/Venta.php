@@ -62,6 +62,11 @@ class Venta extends Model
         return $this->pagos()->orderBy("id", "DESC")->value("restante");
     }
 
+    // fecha cancelacion de la deuda
+    public function fechaCancelacion(){
+        return $this->pagos()->orderBy("id", "DESC")->value("fecha_cancelacion");
+    }
+
     // guardar datos de la venta
     public static function saveVenta($request){
 

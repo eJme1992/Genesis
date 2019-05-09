@@ -30,6 +30,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function fullName(){
+        return $this->name.' '.$this->ape;
+    }
+
     public function rol(){
         return $this->belongsTo("App\Rol", "rol_id");
     }

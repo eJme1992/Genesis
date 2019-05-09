@@ -1,36 +1,54 @@
-<form id="form_create_guia" action="" method="POST">
-{{ csrf_field() }}
-	<div class="modal fade" role="dialog" id="modelos_guia">
+
+	<div class="modal fade" role="dialog" id="show_guia_{{ $d->id }}">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
-				<div class="panel panel-info">
+				<div class="panel panel-primary">
 					<div class="panel-heading text-center">
 						<buttton class="close" type="button" data-dismiss="modal">&times;</buttton>
-						<h3><i class="fa fa-list-alt"></i> Guia <b>Nº <span id="n_guia"></span></b></h3>
+						<h3><i class="fa fa-arrow-right"></i> Guia <b>Nº <span> {{ $d->serial  }} </span></b></h3>
 					</div>
 					<div class="panel-body">
-						<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">	
-						<section id='section_modelos'>
-							<div id='mas_modelos_1'>
+                        <div class="form-group col-lg-3">
+                            <label>Tipo de item</label>
+                            <p class="list-group-item">{{ $d->detalleGuia->item->nombre }}</p>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Cantidad</label>
+                            <p class="list-group-item">{{ $d->detalleGuia->cantidad }}</p>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Peso</label>
+                            <p class="list-group-item">{{ $d->detalleGuia->peso }}</p>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Motivo</label>
+                            <p class="list-group-item list-group-item-info">{{ $d->motivo_guia->nombre }}</p>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Descripcion</label>
+                            <p class="list-group-item">{{ $d->detalleGuia->descripcion == null ? 'sin detalles' : $d->detalleGuia->descripcion }}</p>
+                        </div>
 
-								<div class='form-group col-sm-8'>
-									<h2><b>Modelos</b></h2>
-									<h3 class="text-capitalize" id="mostrar_mod"></h3>
-								</div>
-
-								<div class='form-group col-sm-2'>
-									<h2>...</h2>
-									<h3 class="flecha"></h3>
-								</div>
-
-								<div class='form-group col-sm-2'>
-									<h2><b>Monturas</b></h2>
-									<h3 id="mostrar_mont"></h3>
-								</div>
-
-							</div>
-						</section>
-
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr class="bg-navy">
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Montura</th>
+                                    <th>Estuche</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($d->modeloGuias as $m)
+                                <tr>
+                                    <td>[{{ $m->id }}]</td>
+                                    <td>{{ $m->modelo->name }}</td>
+                                    <td>{{ $m->montura }}</td>
+                                    <td>{{ $m->estuche == null ? 'No posee' : $m->estuche }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 					</div>		
 					<div class="modal-footer">
 						<div class="form-group text-right">
@@ -41,4 +59,3 @@
 			</div>
 		</div>
 	</div>
-</form>

@@ -37,6 +37,7 @@
                         <thead class="label-danger">
                             <tr>
                                 <th>Cod. Venta</th>
+                                <th>Cliente</th>
                                 <th>Motivo</th>
                                 <th>Fecha</th>
                                 <th>Ultima act.</th>
@@ -48,6 +49,7 @@
                             @foreach($devoluciones as $d)
                                 <tr>
                                     <td>[{{ $d->venta_id }}]</td>
+                                    <td>{{ $d->venta->cliente->nombre_full }}</td>
                                     <td>{{ $d->motivo }}</td>
                                     <td>{{ $d->fecha }}</td>
                                     <td>{{ $d->updateF() }}</td>

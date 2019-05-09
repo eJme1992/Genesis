@@ -13,11 +13,23 @@ class Cliente extends Model
         return $this->belongsTo("App\Direccion", "direccion_id");
     }
 
+    public function ventas(){
+        return $this->hasMany("App\Venta");
+    }
+
     public function dir(){
         return $this->direccion->departamento->departamento.' | '
         .$this->direccion->provincia->provincia.' | '
         .$this->direccion->distrito->distrito.' | '
         .$this->direccion->detalle;
+    }
+
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
     }
 
     // ---------------- metodos personalizados ------------------

@@ -40,19 +40,20 @@
 						<thead class="label-danger">
 							<tr>
 								<th class="text-center">Serial-Guia</th>
+								<th class="text-center">Cliente</th>
 								<th class="text-center">Salida</th>
 								<th class="text-center">Llegada</th>
 								<th class="text-center">Motivo</th>
 								<th class="text-center">Vendedor</th>
-								<th class="text-center">Cliente</th>
 								<th class="text-center">Modelos</th>
-								<th class="text-center">Acciones</th>
+								<th class="text-center bg-navy text-nowrap"><i class="fa fa-cogs"></i></th>
 							</tr>
 						</thead>
 						<tbody class="">
 							@foreach($guias as $d)
 								<tr>
 									<td><b>{{ $d->serial }}</b></td>
+									<td>{{ $d->cliente->nombre_full ?? '' }}</td>
 									<td>
 										{{ $d->dirSalida->departamento->departamento }} |
 										{{ $d->dirSalida->provincia->provincia }} |
@@ -70,36 +71,37 @@
 										{{ $d->dirLLegada->distrito->distrito }} |
 										{{ $d->dirLLegada->detalle }}
 									</td>
-									<td>{{ $d->motivo_guia->nombre }}</td>
+									<td class="success">{{ $d->motivo_guia->nombre }}</td>
 									<td>{{ $d->user->name ?? '' }}</td>
-									<td>{{ $d->cliente->nombre_full ?? '' }}</td>
 									<td class="text-center">
 										{{ count($d->modeloGuias) }}
-										<a href="#modelos_guia"
-											data-toggle="modal"
-											data-serial="{{ $d->serial }}"
-											data-id="{{ $d->id }}"
-											class="btn btn-link btn_mg">
-											<i class="fa fa-eye" aria-hidden="true"></i>
-										</a> 
 									</td>
-									<td>
-										<span class="col-sm-6">
-											<!-- <a href="#create_guia"
-												data-toggle="modal" 
-												data-target="#create_guia"
-												value="{{ $d->id }}"
-												class="btn btn-warning btn-sm">
-												<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
-											</a> -->
-										</span>
-										<span class="col-sm-6">
+									<td class="text-nowrap">
+                                        <span class="col-lg-4" data-toggle="modal" data-target="#editar_guia">
+                                            <button type="button"
+                                                data-id="{{ $d->detalleGuia->id }}"
+                                                data-cantidad="{{ $d->detalleGuia->cantidad }}"
+                                                data-peso="{{ $d->detalleGuia->peso }}"
+                                                data-descripcion="{{ $d->detalleGuia->descripcion }}"
+                                                data-toggle="tooltip" title="Editar datos de la guia"
+                                                class="btn btn-xs bg-orange beg">
+                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </button> 
+                                        </span>
+                                        <span class="col-lg-4" data-toggle="modal" data-target="#show_guia_{{ $d->id }}">
+                                            <button type="button"
+                                                data-toggle="tooltip" title="Detalles de la guia"
+                                                class="btn btn-xs bg-navy btn_mg">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button> 
+                                        </span>
+                                        <span class="col-lg-4">
 											<form action="{{ route('guiaRemision.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
 		              							{{ csrf_field() }}
-		              							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la guia de remision S/N?');"><i class="fa fa-trash"></i></button>
+		              							<button class="btn btn-xs btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la guia de remision S/N?');"><i class="fa fa-trash"></i></button>
 											</form>
-										</span>
+                                        </span>
 									</td>
 								</tr>
 							@endforeach
@@ -109,10 +111,10 @@
 			</div>
 		</div>
 	</div>
+    @include('guia_remision.modals.editar_guia')
+    @foreach($guias as $d)
 	@include('guia_remision.modals.modelos')
-	{{-- @include("guia_remision.modals.create")
-	@include('direcciones.modals.modal_create')
-	@include('clientes.modals.createclientes') --}}
+    @endforeach
 
 @endsection
 @section("script")
@@ -120,18 +122,15 @@
 
 contar_modelos = 1;
 
-$(".btn_mg").click(function(e) {
-	$("#n_guia").empty().text($(this).data('serial'));
-	ruta = '{{ route("guiaRemision.show",":btn.value") }}';
-	ruta = ruta.replace(':btn.value', $(this).data("id"));
+$(".beg").click(function(e) {
+    ruta = '{{ route("guiaRemision.update",":value") }}';
+    $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).data("id")));
 
-	$.get(ruta, function(res) {
-		$("#mostrar_mod").empty().append(res.modelo);
-		$("#mostrar_mont").empty().append(res.montura);
-		for (i = 0; i < res.montura.length; i++) {
-			$(".flecha").empty().append('<i class="fa fa-arrow-right"></i><br>');
-		}
-	});
+    $("#cantidad, #peso, #descripcion").val("");
+
+    $("#cantidad").val($(this).data("cantidad"));
+    $("#peso").val($(this).data("peso"));
+    $("#descripcion").val($(this).data("descripcion"));
 });
 
 // cargar clientes

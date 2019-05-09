@@ -65,6 +65,12 @@ class GuiaRemisionController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'cantidad'    => 'required',
+            'peso'        => 'required',
+            'descripcion' => 'required',
+        ]);
+
         return GuiaRemision::guiaUpdate($request, $id);
     }
 
