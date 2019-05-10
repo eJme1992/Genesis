@@ -242,7 +242,7 @@ class Asignacion extends Model
         }
    }
 
-   public function nombreStatus(){
+   public function status(){
     if ($this->status == 1) {
         $this->status = "Asignado";
     }elseif($this->status == 2){

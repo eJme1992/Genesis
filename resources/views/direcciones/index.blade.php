@@ -73,7 +73,7 @@
 											<button type="button" id="btn_dir" value="{{ $d->id }}"
 												data-toggle="modal" data-target="#modal_edit"
 												aria-expanded="false" aria-controls="modal_edit"
-												class="btn btn-warning btn-sm" onclick="MostrarDireccion(this);">
+												class="btn btn-warning btn-xs" onclick="MostrarDireccion(this);">
 													<span class="">
 														<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
 													</span>
@@ -83,7 +83,7 @@
 											<form action="{{ route('direcciones.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
 		              							{{ csrf_field() }}
-		              							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la direccion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i></button>
+		              							<button class="btn btn-xs btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la direccion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i></button>
 											</form>
 										</span>
 									</td>

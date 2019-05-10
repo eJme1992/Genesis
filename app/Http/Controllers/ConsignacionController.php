@@ -92,7 +92,11 @@ class ConsignacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'fecha_envio'    => 'required',
+        ]);
+
+        return Consignacion::updateConsig($request, $id);
     }
 
     /**

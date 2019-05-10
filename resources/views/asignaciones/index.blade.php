@@ -42,9 +42,10 @@
 								<th class="text-center">Vendedor (Usuario)</th>
 								<th class="text-center">Modelo - [Codigo]</th>
 								<th class="text-center">Monturas</th>
+                                <th class="text-center">Estuches</th>
 								<th class="text-center">Fecha asignacion</th>
                                 <th class="text-center bg-navy">Estado</th>
-								{{-- <th class="text-center bg-navy">Acciones</th> --}}
+								<th class="text-center bg-navy"><i class="fa fa-cogs"></i></th>
 							</tr>
 						</thead>
 						<tbody class="text-center">
@@ -53,20 +54,23 @@
 									<td class="text-capitalize"><strong>{{ $d->user->name }} {{ $d->user->ape }}</strong></td>
 									<td>{{ $d->modelo->name.' - ['.$d->modelo->id.']' }}</td>
 									<td>{{ $d->monturas }}</td>
+                                    <td>{{ $d->estuche }}</td>
                                     <td>{{ $d->fecha }}</td>
 									<td @if($d->status == 1) class='warning' @elseif($d->status == 2) class='info' @else class='success' @endif>
-                                        {{ $d->nombreStatus() }}
+                                        {{ $d->status() }}
                                     </td>
-									{{-- <td>
+									<td>
+                                        @if($d->status == "Asignado")
 										<span class="">
 											<form action="{{ route('asignaciones.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
                       							{{ csrf_field() }}
-                      							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
+                      							<button class="btn btn-xs btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i>
                       							</button>
 											</form>
 										</span>
-									</td> --}}
+                                        @endif
+									</td>
 								</tr>
 							@endforeach
 						</tbody>

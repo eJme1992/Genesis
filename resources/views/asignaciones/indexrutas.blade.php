@@ -81,7 +81,7 @@
 											<button type="button" id="btn_ar" value="{{ $d->id }}"
 												data-toggle="modal" data-target="#edit_ar"
 												aria-expanded="false" aria-controls="edit_ar"
-												class="btn btn-warning btn-sm" onclick="MostrarAsigRuta(this);">
+												class="btn btn-warning btn-xs" onclick="MostrarAsigRuta(this);">
 													<span class="">
 														<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
 													</span>
@@ -91,7 +91,7 @@
 											<form action="{{ route('asig_ruta.destroy', $d->id) }}" method="POST">
 												{{ method_field( 'DELETE' ) }}
 		              							{{ csrf_field() }}
-		              							<button class="btn btn-sm btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i></button>
+		              							<button class="btn btn-xs btn-danger confirmar" type="submit" onclick="return confirm('Desea eliminar la asignacion con todas sus dependencias S/N?');"><i class="fa fa-trash"></i></button>
 											</form>
 										</span>
 									</td>

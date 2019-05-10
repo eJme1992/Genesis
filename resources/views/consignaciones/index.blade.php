@@ -49,19 +49,25 @@
   						<tbody class="text-center">
   							@foreach($consignaciones as $d)
   								<tr>
-  									<td>{{ $d->id }}</td>
+  									<td>[{{ $d->id }}]</td>
                                     <td>{{ $d->cliente->nombre_full }}</td>
-  									<td>{{ $d->fecha_envio }}</td>
+  									<td class="text-nowrap">
+                                        {{ $d->fecha_envio }}
+                                        <span data-toggle="tooltip" title="Editar fecha de envio" class="pull-right">
+                                            <button type="button" class="btn bg-orange btn-xs bec" data-toggle="modal" data-target="#editar_consig" data-fechaenvio="{{ $d->fecha_envio }}" data-id="{{ $d->id }}">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                    </td>
                                     <td>{{ $d->detalleConsignacion->count() }}</td>
                                     <td>{{ $d->modelosConsignados($d->id) }}</td>
                                     <td class="{{ $d->status == 1 ? 'warning' : 'success' }}">{{ $d->status == 1 ? 'En espera' : 'Consignada' }}</td>
   									<td>
-                                        <a href="#detalle_consig" class="btn bg-navy btn-xs btn_detalle_consig" data-toggle="modal" data-target="#detalle_consig" title="Datos completos de la consignacion" id="" data-id="{{ $d->id }}">
-                                            <i class="fa fa-eye"></i> detalle
-                                        </a>
-                                        {{-- <a href="{{ route('consignacion.edit', $d->id) }}" class="btn bg-orange btn-xs">
-                                            <i class="fa fa-edit"></i> editar
-                                        </a> --}}
+                                        <span data-toggle="tooltip" title="Detalles de la consignacion">
+                                            <a href="#detalle_consig" class="btn bg-navy btn-xs btn_detalle_consig" data-toggle="modal" data-target="#detalle_consig" id="" data-id="{{ $d->id }}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
                                         <input type="hidden" data-v="{{ ($d->guia != null) ? $d->guia->dirSalida->full_dir() : 'vacio' }}" id="val_salida{{ $d->id }}"> 
                                         <input type="hidden" data-v="{{ ($d->guia != null) ? $d->guia->dirLLegada->full_dir() : 'vacio' }}" id="val_llegada{{ $d->id }}">                         
                                     </td>
@@ -73,10 +79,20 @@
 			</div>
 		</div>
 	</div>
+    @include("consignaciones.modals.editar_consig")
     @include("consignaciones.modals.detalle_consig")
 @endsection
 @section("script")
 <script>
+
+    $(".bec").click(function(e) {
+        ruta = '{{ route("consignacion.update",":value") }}';
+        $("#form_edit_consig").attr("action", ruta.replace(':value', $(this).data("id")));
+
+        $("#fecha_envio").val("");
+
+        $("#fecha_envio").val($(this).data("fechaenvio"));
+    });
 
     // mostrar y validar campos en consignacion y guia
     $(".btn_detalle_consig").click(function(e){

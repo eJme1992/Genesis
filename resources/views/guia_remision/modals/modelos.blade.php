@@ -18,7 +18,7 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label>Peso</label>
-                            <p class="list-group-item">{{ $d->detalleGuia->peso }}</p>
+                            <p class="list-group-item">{{ $d->detalleGuia->peso }} Kg</p>
                         </div>
                         <div class="form-group col-lg-3">
                             <label>Motivo</label>

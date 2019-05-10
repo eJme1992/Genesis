@@ -44,18 +44,6 @@ class GuiaRemisionController extends Controller
 
     public function show($id)
     {
-        $query = GuiaRemision::findOrFail($id)->modeloGuias;
-        $modelo = array();
-        $montura = array();
-        foreach ($query as $m) {
-            $modelo []  = $m->modelo->name.' / ['.$m->modelo->id.']<br>';
-            $montura [] = $m->montura.'<br>';
-        }
-
-        return response()->json([
-            "modelo"    => $modelo,
-            "montura"   => $montura,
-        ]);
     }
 
     public function edit($id)

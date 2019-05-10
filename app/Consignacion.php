@@ -76,6 +76,25 @@ class Consignacion extends Model
         return response()->json("ok");
     }
 
+    // validar si la consignacion tiene o no guia
+    public static function updateConsig($request, $id){
+
+        $consig = Consignacion::findOrFail($id);
+        $consig->fill($request->all());
+        $consig->save();
+
+        BitacoraUser::saveBitacora("Consignacion [".$id."] actualizada  correctamente");
+        
+        if ($request->ajax()) {
+            return response()->json(1);
+        }else{
+            return back()->with([
+                'flash_message' => 'Consignacion actualizada.',
+                'flash_class' => 'alert-success'
+            ]);
+        }
+    }
+
     //actualizar status en consig;
     public static function updateStatusConsignacion($id, $status){
         $consig = Consignacion::findOrFail($id);

@@ -124,7 +124,7 @@
 
                                     <td>
                                         <a href="{{ route('ventas.show', $d->id) }}" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Detalles de la venta">
-                                            <i class="fa fa-eye"></i> Detalles
+                                            <i class="fa fa-eye"></i> 
                                         </a>
                                     </td>
                                 </tr>

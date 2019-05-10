@@ -9,15 +9,15 @@
             <h4 class="modal-title"><i class="fa fa-arrow-right"></i> Editar guia de remision</h4>
       </div>
       <div class="modal-body">
-        <div class="form-group col-lg-4">
+        <div class="form-group col-lg-6">
             <label>Cantidad *</label>
             <input type="text" name="cantidad" class="form-control" id="cantidad" required="">
         </div>
-        <div class="form-group col-lg-4">
-            <label>Peso *</label>
+        <div class="form-group col-lg-6">
+            <label>Peso * (Kg)</label>
             <input type="text" name="peso" class="form-control" id="peso" required="">
         </div>
-        <div class="form-group col-lg-4">
+        <div class="form-group col-lg-12">
             <label>Descripcion *</label>
             <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
         </div>
