@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'ventas'        => 'VentaController',
         'pagos'         => 'PagoController',
         'facturas'      => 'FacturaController',
+        'kardex'        => 'KardexController',
         'notacredito'   => 'NotaCreditoController',
         'devoluciones'  => 'DevolucionController',
 	    'departamentos' => 'DepartamentoController',
@@ -33,6 +34,10 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	    'distritos'     => 'DistritoController',
 	]);
 	
+    // kardex 
+    Route::post('kardex',    'KardexController@busqueda')->name("kardex.busqueda");
+
+
     // consignaciones
     Route::get('detalleConsig/{id}', 'ConsignacionController@show');
 	
@@ -70,6 +75,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('eliminarModelo/{coleccion}/{marca}', 	'ModeloController@eliminarModelo');
 	Route::get('actualizarModelo/{coleccion}/{marca}', 	'ModeloController@actualizarModelo');
 	Route::put('updateAll', 							'ModeloController@updateAll')->name("updateAll");
+    Route::get('modelosActivos/{coleccion}/{marca}',    'ModeloController@modelosActivos');
 
 	// productos
 	Route::get('pdfPro/{id}',	'ProductoController@pdf');

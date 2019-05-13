@@ -48,6 +48,37 @@ class Modelo extends Model
     public function asignaciones(){
       return $this->hasMany('App\Asignacion');
     }
+
+    //  scopes
+    public function scopeColeccion($query, $coleccion)
+    {   
+        if ($coleccion) {
+            return $query->where('coleccion_id', $coleccion);
+        }
+    }
+
+    public function scopeMarca($query, $marca)
+    {   
+        if ($marca) {
+            return $query->where('marca_id', $marca);
+        }
+    }
+
+    public function scopeModelo($query, $modelo)
+    {   
+        if ($modelo) {
+            return $query->where('id', $modelo);
+        }
+    }
+
+    public function scopeFecha($query, $from, $to)
+    {   
+        if ($from && $to) {
+            $desde = date('Y-m-d',strtotime(str_replace('/', '-', $from)));
+            $hasta = date('Y-m-d',strtotime(str_replace('/', '-', $to)));
+            return $query->whereBetween('created_at',[$desde, $hasta]);
+        }
+    }
     
     //-------------------------------------- funciones personalizadas --------------------------------------------
 
@@ -90,6 +121,23 @@ class Modelo extends Model
         }
         $data->montura = $data->montura + $montura;
         return $data->save();
+    }
+
+    public static function modelosActivos(){
+        $modelos = Modelo::where("status_id", "<>",  5)
+                          ->get()->groupBy("name");
+
+        $data = array();
+        foreach ($modelos as $m) {
+
+            foreach ($m as $mod) {
+
+                $data [] = $mod;
+
+            }
+        }
+
+        return $data;
     }
 
     //------------------------------------------- metodos propios --------------------------------------------------------------

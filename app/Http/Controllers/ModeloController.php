@@ -88,6 +88,13 @@ class ModeloController extends Controller
         return response()->json($col);
     }
 
+    public function modelosActivos($coleccion, $marca){
+        $m = Modelo::with("status")->where("coleccion_id", $coleccion)
+                                     ->where("marca_id", $marca)
+                                     ->get();
+        return response()->json($m);
+    }
+
     public function eliminarModelo($coleccion, $marca){
         $modelos = Modelo::with("marca.material","status")
                            ->where("coleccion_id", $coleccion)
