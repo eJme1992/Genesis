@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Modelo, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra, NotaCredito, MovDevolucion};
+use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Modelo, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra, NotaCredito, MovDevolucion, Asignacion, DetalleConsignacion, MovimientoVenta};
 
 class KardexController extends Controller
 {
     public function index()
     {
         return view('kardex.index',[
-            "colecciones"   => Coleccion::all(),
-            "modelos"       => Modelo::where("status_id", "<>",  5)
-                          ->get(),
+            "colecciones"       => Coleccion::all(),
+            "asignaciones"      => Asignacion::all(),
+            "consignaciones"    => DetalleConsignacion::all(),
+            "ventas"            => MovimientoVenta::all(),
+            "devoluciones"      => MovDevolucion::all(),
         ]);
     }
 
@@ -26,7 +28,7 @@ class KardexController extends Controller
                             ->get();
                             // dd($modelos);
 
-        return back()->with([
+        return view("kardex.index")->with([
             "colecciones"   => Coleccion::all(),
             "modelos"       => $modelos,
             'flash_message' => '('.count($modelos).') resultados encontrados',

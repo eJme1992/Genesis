@@ -49,6 +49,14 @@ class Modelo extends Model
       return $this->hasMany('App\Asignacion');
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
     //  scopes
     public function scopeColeccion($query, $coleccion)
     {   
@@ -79,8 +87,29 @@ class Modelo extends Model
             return $query->whereBetween('created_at',[$desde, $hasta]);
         }
     }
-    
+
     //-------------------------------------- funciones personalizadas --------------------------------------------
+    
+    public function precioA($coleccion, $marca){
+        return  ColeccionMarca::where([
+                    ["coleccion_id", $coleccion],
+                    ["marca_id", $marca],
+                ])->value("precio_almacen");
+    }
+
+    public function precioVE($coleccion, $marca){
+        return  ColeccionMarca::where([
+                    ["coleccion_id", $coleccion],
+                    ["marca_id", $marca],
+                ])->value("precio_venta_establecido");
+    }
+
+    public function cajas($coleccion, $marca){
+        return  ColeccionMarca::where([
+                    ["coleccion_id", $coleccion],
+                    ["marca_id", $marca],
+                ])->value("rueda");
+    }
 
     // modelos a mostrar dependiendo del rol
     public static function modelosToUser(){
