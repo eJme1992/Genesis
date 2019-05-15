@@ -23,6 +23,23 @@ class Asignacion extends Model
     	return $this->belongsTo("App\User", "user_id");
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
+    public function scopeFecha($query, $from, $to)
+    {   
+        if ($from && $to) {
+            $desde = date('Y-m-d',strtotime(str_replace('/', '-', $from)));
+            $hasta = date('Y-m-d',strtotime(str_replace('/', '-', $to)));
+            return $query->whereBetween('created_at',[$desde, $hasta]);
+        }
+    }
+
     // ------------------------- funciones personalizadas ------------------------------
     
     // setear la marca con su material

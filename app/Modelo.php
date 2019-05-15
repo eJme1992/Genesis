@@ -57,6 +57,10 @@ class Modelo extends Model
         return $this->updated_at->format("d-m-Y");
     }
 
+    public function estuche(){
+        return $this->estuche == null ? 'No posee' : $this->estuche;
+    }
+
     //  scopes
     public function scopeColeccion($query, $coleccion)
     {   
@@ -86,6 +90,20 @@ class Modelo extends Model
             $hasta = date('Y-m-d',strtotime(str_replace('/', '-', $to)));
             return $query->whereBetween('created_at',[$desde, $hasta]);
         }
+    }
+
+    public static function estaciones($request){
+        if ($request->estado == "asignacion") {
+            $modelos = Asignacion::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
+        }elseif ($request->estado == "consignacion") {
+            $modelos = DetalleConsignacion::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
+        }elseif ($request->estado == "venta") {
+            $modelos = MovimientoVenta::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
+        }elseif ($request->estado == "devolucion") {
+            $modelos = MovDevolucion::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
+        }
+
+        return $modelos;
     }
 
     //-------------------------------------- funciones personalizadas --------------------------------------------

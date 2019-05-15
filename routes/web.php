@@ -35,7 +35,8 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	]);
 	
     // kardex 
-    Route::post('kardex',    'KardexController@busqueda')->name("kardex.busqueda");
+    Route::post('kardex',    'KardexController@busquedaCM')->name("kardex.busquedaCM");
+    Route::post('kardex/modeloporestado',    'KardexController@busquedaPorEstado')->name("kardex.busquedaPorEstado");
 
 
     // consignaciones

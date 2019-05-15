@@ -22,6 +22,23 @@ class MovDevolucion extends Model
         return $this->belongsTo("App\Modelo", "modelo_id");
     }
 
+    public function scopeFecha($query, $from, $to)
+    {   
+        if ($from && $to) {
+            $desde = date('Y-m-d',strtotime(str_replace('/', '-', $from)));
+            $hasta = date('Y-m-d',strtotime(str_replace('/', '-', $to)));
+            return $query->whereBetween('created_at',[$desde, $hasta]);
+        }
+    }
+
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
     public static function saveMovDevolucion($request, $devolucion, $notacredito){
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
             if ($request->montura[$i] != 0 || $request->montura[$i] != null) {

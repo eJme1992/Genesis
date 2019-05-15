@@ -11,14 +11,21 @@
     @include('partials.flash')
 
     <div class="row">
-        @include('kardex.partials.boxes')
+        <div class="col-lg-3 col-sm-3 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-database"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text text-capitalize">{{ $des }}</span>
+              <span class="info-box-number">{{ count($modelos) }}</span>
+            </div>
+          </div>
+        </div>
     </div>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="box box-success">
                 <div class="box-body">
-                    @include('kardex.partials.form_busqueda_cm')
                     @include('kardex.partials.form_busqueda_estado')
                 </div>
             </div>
@@ -29,9 +36,8 @@
         <div class="col-lg-12">
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-arrow-right"></i> Modelos en almacen</h3>
+                    <h3 class="box-title"><i class="fa fa-arrow-right"></i> Modelos en {{ $des }}</h3>
                     <div class="box-tools pull-right">
-                        <span class="label label-info"> Ultimos {{ count($modelos) }}</span>
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>
                         </button>
@@ -48,27 +54,20 @@
                                 <th class="text-center">Nombre</th>
                                 <th class="text-center">Monturas</th>
                                 <th class="text-center">Estuches</th>
-                                <th class="text-center">Precio <b>[PA - PVE]</b></th>
                                 <th class="text-center">Marca (material)- Coleccion</th>
-                                <th class="text-center">Cajas</th>
                                 <th class="text-center">Fecha Reg.</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             @foreach($modelos as $d)
                                 <tr>
-                                    <td>{{ $d->id }}</td>
-                                    <td>{{ $d->name }}</td>
-                                    <td>{{ $d->montura }}</td>
-                                    <td>{{ $d->estuche()  }}</td>
+                                    <td>{{ $d->modelo_id }}</td>
+                                    <td>{{ $d->modelo->name }}</td>
+                                    <td>{{ $d->monturas }}</td>
+                                    <td>{{ $d->estuches  }}</td>
                                     <td>
-                                        [{{ $d->precioA($d->coleccion_id, $d->marca_id) == null ? 'no posee' : $d->precioA($d->coleccion_id, $d->marca_id) }} - 
-                                        {{ $d->precioVE($d->coleccion_id, $d->marca_id) == null ? 'no posee' : $d->precioVE($d->coleccion_id, $d->marca_id) }}]
+                                        {{ $d->modelo->marca->name.' ('.$d->modelo->marca->material->name.') - '.$d->modelo->coleccion->name  }}
                                     </td>
-                                    <td>
-                                        {{ $d->marca->name.' ('.$d->marca->material->name.') - '.$d->coleccion->name  }}
-                                    </td>
-                                    <td>{{ $d->cajas($d->coleccion_id, $d->marca_id) }}</td>
                                     <td>{{ $d->createF() }}</td>
                                 </tr>
                             @endforeach
@@ -102,7 +101,6 @@
 
     // busqueda de modelos
     $('#marca').change(function(event) {
-        $("#modelo").empty();
         $.get("modelosActivos/"+$("#coleccion").val()+"/"+$("#marca").val()+"",function(response){
             if (response.length > 0) {
                 $("#modelo").append("<option value=''>Seleccione...</option>");

@@ -40,7 +40,7 @@ $(document).ready(function(){
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
     var dateFormat = "mm/dd/yy",
-      from = $( "#from" )
+      from = $( ".from" )
         .datepicker({
           defaultDate: "+1w",
           changeMonth: true,
@@ -49,7 +49,7 @@ $(document).ready(function(){
         .on( "change", function() {
           to.datepicker( "option", "minDate", getDate( this ) );
         }),
-      to = $( "#to" ).datepicker({
+      to = $( ".to" ).datepicker({
         defaultDate: "+1w",
         changeMonth: true,
         numberOfMonths: 1
