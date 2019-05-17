@@ -56,6 +56,7 @@
                                 <th class="text-center">Estuches</th>
                                 <th class="text-center">Marca (material)- Coleccion</th>
                                 <th class="text-center">Fecha Reg.</th>
+                                <th class="text-center bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -63,12 +64,27 @@
                                 <tr>
                                     <td>{{ $d->modelo_id }}</td>
                                     <td>{{ $d->modelo->name }}</td>
-                                    <td>{{ $d->monturas }}</td>
-                                    <td>{{ $d->estuches  }}</td>
+                                    <td>{{ !$d->montura ? $d->monturas : $d->montura}}</td>
+                                    <td>{{ !$d->estuches ? $d->estuche : $d->estuches  }}</td>
                                     <td>
                                         {{ $d->modelo->marca->name.' ('.$d->modelo->marca->material->name.') - '.$d->modelo->coleccion->name  }}
                                     </td>
                                     <td>{{ $d->createF() }}</td>
+                                    <td>
+                                        @if($des == "asignacion")
+
+                                        @elseif($des == "consignacion")
+                                            <span data-toggle="tooltip" title="detalles de la {{ $des }}">
+                                                <button type="button" data-toggle="modal" data-target="#detalle_consig" class="btn btn-xs bg-navy bc" data-id="{{ $d->consignacion_id }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </span>
+                                        @elseif($des == "venta")
+
+                                        @elseif($des == "devolucion")
+
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -77,44 +93,16 @@
             </div>
         </div>
     </div>
+    @include("consignaciones.modals.detalle_consig")
 @endsection
 @section('script')
 <script>
-     // busqueda de marcas
-    $('#coleccion').change(function(event) {
-        $("#marca, #modelo").empty();
-        $.get("marcasAll/"+event.target.value+"",function(response, dep){
-            if (response.length > 0) {
-                $("#marca").append("<option value=''>Seleccione...</option>");
-                for (i = 0; i<response.length; i++) {
-                    $("#marca").append(
-                        "<option value='"+response[i].marca.id+"'>"
-                        +response[i].marca.material.name+' | '+response[i].marca.name+
-                        "</option>"
-                    );
-                }
-            }else{
-                mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");
-            }
+
+    $(".bc").click(function(e){
+        $.get('detalleConsig/'+$(this).data("id"), function(data) {
+            alert(data);
         });
     });
 
-    // busqueda de modelos
-    $('#marca').change(function(event) {
-        $.get("modelosActivos/"+$("#coleccion").val()+"/"+$("#marca").val()+"",function(response){
-            if (response.length > 0) {
-                $("#modelo").append("<option value=''>Seleccione...</option>");
-                for (i = 0; i<response.length; i++) {
-                    $("#modelo").append(
-                        "<option value='"+response[i].id+"'>["
-                        +response[i].id+'] | '+response[i].name+
-                        "</option>"
-                    );
-                }
-            }else{
-                mensajes("Alerta!", "No posee modelos asociadas", "fa-warning", "red");
-            }
-        });
-    });
 </script>
 @endsection

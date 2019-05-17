@@ -20,7 +20,7 @@ class DetalleConsignacion extends Model
        return $this->belongsTo("App\Modelo", "modelo_id");
    }
    
-   public function createF(){
+    public function createF(){
         return $this->created_at->format("d-m-Y");
     }
 
