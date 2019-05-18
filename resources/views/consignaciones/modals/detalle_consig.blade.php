@@ -73,7 +73,7 @@
                         </div>      
 
                         <div class="col-lg-12">
-                            <table class="table table-bordered table-striped table-hover data-table">
+                            <table class="table table-bordered table-striped table-hover data-table" width="100%">
                                 <thead class="bg-navy">
                                     <tr>
                                         <th>[Codigo]</th>

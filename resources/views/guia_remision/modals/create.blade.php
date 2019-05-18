@@ -84,7 +84,7 @@
 										<option value=''>...</option>
 										@foreach($modelos as $m)
 										<option value='{{ $m->id }}'>
-											{{ $m->modelo->coleccion->name }} | {{ $m->modelo->marca->name.'('.$m->modelo->marca->material->name.')' }} | {{ '['.$m->modelo->id.']' }} | {{ $m->name }}
+											{{ $m->coleccion->name }} | {{ $m->marca->name.'('.$m->marca->material->name.')' }} | {{ '['.$m->id.']' }} | {{ $m->name }}
 										</option>
 										@endforeach
 									</select>

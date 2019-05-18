@@ -83,4 +83,25 @@ class Devolucion extends Model
             ]);
         }
     }
+
+    public static function showDevolucionJson($id){
+        $dev = Devolucion::findOrFail($id);
+        $data = array();
+
+        foreach ($dev->movDevolucion as $m) 
+        {
+            $data [] = "<tr>
+                <td>".$m->modelo_id."</td>
+                <td>".$m->modelo->name."</td>
+                <td>".$m->monturas."</td>
+                <td>".$m->estuches."</td>
+            </tr>"; 
+        }               
+        
+        return response()->json([
+            "data"      => $data,
+            "fecha"     => $dev->createF(),
+            "motivo"    => $dev->motivo,
+        ]);
+    }
 }

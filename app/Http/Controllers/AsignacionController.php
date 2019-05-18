@@ -79,11 +79,6 @@ class AsignacionController extends Controller
         return Asignacion::asigDestroy($id);
     }
 
-    public function buscarModeloAsignado($id)
-    {   
-        return Asignacion::buscarModeloAsignado($id);
-    }
-
     // --------------- Asignacion - Ruta -------------------
 
     public function rutasIndex()

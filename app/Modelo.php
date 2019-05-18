@@ -101,6 +101,13 @@ class Modelo extends Model
             $modelos = MovimientoVenta::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
         }elseif ($request->estado == "devolucion") {
             $modelos = MovDevolucion::orderBy("id", "DESC")->fecha($request->desde, $request->hasta)->get();
+        }elseif($request->estado == "almacen"){
+            $modelos = Modelo::orderBy("id", "DESC")
+                            ->coleccion($request->coleccion)
+                            ->marca($request->marca)
+                            ->modelo($request->modelo)
+                            ->fecha($request->desde, $request->hasta)
+                            ->get();
         }
 
         return $modelos;
@@ -307,6 +314,35 @@ class Modelo extends Model
         }                  
 
         return response()->json($data);
+    }
+
+    // buscar modelo 
+    public static function cargarModelo($id)
+    {
+        $m = array();
+        $e = array();
+        $query = Modelo::findOrFail($id);
+        
+        for ($i = 1; $i < $query->montura + 1; $i++) { 
+            if ($i == $query->montura) {
+                $m [] = "<option value=".$i." selected>".$i."</option>";
+            }else{
+                $m [] = "<option value=".$i.">".$i."</option>";
+            } 
+        }
+        
+        for ($j = 1; $j < $query->estuche + 1; $j++) { 
+            if ($j == $query->estuche) {
+                $e [] = "<option value=".$j." selected>".$j."</option>";
+            }else{
+                $e [] = "<option value=".$j.">".$j."</option>";
+            } 
+        }
+
+        return response()->json([
+          "monturas" => join(",", $m),
+          "estuches" => join(",", $e),
+        ]);
     }
 
 }

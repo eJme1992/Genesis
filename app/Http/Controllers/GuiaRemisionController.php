@@ -17,7 +17,7 @@ class GuiaRemisionController extends Controller
             "users"          => User::all(),
             "departamentos"  => Departamento::all(),
             "clientes"       => Cliente::all(),
-            "modelos"        => Asignacion::where("user_id", \Auth::user()->id)->where("monturas", ">", 0)->get(),
+            "modelos"        => Modelo::where("montura", ">", 0)->where("status_id", 1)->get(),
         ]);
     }
 

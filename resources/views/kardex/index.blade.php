@@ -10,20 +10,7 @@
 @section('content')
     @include('partials.flash')
 
-    <div class="row">
-        @include('kardex.partials.boxes')
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="box box-success">
-                <div class="box-body">
-                    @include('kardex.partials.form_busqueda_cm')
-                    @include('kardex.partials.form_busqueda_estado')
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('kardex.partials.boxes')
 
     <div class="row">
         <div class="col-lg-12">
@@ -31,7 +18,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-arrow-right"></i> Modelos en almacen</h3>
                     <div class="box-tools pull-right">
-                        <span class="label label-info"> Ultimos {{ count($modelos) }}</span>
+                        <span class="label bg-navy"> Ultimos {{ count($modelos) }}</span>
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
                             <i class="fa fa-minus"></i>
                         </button>
@@ -117,6 +104,14 @@
                 mensajes("Alerta!", "No posee modelos asociadas", "fa-warning", "red");
             }
         });
+    });
+
+    $('#estado').change(function(event) {
+        if ($('#estado').val() == 'almacen') {
+            $("#section_almacen").show();
+        }else{
+            $("#section_almacen").hide();
+        }
     });
 </script>
 @endsection

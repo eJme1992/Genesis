@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
         'facturas'      => 'FacturaController',
         'kardex'        => 'KardexController',
         'notacredito'   => 'NotaCreditoController',
+        'notapedido'    => 'NotaPedidoController',
         'devoluciones'  => 'DevolucionController',
 	    'departamentos' => 'DepartamentoController',
 	    'provincias'    => 'ProvinciaController',
@@ -35,12 +36,13 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	]);
 	
     // kardex 
-    Route::post('kardex',    'KardexController@busquedaCM')->name("kardex.busquedaCM");
     Route::post('kardex/modeloporestado',    'KardexController@busquedaPorEstado')->name("kardex.busquedaPorEstado");
-
 
     // consignaciones
     Route::get('detalleConsig/{id}', 'ConsignacionController@show');
+
+    // devolucion
+    Route::get('showDevolucion/{id}', 'DevolucionController@showDevolucionJson');
 	
 	// dashboard
 	Route::get('dashboard', 'LoginController@index')->name('dashboard');
@@ -77,6 +79,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('actualizarModelo/{coleccion}/{marca}', 	'ModeloController@actualizarModelo');
 	Route::put('updateAll', 							'ModeloController@updateAll')->name("updateAll");
     Route::get('modelosActivos/{coleccion}/{marca}',    'ModeloController@modelosActivos');
+    Route::get('cargarModelo/{id}',                     'ModeloController@cargarModelo');
 
 	// productos
 	Route::get('pdfPro/{id}',	'ProductoController@pdf');
@@ -84,7 +87,6 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	Route::get('busmod/{id}',	'ProductoController@buscarMod');
 
 	// asignaciones
-	Route::get('buscar_modelos_en_asignacion/{id}', 'AsignacionController@buscarModeloAsignado');
 	Route::get('marcasAll/{id}', 					'AsignacionController@marcasAll');
 	Route::get('editAsigRuta/{id}', 				'AsignacionController@editAsigRuta');
 	Route::get('modelosAll/{coleccion}/{marca}', 	'AsignacionController@modelosAll');
@@ -125,6 +127,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
     Route::get('create_venta_asignacion', 'VentaController@createAsignacion')->name('create_venta_asignacion');
     Route::get('create_venta_directa', 'VentaController@createDirecta')->name('create_venta_directa');
     Route::get('cargarTablaVenta/{id}', 'VentaController@cargarTablaVenta')->name('cargarTablaVenta');
+    Route::get('showVenta/{id}', 'VentaController@showVentaJson')->name('showVentaJson');
     Route::post('storeVentaDirecta', 'VentaController@storeVentaDirecta')->name('ventas.storeVentaDirecta');
     Route::post('storeVentaConsignacion', 'VentaController@storeVentaConsignacion')->name('ventas.storeVentaConsignacion');
     Route::post('storeVentaAsignacion', 'VentaController@storeVentaAsignacion')->name('ventas.storeVentaAsignacion');

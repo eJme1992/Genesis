@@ -125,4 +125,9 @@ class ModeloController extends Controller
     public function cargarTabla($coleccion, $marca){
         return Modelo::cargarTabla($coleccion, $marca);
     }
+
+    public function cargarModelo($id)
+    {   
+        return Modelo::cargarModelo($id);
+    }
 }

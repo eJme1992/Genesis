@@ -30,9 +30,9 @@
 	      		<div class="box-header with-border">
 			        <h3 class="box-title"><i class="fa fa-list-alt"></i> Guias de Remision</h3>
 			        <span class="pull-right">
-						{{-- <a href="#create" data-toggle="modal" data-target="#create_guia" class="btn btn-danger" id="modal_guia">
+						<a href="#create" data-toggle="modal" data-target="#create_guia" class="btn btn-danger" id="modal_guia">
 							<i class="fa fa-plus" aria-hidden="true"></i> Nueva guia
-						</a> --}}
+						</a>
 					</span>
 			    </div>
       			<div class="box-body">
@@ -112,6 +112,9 @@
 		</div>
 	</div>
     @include('guia_remision.modals.editar_guia')
+    @include('guia_remision.modals.create')
+    @include('direcciones.modals.modal_create')    
+    @include('clientes.modals.createclientes') 
     @foreach($guias as $d)
 	@include('guia_remision.modals.modelos')
     @endforeach
@@ -132,22 +135,6 @@ $(".beg").click(function(e) {
     $("#peso").val($(this).data("peso"));
     $("#descripcion").val($(this).data("descripcion"));
 });
-
-// cargar clientes
-function viewCliente(){
-    $.get("{{ route('viewClientes') }}", function(res){
-        $.each(res, function(index, val) {
-            $("#add_cliente").empty().append("<option value='"+val.id+"'>"+val.nombre_full+"</option>");
-        });
-    });
-}
-
-// cargar direcciones
-function allDir(){
-  	$.get('{{ route("allDireccion") }}', function(response, dir){
-			$(".dir_asig").empty().append(response);
-  	});
-}
 
 // añadir mas modelos
 $("#btn_mas_modelos").click(function(event) {
@@ -190,7 +177,7 @@ $("#btn_mas_modelos").click(function(event) {
 // busqueda de modelo
 $("#section_modelos").on("change", ".select_modelo, .select_montura, .select_estuche",function(event) {
 	val = $(this).data("valor");
-	$.get("buscar_modelos_en_asignacion/"+event.target.value+"",function(res, index){
+	$.get("cargarModelo/"+event.target.value+"",function(res, index){
 		$("#select_montura_"+val).empty().append(res.monturas);
 		$("#select_estuche_"+val).empty().append(res.estuches);
 	});
@@ -205,97 +192,6 @@ $('#motivo_guia').change(function(event) {
 		$('#add_cliente').removeAttr('disabled');
 		$('#add_cliente').removeAttr('selected');	
 	}
-});
-
-// busqueda de provincias
-$('.dep').change(function(event) {
-	$(".prov").empty();
-	$(".dist").empty();
-	$(".prov").append("<option value=''>...</option>");
-	$.get("prov/"+event.target.value+"",function(response, dep){
-		for (i = 0; i<response.length; i++) {
-				$(".prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
-		}
-	});
-});
-
-// busqueda de distritos
-$('.prov').change(function(event) {
-	$(".dist").empty();
-	$.get("dist/"+event.target.value+"",function(response, dep){
-		for (i = 0; i<response.length; i++) {
-				$(".dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
-		}
-	});
-});
-
-// crear nuevos clientes
-$("#form_cliente_save").on("submit", function(e) {
-	e.preventDefault();
-	btn = $(".btn_create_cliente");
-	form = $(this);
-
-	btn.text("Espere un momento...").addClass("disabled");
-
-	$.ajax({
-		url: '{{ route("clientes.store") }}',
-		headers: {'X-CSRF-TOKEN': $("#token").val()},
-		type: 'POST',
-		dataType: 'JSON',
-		data: form.serialize(),
-	})
-	.done(function(data) {
-		$("#create_cliente").modal('toggle');
-	    btn.text("Guardar").removeClass("disabled");
-	    viewCliente();
-	    form[0].reset();
-      mensajes('Listo!', "Cliente agregado", 'fa-check', 'green');
-	})
-	.fail(function(data) {
-		btn.text("Guardar").removeClass("disabled");
-		mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-	})
-	.always(function() {
-		console.log("complete");
-	});
-	
-});
-
-// guardar direccion
-$(".form_create_direccion").on('submit', function(e) {
-	e.preventDefault();
-	btn = $(".btn_create_direccion");
-	btn.text("Espere...").attr("disabled", 'disabled');
-
-	var form = $(this);
-
-	$.ajax({
-		url: '{{ route("direcciones.store") }}',
-		headers: {'X-CSRF-TOKEN': $("#token").val()},
-		type: 'POST',
-		dataType: 'JSON',
-		data: form.serialize(),
-	})
-	.done(function(data) {
-		allDir();
-		if (data == 1) {
-			mensajes('Alerta!', 'Direccion ya existente, verifique', 'fa-warning', 'red');
-			btn.text("Guardar").removeAttr("disabled");
-		}else{
-			mensajes('Listo!', 'Agregado con exito', 'fa-check', 'green');	
-		  form[0].reset();
-			$(".modal_create_direccion").modal('toggle');
-			btn.text("Guardar").removeAttr("disabled");
-		}
-	})
-	.fail(function(data) {
-		btn.text("Guardar").removeAttr("disabled");
-		mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-	})
-	.always(function() {
-		console.log("complete");
-	});
-	
 });
 
 // guardar guia de remision

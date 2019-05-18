@@ -119,6 +119,11 @@ class VentaController extends Controller
         ]);
     }
 
+    public function showVentaJson($id)
+    {
+        return Venta::showVentaJson($id);
+    }
+
     public function cargarTablaVenta($id)
     {
         return Venta::cargarTablaVenta(Venta::findOrFail($id));

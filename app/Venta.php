@@ -281,4 +281,32 @@ class Venta extends Model
         ]);
     }
 
+     // cargar datos de venta
+    public static function showVentaJson($id){
+        
+        $venta          = Venta::findOrFail($id);
+        $data           = array();
+
+        foreach ($venta->movimientoVenta as $m) 
+        {
+            $data [] = "<tr>
+                <td>".$m->modelo_id."</td>
+                <td>".$m->monturas."</td>
+                <td>".$m->estuches."</td>
+                <td>".$m->precio_montura."</td>
+                <td>".$m->precio_modelo."</td>
+            </tr>"; 
+        }               
+        
+        return response()->json([
+            "data"              => $data,
+            "user"              => $venta->user->fullName(),
+            "cliente"           => $venta->cliente->nombre_full,
+            "direccion"         => $venta->direccion->full_dir(),
+            "fecha_venta"       => $venta->created_at->format("d-m-Y"),
+            "status_estuche"    => $venta->estatusEstuche(),
+            "total"             => array_sum($venta->movimientoVenta->pluck("precio_modelo")->toArray()),
+        ]);
+    }
+
 }

@@ -19,38 +19,18 @@ class KardexController extends Controller
         ]);
     }
 
-    public function busquedaCM(Request $request)
-    {
-        $modelos = Modelo::orderBy("id", "DESC")
-                            ->coleccion($request->coleccion)
-                            ->marca($request->marca)
-                            ->modelo($request->modelo)
-                            ->fecha($request->desde, $request->hasta)
-                            ->get();
-        // dd($modelos);
-
-        return view("kardex.index")->with([
-            "colecciones"       => Coleccion::all(),
-            "asignaciones"      => Asignacion::orderBy("id", "DESC")->get(),
-            "consignaciones"    => DetalleConsignacion::orderBy("id", "DESC")->get(),
-            "ventas"            => MovimientoVenta::orderBy("id", "DESC")->get(),
-            "devoluciones"      => MovDevolucion::orderBy("id", "DESC")->get(),
-            "modelos"           => $modelos
-        ]);
-    }
-
     public function busquedaPorEstado(Request $request)
     {
         $this->validate($request, [
-            'estado'   => 'required|in: "asignacion", "consignacion", "venta", "devolucion"',
+            'estado'   => 'required|in: "asignacion", "consignacion", "venta", "devolucion", "almacen',
         ]);
         
-
         return view("kardex.busquedaEstado")->with([
             "colecciones"       => Coleccion::all(),
             "modelos"           => Modelo::estaciones($request),
             "des"               => $request->estado
         ]);
+        
     }
 
     public function create()

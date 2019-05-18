@@ -143,20 +143,23 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
-                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
                 <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
+                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
+                <li><a href="{{ route('pagos.index') }}"><i class="fa fa-circle-o"></i>Pagos</a></li>
               </ul>
             </li>
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-archive"></i>
-                <span>Kardex</span>
+                <i class="fa fa-file-o"></i>
+                <span>Documentos</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('kardex.index') }}"><i class="fa fa-circle-o"></i>Consultas</a></li>
+                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
+                <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
+                <li><a href="{{ route('notapedido.index') }}"><i class="fa fa-circle-o"></i>Notas de pedido</a></li>
+                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
               </ul>
             </li>
 
@@ -181,13 +184,24 @@
                     <li>
                         <a href="{{ route('create_venta_consignacion') }}"><i class="fa fa-circle-o"></i> Venta por consignacion</a>
                     </li>
-                    <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Notas de Pedido (Ventas)</a></li>
                   </ul>
                 </li>
-                <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
+                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
                 <li><a href="{{ route('devoluciones.index') }}"><i class="fa fa-circle-o"></i>Devoluciones</a></li>
-                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
+              </ul>
+            
+            </li>
+
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-archive"></i>
+                <span>Kardex</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('kardex.index') }}"><i class="fa fa-circle-o"></i>Consultas</a></li>
               </ul>
             </li>
 

@@ -354,33 +354,4 @@ class Asignacion extends Model
                 'flash_message' => 'Asignacion ruta - vendedor eliminada con exito.'
         ]);
     }
-
-    // buscar modelo asignado
-    public static function buscarModeloAsignado($id)
-    {
-        $m = array();
-        $e = array();
-        $query = Asignacion::where("modelo_id", $id)->first();
-        
-        for ($i = 1; $i < $query->monturas + 1; $i++) { 
-            if ($i == $query->monturas) {
-                $m [] = "<option value=".$i." selected>".$i."</option>";
-            }else{
-                $m [] = "<option value=".$i.">".$i."</option>";
-            } 
-        }
-        
-        for ($j = 1; $j < $query->estuche + 1; $j++) { 
-            if ($j == $query->estuche) {
-                $e [] = "<option value=".$j." selected>".$j."</option>";
-            }else{
-                $e [] = "<option value=".$j.">".$j."</option>";
-            } 
-        }
-
-        return response()->json([
-          "monturas" => join(",", $m),
-          "estuches" => join(",", $e),
-        ]);
-    }
 }

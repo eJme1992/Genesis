@@ -65,6 +65,11 @@ class DevolucionController extends Controller
         ]);
     }
 
+    public function showDevolucionJson($id)
+    {
+        return Devolucion::showDevolucionJson($id);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
