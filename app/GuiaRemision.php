@@ -87,6 +87,23 @@ class GuiaRemision extends Model
         BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
     }
 
+    public static function storeGuiaRemision($request){
+        if (GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count() > 0) {
+            return response()->json(2);
+        }else{
+            GuiaRemision::guiaStore($request, $request->motivo_guia_id);
+            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+                if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                    Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+                }
+            }
+        }
+
+        if ($request->ajax()) {
+            return response()->json(1);
+        }    
+    }
+
     // actualizar guia de remision
     public static function guiaUpdate($request, $id){
         $guia = DetalleGuiaRemision::findOrFail($id);

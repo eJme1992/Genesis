@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{GuiaRemision, MotivoGuia, ModeloGuia, Direccion, User, Departamento, Cliente, Modelo, Asignacion};
+use App\{GuiaRemision, MotivoGuia, ModeloGuia, Direccion, User, Departamento, Cliente, Modelo, Asignacion, RefItem};
+use DB;
 
 class GuiaRemisionController extends Controller
 {
@@ -18,6 +19,7 @@ class GuiaRemisionController extends Controller
             "departamentos"  => Departamento::all(),
             "clientes"       => Cliente::all(),
             "modelos"        => Modelo::where("montura", ">", 0)->where("status_id", 1)->get(),
+            "items"          => RefItem::all(),
         ]);
     }
 
@@ -28,18 +30,18 @@ class GuiaRemisionController extends Controller
 
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'serial'         => 'required',
-        //     'guia'           => 'required',
-        //     'cliente_id'     => '',
-        //     'dir_salida'     => 'required',
-        //     'dir_llegada'    => 'required',
-        //     'motivo_guia_id' => 'required',
-        //     'modelo_id'      => 'required',
-        //     'montura'        => 'required',
-        // ]);
-
-        // return GuiaRemision::guiaStore($request);
+        $this->validate($request, [
+            'serial'         => 'required',
+            'guia'           => 'required',
+            'cliente_id'     => '',
+            'dir_salida'     => 'required',
+            'dir_llegada'    => 'required',
+            'motivo_guia_id' => 'required',
+            'modelo_id'      => 'required',
+            'montura'        => 'required',
+        ]);
+        
+        return GuiaRemision::storeGuiaRemision($request);
     }
 
     public function show($id)

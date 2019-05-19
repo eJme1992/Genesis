@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = "clientes";
-    protected $fillable = ["identificacion", "tipo_id", "ruc", "nombre_1", "nombre_2", "ape_1", "ape_2", "nombre_full", "direccion_id", "correo", "telefono_1", "telefono_2", "status"];
+    protected $fillable = [
+        "identificacion", "tipo_id", "ruc", 
+        "nombre_1", "nombre_2", "ape_1", "ape_2", 
+        "nombre_full", "direccion_id", "correo", 
+        "telefono_1", "telefono_2", "status"
+    ];
 
     public function direccion(){
         return $this->belongsTo("App\Direccion", "direccion_id");

@@ -193,9 +193,9 @@ class MarcaController extends Controller
     public function editMarcaSave(Request $request){
 
         $this->validate($request, [
-            'name' => 'required',
-            'material_id' => 'required',
-            'estuche' => 'required'
+            'name'          => 'required',
+            'material_id'   => 'required',
+            'estuche'       => 'required'
         ]);
 
         $existe = Marca::where("name", $request->name)
@@ -211,7 +211,6 @@ class MarcaController extends Controller
           $marca = Marca::findOrFail($request->id);
           $marca->observacion = $request->observacion;
           $marca->name = $request->name;
-          $marca->precio = $request->precio;
 
           if ($request->material_id) {
             $marca->material_id = $request->material_id;
@@ -220,12 +219,7 @@ class MarcaController extends Controller
           }
 
           $marca->save();
-          $bu = new BitacoraUser;
-          $bu->fecha = date("d/m/Y");
-          $bu->hora = date("H:i:s");
-          $bu->movimiento = "Actualizacion de marca (".$request->name.")";
-          $bu->user_id = \Auth::user()->id;
-          $bu->save();
+          BitacoraUser::saveBitacora("Actualizacion de marca (".$request->name.")");
         }
 
         return response()->json($marca);

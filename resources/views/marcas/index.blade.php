@@ -123,14 +123,10 @@
 		    location.reload(2000);
 		  })
 		  .fail(function(data) {
-		    $("#modal_edit").modal('toggle');
-		    btn.text('Actualizar');
-		    msj = data.responseText;
-				separador = ",";
-				msj = msj.replace(/\{|\}|\"|\[|\]/gi," ");
-				msj2 = msj.replace(/\,/gi,"\n\n");
-				alert(msj2.toUpperCase());
-			  })
+		        $("#modal_edit").modal('toggle');
+		        btn.text('Actualizar');
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+		    })
 		});
 
 		// actualizar coleccion

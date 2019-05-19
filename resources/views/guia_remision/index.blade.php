@@ -142,36 +142,36 @@ $("#btn_mas_modelos").click(function(event) {
 	contar_modelos++;
 
 	$("#section_modelos").append(
-				"<div id='mas_modelos_"+contar_modelos+"'>"+
-					"<div class='form-group col-sm-6'>"+
-						"<select class='form-control select_modelo' name='modelo_id[]' required='' id='select_modelo_"+contar_modelos+"' style='width: 100%;' data-valor="+contar_modelos+">"+
-							"<option value=''>...</option>"+
-							
-						"</select>"+
-					"</div>"+
-					"<div class='form-group col-sm-2'>"+
-						"<select class='form-control select_montura' name='montura[]' required='' id='select_montura_"+contar_modelos+"'>"+
-						"</select>"+
-					"</div>"+
-					"<div class='form-group col-sm-2'>"+
-						"<select class='form-control select_estuche' name='estuche[]' required='' id='select_estuche_"+contar_modelos+"'>"+
-						"</select>"+
-					"</div>"+
-					"<div class='form-group col-sm-1'>"+
-						"<button class='btn btn-link' type='button' id='btn_delete_modelo_"+contar_modelos+"'>"+
-							"<i class='fa fa-remove text-danger'></i>"+
-						"</button>"+
-					"</div>"+
-				"</div>");
+	"<div id='mas_modelos_"+contar_modelos+"'>"+
+		"<div class='form-group col-sm-6'>"+
+			"<select class='form-control select_modelo' name='modelo_id[]' required='' id='select_modelo_"+contar_modelos+"' style='width: 100%;' data-valor="+contar_modelos+">"+
+				"<option value=''>...</option>"+
+				
+			"</select>"+
+		"</div>"+
+		"<div class='form-group col-sm-2'>"+
+			"<select class='form-control select_montura' name='montura[]' required='' id='select_montura_"+contar_modelos+"'>"+
+			"</select>"+
+		"</div>"+
+		"<div class='form-group col-sm-2'>"+
+			"<select class='form-control select_estuche' name='estuche[]' id='select_estuche_"+contar_modelos+"'>"+
+			"</select>"+
+		"</div>"+
+		"<div class='form-group col-sm-1'>"+
+			"<button class='btn btn-link' type='button' id='btn_delete_modelo_"+contar_modelos+"'>"+
+				"<i class='fa fa-remove text-danger'></i>"+
+			"</button>"+
+		"</div>"+
+	"</div>");
 
 		// eliminar 
-		$('#btn_delete_modelo_'+contar_modelos+'').click(function(e){
+	$('#btn_delete_modelo_'+contar_modelos+'').click(function(e){
       $('#mas_modelos_'+contar_modelos+'').remove();
       contar_modelos--;
     });
 
     // clonar los modelos del option a un nuevo select
-	  $("#select_modelo_"+contar_modelos+"").html($("#select_modelo_1").html());
+	$("#select_modelo_"+contar_modelos+"").html($("#select_modelo_1").html());
 });
 
 // busqueda de modelo
@@ -225,13 +225,12 @@ $("#form_create_guia").on('submit', function(e) {
 			data: form.serialize(),
 		})
 		.done(function(data) {
-			console.log(data)
-			if (data == 1) {
+			if (data == 2) {
 				mensajes('Alerta!', 'Nº de Guia repetido, verifique', 'fa-warning', 'red');
 				btn.text("Guardar").removeAttr("disabled");
 			}else{
-				mensajes('Listo!', 'Creada con exito..... espere', 'check fa fa-spinner fa-spin', 'green');
-			  form[0].reset();
+				mensajes('Listo!', 'Creada con exito..... espere', 'fa-check', 'green');
+			    form[0].reset();
 				$("#create_guia").modal('toggle');
 				btn.text("Guardar").removeAttr("disabled");
 				location.reload();

@@ -31,6 +31,19 @@ class Asignacion extends Model
         return $this->updated_at->format("d-m-Y");
     }
 
+    public function status(){
+        if ($this->status == 1) {
+            $this->status = "Asignado";
+        }elseif($this->status == 2){
+            $this->status = "Devuelto a almacen";
+        }elseif ($this->status == 3) {
+            $this->status = "Vendido";
+        }elseif ($this->status == null) {
+            $this->status = "Sin status";
+        }
+        return $this->status;
+    }
+
     public function scopeFecha($query, $from, $to)
     {   
         if ($from && $to) {
@@ -207,7 +220,9 @@ class Asignacion extends Model
     }
 
     public static function cargarAsigModelosToUser($user){
-        $modelos = Asignacion::where("user_id", $user)->where("status", 1)->get();
+        $modelos = Asignacion::where("user_id", $user)
+                                ->where("status", 1)
+                                ->get();
         $data = array();
 
         if ($modelos->count() > 0) {
@@ -257,17 +272,6 @@ class Asignacion extends Model
 
             $data->save();
         }
-   }
-
-   public function status(){
-    if ($this->status == 1) {
-        $this->status = "Asignado";
-    }elseif($this->status == 2){
-        $this->status = "Devuelto a almacen";
-    }elseif ($this->status == 3) {
-        $this->status = "Vendido";
-    }
-    return $this->status;
    }
 
     //-------------------------------------------- Rutas asignadas a usuarios ----------------------------

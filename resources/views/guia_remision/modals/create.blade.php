@@ -10,17 +10,17 @@
 					</div>
 					<div class="panel-body">
 						<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">	
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label>Nº Serie *</label>
 							<input type="text" name="serial" class="form-control" placeholder="Nª de serie..." required="" autofocus="" id="serial">
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label>Nº Guia *</label>
 							<input type="text" name="guia" class="form-control" placeholder="Nª de guia de remision..." required="" id="guia">
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label>Motivo de guia *</label>
 							<select class="form-control" name="motivo_guia_id" id="motivo_guia">
 								@foreach($motivo as $m)
@@ -31,9 +31,9 @@
 							</select>
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label for="">Cliente * </label> 
-							<button type="button" data-toggle="modal" data-target="#create_cliente" class="btn btn-link btn-sm">
+							<button type="button" data-toggle="modal" data-target="#create_cliente" class="btn btn-link btn-xs">
 								<i class="fa fa-plus" aria-hidden="true"></i> Nuevo cliente
 							</button>
 							<select class="form-control" name="cliente_id" required="" id="add_cliente">
@@ -46,9 +46,9 @@
 							</select>
 						</div>
 
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label for="">Direccion de salida *</label> 
-							<button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-sm">
+							<button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-xs">
 								<i class="fa fa-plus" aria-hidden="true"></i> Nueva direccion
 							</button>
 							<select class="form-control dir_asig" name="dir_salida" required="" id="dir_salida">
@@ -61,7 +61,7 @@
 							</select>
 						</div>
 						
-						<div class="form-group col-sm-6">
+						<div class="form-group col-lg-6">
 							<label for="">Direccion de llegada *</label> 
 							<select class="form-control dir_asig" name="dir_llegada" required="" id="dir_llegada">
 								@foreach($direcciones as $m)
@@ -72,9 +72,34 @@
 								@endforeach
 							</select>
 						</div>
+
+                        <div class="form-group col-lg-4">
+                            <label>Tipo de item *</label>
+                            <select class="form-control item" name="ref_item_id" id="item">
+                                @foreach($items as $m)
+                                <option value="{{ $m->id }}">{{ $m->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-lg-4">
+                            <label>Cantidad *</label>
+                            <input type="text" name="cantidad" class="form-control numero" placeholder="Cantidad..." id="cantidad">
+                        </div>
+
+                        <div class="form-group col-lg-4">
+                            <label>Peso * (KG = Kilogramos)</label>
+                            <input type="text" name="peso" class="form-control numero" placeholder="Cantidad..." id="peso">
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            <label>Descripcion</label>
+                            <textarea name="descripcion" class="form-control" placeholder="Alguna observacion..." id="descripcion"></textarea>
+                            <br>
+                        </div>
 						
-						<div class="form-group col-sm-12">
-							<h3 style="border-bottom: solid 1px #198F56">Descripci&oacute;n</h3>
+						<div class="form-group col-lg-12">
+							<h3 style="border-bottom: solid 1px #198F56">Modelos a enviar</h3>
 						</div>
 						<section id='section_modelos'>
 							<div id='mas_modelos_1'>
@@ -90,21 +115,21 @@
 									</select>
 								</div>
 
-								<div class='form-group col-sm-2'>
+								<div class='form-group col-lg-2'>
 									<label>Monturas *</label>
 									<select class='form-control select_montura' name='montura[]' required='' id='select_montura_1'>
 									</select>
 								</div>
 								
-								<div class='form-group col-sm-2'>
+								<div class='form-group col-lg-2'>
 									<label>Estuches *</label>
-									<select class='form-control select_estuche' name='estuche[]' required='' id='select_estuche_1'>
+									<select class='form-control select_estuche' name='estuche[]' id='select_estuche_1'>
 									</select>
 								</div>
 							</div>
 						</section>
 
-						<div class="form-group col-sm-1 pull-right">
+						<div class="form-group col-lg-1 pull-right">
 							<label>...</label>
 							<button class="btn btn-primary" type="button" id="btn_mas_modelos" data-toggle="tooltip" data-placement="top" title="Añadir mas modelos"> 
 								<i class="fa fa-plus"></i> 

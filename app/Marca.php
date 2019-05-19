@@ -8,7 +8,7 @@ class Marca extends Model
 {
     protected $table = "marcas";
 
-    protected $fillable = ["name", "codigo", "observacion", "material_id", "precio", "estuche"];
+    protected $fillable = ["name", "codigo", "observacion", "material_id", "estuche"];
 
     // muchos mc
     public function marcaColeccion(){
