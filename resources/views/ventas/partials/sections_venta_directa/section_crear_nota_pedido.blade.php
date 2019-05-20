@@ -1,4 +1,9 @@
 <div class="form-group col-lg-3">
+    <label for="">Nº Pedido * </label>
+    <input type="text" name="n_pedido" required="" class="form-control">
+</div>
+
+<div class="form-group col-lg-3">
     <label for="">Cliente * </label> 
     <button type="button" data-toggle="modal" data-target="#create_cliente" class="btn btn-link btn-xs">
         [Nuevo cliente]

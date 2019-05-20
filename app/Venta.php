@@ -103,6 +103,7 @@ class Venta extends Model
         $db = DB::transaction(function() use ($request) {
 
             $v = Venta::saveVenta($request); // guardar venta
+            $n = NotaPedido::saveNotaPedido($request, $motivo = 1); // guardar nota pedido
 
             for ($i = 0; $i < count($request->modelo_id) ; $i++) {
                 Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]); // descontar modelos vendidos
@@ -150,7 +151,8 @@ class Venta extends Model
         $db = DB::transaction(function() use ($request) {
             
             $v = Venta::saveVenta($request); // guardar venta
-            
+            $n = NotaPedido::saveNotaPedido($request, $motivo = 3); // guardar nota pedido
+
             if ($request->checkbox_factura) {
                 if ($request->checkbox_factura == 1) {
                     $factura = Factura::saveFactura($request); // guardar factura
@@ -188,7 +190,8 @@ class Venta extends Model
     public static function storeVentaAsignacion($request){
         
         $db = DB::transaction(function() use ($request) {
-            $venta = Venta::saveVenta($request); // guardar venta
+            $venta  = Venta::saveVenta($request); // guardar venta
+            $n      = NotaPedido::saveNotaPedido($request, $motivo = 1); // guardar nota pedido
             Asignacion::modeloRetornadoOrAsignados($request); // descontar modelos vendidos asignados
         });
 

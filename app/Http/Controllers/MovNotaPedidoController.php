@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\NotaPedido;
+use App\MovNotaPedido;
 use Illuminate\Http\Request;
 
-class NotaPedidoController extends Controller
+class MovNotaPedidoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,7 @@ class NotaPedidoController extends Controller
      */
     public function index()
     {
-        return view("notapedido.index",[
-            "notapedidos" => NotaPedido::all(),
-        ]);
+        //
     }
 
     /**
@@ -43,10 +41,10 @@ class NotaPedidoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\NotaPedido  $notaPedido
+     * @param  \App\MovNotaPedido  $movNotaPedido
      * @return \Illuminate\Http\Response
      */
-    public function show(NotaPedido $notaPedido)
+    public function show(MovNotaPedido $movNotaPedido)
     {
         //
     }
@@ -54,10 +52,10 @@ class NotaPedidoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\NotaPedido  $notaPedido
+     * @param  \App\MovNotaPedido  $movNotaPedido
      * @return \Illuminate\Http\Response
      */
-    public function edit(NotaPedido $notaPedido)
+    public function edit(MovNotaPedido $movNotaPedido)
     {
         //
     }
@@ -66,10 +64,10 @@ class NotaPedidoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\NotaPedido  $notaPedido
+     * @param  \App\MovNotaPedido  $movNotaPedido
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NotaPedido $notaPedido)
+    public function update(Request $request, MovNotaPedido $movNotaPedido)
     {
         //
     }
@@ -77,10 +75,10 @@ class NotaPedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\NotaPedido  $notaPedido
+     * @param  \App\MovNotaPedido  $movNotaPedido
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NotaPedido $notaPedido)
+    public function destroy(MovNotaPedido $movNotaPedido)
     {
         //
     }

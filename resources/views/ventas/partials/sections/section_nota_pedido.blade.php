@@ -1,12 +1,16 @@
+<div class="form-group col-lg-3">
+    <label for="">Nº Pedido * </label>
+    <input type="text" name="n_pedido" required="" class="form-control">
+</div>
 
-<div class="form-group col-lg-4">
+<div class="form-group col-lg-3">
     <label class="">Cliente *</label>
     <input type="hidden" name="cliente_id" class="cliente_id" required="">
     <input type="text" id="cliente_form" class="form-control" disabled="disabled">
 </div>
 
 
-<div class="form-group col-lg-4">
+<div class="form-group col-lg-3">
     <label for="">Direccion *</label> 
     <button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-xs">
         [Nueva direccion]
@@ -21,7 +25,7 @@
     </select>
 </div>
 
-<div class="form-group col-lg-4">
+<div class="form-group col-lg-3">
     <label class="">Estado de los estuches *</label><br>
     <span id="span_select_estuche" style="display: none;">
         <select class="form-control" id="status_estuche">

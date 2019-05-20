@@ -27,6 +27,7 @@ class CreateVentaRequest extends FormRequest
             'checkbox_factura'      => '',
             'checkbox_guia'         => '',
             'checkbox_pago'         => '',
+            'n_pedido'              => 'required|unique:nota_pedidos',
             'cliente_id'            => 'required',
             'direccion_id'          => 'required',
             'status_estuche'        => '',
