@@ -15,7 +15,8 @@ class NotaCreditoController extends Controller
     public function index()
     {
         return view("notacredito.index",[
-            "notacreditos" => NotaCredito::all()
+            "notacreditos"  => NotaCredito::all(),
+            "facturas"      => Factura::all(),
         ]);
     }
 
@@ -37,7 +38,20 @@ class NotaCreditoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'factura_id'    => 'required',
+            'n_serie'       => 'required|unique:nota_creditos',
+            'n_nota'        => 'required|unique:nota_creditos',
+            'subtotal'      => 'required',
+            'impuesto'      => 'required',
+            'total_neto'    => 'required',
+        ]);
+
+        $nc = NotaCredito::saveNotaCredito($request, $request->factura_id);
+        
+        if ($request->ajax()) {
+            return response()->json(1);
+        }
     }
 
     /**

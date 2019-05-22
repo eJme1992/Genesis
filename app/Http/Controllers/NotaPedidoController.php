@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\NotaPedido;
+use App\{NotaPedido, MotivoGuia, Cliente, Direccion};
 use Illuminate\Http\Request;
 
 class NotaPedidoController extends Controller
@@ -15,7 +15,10 @@ class NotaPedidoController extends Controller
     public function index()
     {
         return view("notapedido.index",[
-            "notapedidos" => NotaPedido::all(),
+            "notapedidos"   => NotaPedido::all(),
+            "motivos"       => MotivoGuia::all(),
+            "clientes"      => Cliente::all(),
+            "direcciones"   => Direccion::all(),
         ]);
     }
 
@@ -37,7 +40,20 @@ class NotaPedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'factura_id'    => 'required',
+            'n_serie'       => 'required|unique:nota_creditos',
+            'n_nota'        => 'required|unique:nota_creditos',
+            'subtotal'      => 'required',
+            'impuesto'      => 'required',
+            'total_neto'    => 'required',
+        ]);
+
+        $nc = NotaCredito::saveNotaCredito($request, $request->factura_id);
+        
+        if ($request->ajax()) {
+            return response()->json(1);
+        }
     }
 
     /**
@@ -69,9 +85,17 @@ class NotaPedidoController extends Controller
      * @param  \App\NotaPedido  $notaPedido
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NotaPedido $notaPedido)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'n_pedido'          => 'required|unique:nota_pedidos,n_pedido,'.$id.',id',
+            'motivo_nota_id'    => 'required',
+            'cliente_id'        => 'required',
+            'direccion_id'      => 'required',
+            'total'             => '',
+        ]);
+
+        return NotaPedido::updateNotaPedido($request, $id);
     }
 
     /**

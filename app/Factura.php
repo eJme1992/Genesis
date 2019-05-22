@@ -23,12 +23,23 @@ class Factura extends Model
         return $this->hasOne("App\AdicionalVenta");
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
     // generar factura que no ha sido creada
     public static function generarFactura($request){
 
         $db = DB::transaction(function() use ($request) {
             $fact = Factura::saveFactura($request);
-            AdicionalVenta::saveAV($request->venta_id, $fact->id, $request);
+
+            if ($request->venta_id) {
+                AdicionalVenta::saveAV($request->venta_id, $fact->id, $request);
+            }
         });
 
         if (is_null($db)) { // fue todo correcto

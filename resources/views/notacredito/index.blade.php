@@ -26,6 +26,13 @@
             <div class="box box-danger box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-arrow-right"></i> Notas de Credito</h3>
+                    <span class="pull-right">
+                        <span data-toggle="modal" data-target="#create_notacredito">
+                            <button type="button" class="btn btn-danger btn_realizar_nc" data-toggle="tooltip" title="Realizar factura">
+                                <i class="fa fa-plus"></i> Nueva
+                            </button>
+                        </span>
+                    </span>
                 </div>
                 <div class="box-body">
                     <table class="table data-table table-bordered table-hover text-center">
@@ -68,12 +75,13 @@
                                             </button>
                                         </span>
 
-                                        {{-- ver modelos devueltos --}}
+                                        {{-- @if(count($d->movDevolucion) > 0)
                                         <span data-toggle="modal" data-target="#show_devolucion_{{ $d->id }}">
                                             <button type="button" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Ver modelos">
                                                 <i class="fa fa-eye"></i>
                                             </button>
                                         </span>
+                                        @endif --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -88,9 +96,19 @@
         @include("notacredito.modals.show_factura")
     @endforeach
     @include("notacredito.modals.editar_nota")
+    @include("notacredito.modals.create_notacredito")
 @endsection
 @section("script")
 <script>
+
+    // calcular impuesto solo para crear notas
+    function calTotal(porcentaje){
+        subtotal = $(".subtotal").val();
+        valor = (porcentaje.value < 0) ? porcentaje.value = 0 : porcentaje.value = porcentaje.value;
+        calculo =  (parseFloat(subtotal) * parseFloat(valor)) / 100;
+        $(".total_neto").val(parseFloat(calculo) + parseFloat(subtotal));
+    }
+
     $(".ben").click(function(e) {
         ruta = '{{ route("notacredito.update",":value") }}';
         $("#form_edit_nota").attr("action", ruta.replace(':value', $(this).data("id")));
@@ -102,6 +120,37 @@
         $("#subtotal").val($(this).data("subtotal"));
         $("#impuesto").val($(this).data("impuesto"));
         $("#total_neto").val($(this).data("total"));
+    });
+
+    $("#form_create_notacredito").submit(function(e){
+        if ($('#total_neto_c').val() == 'NaN' || $('#total_neto_c').val() < 0) {
+            mensajes("Alerta!", "El restante no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
+            return false;
+        }
+
+        e.preventDefault();
+        btn = $(".btn_save_nc"); btn.attr("disabled", 'disabled');
+        form = $(this);
+
+        $.ajax({
+            url: "{{ route('notacredito.store') }}",
+            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+            type: 'POST',
+            dataType: 'JSON',
+            data: form.serialize(),
+        })
+        .done(function(data) {
+            mensajes('Listo!', 'Factura procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+            setTimeout(window.location = "notacredito", 3000);
+        })
+        .fail(function(data) {
+            btn.removeAttr("disabled");
+            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
     });
 </script>
 @endsection

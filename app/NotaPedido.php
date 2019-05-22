@@ -71,4 +71,24 @@ class NotaPedido extends Model
         return $n;
 
     }
+
+     // actualizar nota pedido
+    public static function updateNotaPedido($request, $id){
+
+        $nt = NotaPedido::findorFail($id);
+        $nt->fill($request->all());
+        $nt->save();
+
+        BitacoraUser::saveBitacora("Nota de pedido [".$id."] actualizada  correctamente");
+
+        if ($request->ajax()) {
+            return response()->json(1);
+        }else{
+            return back()->with([
+                'flash_message' => 'Nota de pedido actualizada.',
+                'flash_class'   => 'alert-success'
+            ]);
+        }
+
+    }
 }

@@ -51,8 +51,8 @@
                                     <td>{{ $d->createF() }}</td>
                                     <td>
                                         {{-- editar nota de pedido --}}
-                                        <span data-toggle="modal" data-target="#editar_nota">
-                                            <button type="button" class="btn bg-orange btn-xs ben" data-toggle="tooltip" title="Editar nota" data-id="{{ $d->id }}" data-nserie="{{ $d->n_serie }}" data-nnota="{{ $d->n_nota }}" data-subtotal="{{ $d->subtotal }}" data-impuesto="{{ $d->impuesto }}" data-total="{{ $d->total }}">
+                                        <span data-toggle="modal" data-target="#editar_notapedido">
+                                            <button type="button" class="btn bg-orange btn-xs benp" data-toggle="tooltip" title="Editar nota" data-id="{{ $d->id }}" data-npedido="{{ $d->n_pedido }}" data-motivo="{{ $d->motivo_nota_id }}" data-cliente="{{ $d->cliente_id }}" data-direccion="{{ $d->direccion_id }}"  data-total="{{ $d->total }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </span>
@@ -72,20 +72,54 @@
             </div>
         </div>
     </div>
+    @include("notapedido.modals.edit_notapedido")
+    @include("notapedido.modals.create_notapedido")
 @endsection
 @section("script")
 <script>
-    $(".ben").click(function(e) {
-        ruta = '{{ route("notacredito.update",":value") }}';
-        $("#form_edit_nota").attr("action", ruta.replace(':value', $(this).data("id")));
 
-        $("#n_serie, #n_nota, #subtotal, #impuesto, #total").val("");
+    $(".benp").click(function(e) {
+        ruta = '{{ route("notapedido.update",":value") }}';
+        $("#form_edit_notapedido").attr("action", ruta.replace(':value', $(this).data("id")));
 
-        $("#n_serie").val($(this).data("nserie"));
-        $("#n_nota").val($(this).data("nnota"));
-        $("#subtotal").val($(this).data("subtotal"));
-        $("#impuesto").val($(this).data("impuesto"));
-        $("#total_neto").val($(this).data("total"));
+        $("#n_pedido, #motivo_nota_id, #cliente_id, #direccion_id, #total").val("");
+
+        $("#n_pedido").val($(this).data("npedido"));
+        $("#motivo_nota_id").val($(this).data("motivo")).attr("selected",true);
+        $("#cliente_id").val($(this).data("cliente")).attr("selected",true);
+        $("#direccion_id").val($(this).data("direccion")).attr("selected",true);
+        $("#total").val($(this).data("total"));
+    });
+
+    $("#form_create_notacredito").submit(function(e){
+        if ($('#total_neto_c').val() == 'NaN' || $('#total_neto_c').val() < 0) {
+            mensajes("Alerta!", "El restante no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
+            return false;
+        }
+
+        e.preventDefault();
+        btn = $(".btn_save_nc"); btn.attr("disabled", 'disabled');
+        form = $(this);
+
+        $.ajax({
+            url: "{{ route('notacredito.store') }}",
+            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+            type: 'POST',
+            dataType: 'JSON',
+            data: form.serialize(),
+        })
+        .done(function(data) {
+            mensajes('Listo!', 'Factura procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+            setTimeout(window.location = "notacredito", 3000);
+        })
+        .fail(function(data) {
+            btn.removeAttr("disabled");
+            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
     });
 </script>
 @endsection
