@@ -45,7 +45,7 @@
                                 <th>Total</th>
                                 <th>Fecha</th>
                                 <th>Ultima act.</th>
-                                <th>Factura</th>
+                                <th class="bg-navy">Factura</th>
                                 <th class="bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
@@ -74,14 +74,6 @@
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </span>
-
-                                        {{-- @if(count($d->movDevolucion) > 0)
-                                        <span data-toggle="modal" data-target="#show_devolucion_{{ $d->id }}">
-                                            <button type="button" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Ver modelos">
-                                                <i class="fa fa-eye"></i>
-                                            </button>
-                                        </span>
-                                        @endif --}}
                                     </td>
                                 </tr>
                             @endforeach
