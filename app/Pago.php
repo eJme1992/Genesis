@@ -25,6 +25,14 @@ class Pago extends Model
         return $this->hasOne("App\Letra");
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
     public static function savePago($request, $venta){
         $p = Pago::create([
             'venta_id'         => $venta,

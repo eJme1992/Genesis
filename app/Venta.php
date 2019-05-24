@@ -39,6 +39,14 @@ class Venta extends Model
         return $this->hasMany("App\Pago");
     }
 
+    public function createF(){
+        return $this->created_at->format("d-m-Y");
+    }
+
+    public function updateF(){
+        return $this->updated_at->format("d-m-Y");
+    }
+
      // comprobar el estado del estuche
     public static function estadoEstuche($request){
         return isset($request->status_estuche) ? $request->status_estuche : $request->status_estuche = null;

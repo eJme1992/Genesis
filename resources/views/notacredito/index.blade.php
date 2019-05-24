@@ -74,6 +74,14 @@
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </span>
+
+                                        @if(count($d->movDevolucion) > 0)
+                                        <span data-toggle="modal" data-target="#show_modelos_{{ $d->id }}">
+                                            <button type="button" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Ver modelos">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -84,7 +92,7 @@
         </div>
     </div>
     @foreach($notacreditos as $d)
-        @include("notacredito.modals.show_devolucion")
+        @include("notacredito.modals.show_modelos")
         @include("notacredito.modals.show_factura")
     @endforeach
     @include("notacredito.modals.editar_nota")
@@ -132,7 +140,7 @@
             data: form.serialize(),
         })
         .done(function(data) {
-            mensajes('Listo!', 'Factura procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+            mensajes('Listo!', 'Nota de credito procesada, espere mientras es redireccionado...', 'fa-check', 'green');
             setTimeout(window.location = "notacredito", 3000);
         })
         .fail(function(data) {

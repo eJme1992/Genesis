@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Pago;
+use App\{Pago, Venta, TipoAbono, Letra, StatusLetra, ProtestoLetra,};
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatePagoRequest;
 
@@ -15,7 +15,13 @@ class PagoController extends Controller
      */
     public function index()
     {
-        //
+        return view("pagos.index", [
+            "pagos"          => Pago::all(),
+            "ventas"         => Venta::whereIn("id", Pago::where("restante", "<>", 0)->get(["id"]))->get(),
+            "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
+        ]);
     }
 
     /**

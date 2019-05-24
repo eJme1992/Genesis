@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{NotaPedido, MotivoGuia, Cliente, Direccion};
+use App\{NotaPedido, MotivoGuia, Cliente, Direccion, Coleccion, Departamento, Modelo};
 use Illuminate\Http\Request;
 
 class NotaPedidoController extends Controller
@@ -15,10 +15,12 @@ class NotaPedidoController extends Controller
     public function index()
     {
         return view("notapedido.index",[
-            "notapedidos"   => NotaPedido::all(),
-            "motivos"       => MotivoGuia::all(),
-            "clientes"      => Cliente::all(),
-            "direcciones"   => Direccion::all(),
+            "notapedidos"       => NotaPedido::all(),
+            "motivos"           => MotivoGuia::all(),
+            "clientes"          => Cliente::all(),
+            "direcciones"       => Direccion::all(),
+            "colecciones"       => Coleccion::all(),
+            "departamentos"     => Departamento::all(),
         ]);
     }
 
@@ -41,15 +43,22 @@ class NotaPedidoController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'factura_id'    => 'required',
-            'n_serie'       => 'required|unique:nota_creditos',
-            'n_nota'        => 'required|unique:nota_creditos',
-            'subtotal'      => 'required',
-            'impuesto'      => 'required',
-            'total_neto'    => 'required',
+            'n_pedido'              => 'required|unique:nota_pedidos',
+            'cliente_id'            => 'required',
+            'direccion_id'          => 'required',
+            'status_estuche'        => '',
+            'total'                 => 'required|numeric|between:1,999999999999.99',
+            'modelo_id'             => 'required',
+            'montura'               => '',
+            'estuche'               => '',
         ]);
 
-        $nc = NotaCredito::saveNotaCredito($request, $request->factura_id);
+        $nc = NotaPedido::saveNotaPedido($request, $request->motivo_nota_id);
+        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+            }
+        }
         
         if ($request->ajax()) {
             return response()->json(1);

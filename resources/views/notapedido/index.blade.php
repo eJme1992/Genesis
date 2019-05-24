@@ -26,6 +26,13 @@
             <div class="box box-danger box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-arrow-right"></i> Notas de Pedido</h3>
+                    <span class="pull-right">
+                        <span data-toggle="tooltip" title="Realizar Nota de pedido">
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#create_notapedido">
+                                    <i class="fa fa-plus"></i> Nueva
+                            </button>
+                        </span>
+                    </span>
                 </div>
                 <div class="box-body">
                     <table class="table data-table table-bordered table-hover text-center">
@@ -58,7 +65,7 @@
                                         </span>
 
                                         {{-- ver modelos pedido --}}
-                                        <span data-toggle="modal" data-target="#show_devolucion_{{ $d->id }}">
+                                        <span data-toggle="modal" data-target="#show_modelos_{{ $d->id }}">
                                             <button type="button" class="btn bg-navy btn-xs" data-toggle="tooltip" title="Ver modelos">
                                                 <i class="fa fa-eye"></i>
                                             </button>
@@ -72,11 +79,124 @@
             </div>
         </div>
     </div>
+    @foreach($notapedidos as $d)
+        @include("notapedido.modals.show_modelos")
+    @endforeach
     @include("notapedido.modals.edit_notapedido")
     @include("notapedido.modals.create_notapedido")
+    @include('direcciones.modals.modal_create')    
+    @include('clientes.modals.createclientes') 
 @endsection
 @section("script")
 <script>
+
+    var saveNotaPedido = $(".btn_save_np").attr("disabled", "disabled");
+
+    $("#select_coleccion").val('').prop('selected', true);
+    
+    // cargar modelos en la tabla para calcular
+    function cargarModelos(){
+        $("#btn_cargar_modelos").attr('disabled', 'disabled');
+        $("#icon-cargar-modelos").show();
+        if ($("#select_coleccion").val() && $("#select_marca").val()) {
+            $.get("cargarTabla/"+$("#select_coleccion").val()+"/"+$("#select_marca").val()+"",function(response, dep){
+                $('.data-table').DataTable().destroy();
+                $("#data_modelos_venta_directa").empty().html(response);
+                $('.data-table').DataTable({responsive: true});
+
+                $("#btn_cargar_modelos").removeAttr("disabled");
+                $("#icon-cargar-modelos").hide();
+                validarEstuche();
+            });
+        }else{
+            mensajes("Alerta!", "Nada para mostrar, debe llenar todos los campos", "fa-warning", "red");
+            $("#btn_cargar_modelos").removeAttr("disabled");
+            $("#icon-cargar-modelos").hide();
+        }
+    }
+
+    function validarEstuche(){
+        if ($(".estuches").length > 0 ) {
+            if ($(".estuches").val() != '') {
+                $("#span_select_estuche").show(400);
+                $("#span_info_estuche").hide(400);
+                $("#status_estuche").attr({
+                    required: 'required',
+                    name: 'status_estuche'
+                });
+            }else{
+                $("#span_select_estuche").hide(400);
+                $("#span_info_estuche").show(400);
+                $("#status_estuche").removeAttr('required').prop('name', '');
+            }
+        }else{
+            $("#span_select_estuche, #span_info_estuche").hide(400);
+            $("#status_estuche").removeAttr('required').prop('name', '');
+        }
+    }
+
+        // Calcular monto y total
+    function calcularMontoTotal(){
+        total = 0; error = false;
+        $.each($(".table > tbody > tr"), function(index, val) {
+            montura = parseInt($(this).find('.montura_modelo').val());
+            precio  = parseFloat($(this).find('.costo_modelo').val());
+
+            if (!Number(montura)) {
+                costo = 0;
+                $(this).find('.costo_modelo').val(0);
+                $(this).find('.preciototal').val(0);
+            }else{
+                costo = montura * precio;
+                if (!Number(costo)) { 
+                    error = true;
+                }else{
+                    $(this).find('.preciototal').val(costo);
+                }
+            }
+            total += costo;
+        });
+
+        if (error) {
+            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+            saveNotaPedido.prop("disabled", true);
+            return false;
+        }else{
+            if (Number(total) || total > 0) {
+                saveNotaPedido.removeAttr("disabled");
+            }else{
+                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                saveNotaPedido.prop("disabled", true);
+            }
+        }
+
+        $(".total_venta").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+    }
+
+    // busqueda de marcas en la coleccion
+    $('#select_coleccion').change(function(event) {
+        $("#select_marca").empty();
+        $.get("marcasAll/"+event.target.value+"",function(response, dep){
+            if (response.length > 0) {
+                for (i = 0; i<response.length; i++) {
+                    $("#select_marca").append(
+                        "<option value='"+response[i].marca.id+"'>"
+                        +response[i].marca.material.name+' | '+response[i].marca.name+
+                        "</option>"
+                    );
+                }
+            }else{
+                mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");
+            }
+            $("#data_modelos_venta_directa").empty();
+        });
+    });
+
+    // evitar el siguiente si se cambia cualquier valor en la carga de modelos
+    $('#select_coleccion').change(function(e) {
+        reiniciarMontoTotal();
+        saveNotaPedido.prop("disabled", true);
+    });
 
     $(".benp").click(function(e) {
         ruta = '{{ route("notapedido.update",":value") }}';
@@ -91,29 +211,29 @@
         $("#total").val($(this).data("total"));
     });
 
-    $("#form_create_notacredito").submit(function(e){
-        if ($('#total_neto_c').val() == 'NaN' || $('#total_neto_c').val() < 0) {
-            mensajes("Alerta!", "El restante no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
+    $("#form_create_notapedido").submit(function(e){
+        if ($('.total_venta').val() == 'NaN' || $('.total_venta').val() < 0) {
+            mensajes("Alerta!", "El total no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
             return false;
         }
 
         e.preventDefault();
-        btn = $(".btn_save_nc"); btn.attr("disabled", 'disabled');
+        saveNotaPedido.attr("disabled", 'disabled');
         form = $(this);
 
         $.ajax({
-            url: "{{ route('notacredito.store') }}",
+            url: "{{ route('notapedido.store') }}",
             headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
             type: 'POST',
             dataType: 'JSON',
             data: form.serialize(),
         })
         .done(function(data) {
-            mensajes('Listo!', 'Factura procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-            setTimeout(window.location = "notacredito", 3000);
+            mensajes('Listo!', 'Nota de pedido procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+            setTimeout(window.location = "notapedido", 3000);
         })
         .fail(function(data) {
-            btn.removeAttr("disabled");
+            saveNotaPedido.removeAttr("disabled");
             mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
         })
         .always(function() {
