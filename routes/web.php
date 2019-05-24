@@ -128,6 +128,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
     Route::get('create_venta_directa', 'VentaController@createDirecta')->name('create_venta_directa');
     Route::get('cargarTablaVenta/{id}', 'VentaController@cargarTablaVenta')->name('cargarTablaVenta');
     Route::get('showVenta/{id}', 'VentaController@showVentaJson')->name('showVentaJson');
+    Route::get('totalDeuda/{id}', 'VentaController@totalDeuda')->name('totalDeuda');
     Route::post('storeVentaDirecta', 'VentaController@storeVentaDirecta')->name('ventas.storeVentaDirecta');
     Route::post('storeVentaConsignacion', 'VentaController@storeVentaConsignacion')->name('ventas.storeVentaConsignacion');
     Route::post('storeVentaAsignacion', 'VentaController@storeVentaAsignacion')->name('ventas.storeVentaAsignacion');

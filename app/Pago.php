@@ -75,5 +75,22 @@ class Pago extends Model
                 return response()->json("0");
             }
         }
+    }
+
+    public static function updatePago($request, $id){
+        $nt = Pago::findorFail($id);
+        $nt->fill($request->all());
+        $nt->save();
+
+        BitacoraUser::saveBitacora("Pago [".$id."] actualizado correctamente");
+
+        if ($request->ajax()) {
+            return response()->json(1);
+        }else{
+            return back()->with([
+                'flash_message' => 'Pago actualizado.',
+                'flash_class'   => 'alert-success'
+            ]);
+        }
     } 
 }

@@ -51,19 +51,29 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach($pagos as $d)
+                            @foreach($pagos as $pago)
                                 <tr>
-                                    <td><b>[{{ $d->id }}]</b></td>
-                                    <td><b>[{{ $d->venta_id }}]</b></td>
-                                    <td>{{ $d->tipoAbono->nombre }}</td>
-                                    <td>{{ $d->total }}</td>
-                                    <td>{{ $d->abono }}</td>
-                                    <td>{{ $d->restante }}</td>
-                                    <td>{{ $d->createF() }}</td>
-                                    <td class="{{ $d->fecha_cancelacion == null ? 'warning' : 'success' }}">
-                                        @if($d->fecha_cancelacion)
-                                            <span><i class="fa fa-arrow-right"></i> Cancelado</span>
-                                            {{ $d->fecha_cancelacion }}
+                                    <td><b>[{{ $pago->id }}]</b></td>
+                                    <td><b>[{{ $pago->venta_id }}]</b></td>
+                                    <td>
+                                        {{ $pago->tipoAbono->nombre }}
+                                        @if($pago->tipo_abono_id == 1)
+                                            <span data-toggle="modal" data-target="#modal_showletra_{{ $pago->id }}">
+                                                <button type="button" class="btn btn-xs bg-navy pull-right" data-toggle="tooltip" title="Detalles de la letra"> 
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </span>
+                                            @include("ventas.modals.showLetra")
+                                        @endif
+                                    </td>
+                                    <td>{{ $pago->total }}</td>
+                                    <td>{{ $pago->abono }}</td>
+                                    <td>{{ $pago->restante }}</td>
+                                    <td>{{ $pago->createF() }}</td>
+                                    <td class="{{ $pago->fecha_cancelacion == null ? 'warning' : 'success' }}">
+                                        @if($pago->fecha_cancelacion)
+                                            <span><i class="fa fa-check text-success"></i> Cancelado</span> / 
+                                            {{ $pago->fecha_cancelacion }}
                                         @else
                                             <span><i class="fa fa-warning"></i> Pendiente</span>
                                         @endif
@@ -71,8 +81,8 @@
                                     <td>
 
                                         {{-- editar devolucion --}}
-                                        <span data-toggle="modal" data-target="#editar_factura">
-                                            <button type="button" class="btn bg-orange btn-xs bf" data-toggle="tooltip" title="Editar factura" data-id="{{ $d->id }}" >
+                                        <span data-toggle="modal" data-target="#editar_pago">
+                                            <button type="button" class="btn bg-orange btn-xs bep" data-toggle="tooltip" title="Editar pago" data-id="{{ $pago->id }}" data-total="{{ $pago->total }}" data-abono="{{ $pago->abono }}" data-restante="{{ $pago->restante }}" data-tipoabono="{{ $pago->tipo_abono_id }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </span>
@@ -87,6 +97,7 @@
         </div>
     </div>
     @include('pagos.modals.create_pago') 
+    @include('pagos.modals.editar_pago') 
 @endsection
 
 @section("script")
@@ -97,13 +108,40 @@
         $('#section_letra').hide();
     });
 
+    $(".bep").click(function(e) {
+        ruta = '{{ route("pagos.update",":value") }}';
+        $("#form_editar_pago").attr("action", ruta.replace(':value', $(this).data("id")));
+
+        $("#total_deuda_edit, #abono_edit, #restante_edit").val('');
+
+        $("#total_deuda_edit").val($(this).data("total"));
+        $("#abono_edit").val($(this).data("abono"));
+        $("#restante_edit").val($(this).data("restante"));
+        $("#tipo_abono_id_edit").val($(this).data("tipoabono")).attr("selected",true);
+    });
+
+    $('#venta_id').change(function(event) {
+        $("#total_deuda, #abono, #restante").val('');
+        $("#icon_load_venta").show();
+        $.get("totalDeuda/"+event.target.value+"",function(response, dep){
+            $("#total_deuda").val(response);
+            $("#icon_load_venta").hide();
+        });
+    });
+
+    // calcular restante del pago a editar
+    function calcularRestanteEdit(monto){
+        valor = (monto.value < 0) ? monto.value = 0 : monto.value = monto.value;
+        $("#restante_edit").val((parseFloat($("#total_deuda_edit").val()) - parseFloat(valor)));
+    }
+
     $("#form_create_pago").submit(function(e){
 
         if ($('#restante').val() == 'NaN' || $('#restante').val() < 0) {
             mensajes("Alerta!", "El restante no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
             return false;
         }
-        
+
         e.preventDefault();
         btn = $(".btn_cp"); btn.attr("disabled", 'disabled');
         form = $(this);

@@ -17,7 +17,7 @@ class PagoController extends Controller
     {
         return view("pagos.index", [
             "pagos"          => Pago::all(),
-            "ventas"         => Venta::whereIn("id", Pago::where("restante", "<>", 0)->get(["id"]))->get(),
+            "ventas"         => Venta::orderBy("id", "DESC")->get(),
             "tipo_abono"     => TipoAbono::all(),
             "status_letra"   => StatusLetra::all(),
             "protesto_letra" => ProtestoLetra::all(),
@@ -74,9 +74,16 @@ class PagoController extends Controller
      * @param  \App\Pago  $pago
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pago $pago)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'tipo_abono_id'     => 'required',
+            'total_deuda'       => 'required',
+            'abono'             => 'required',
+            'restante'          => 'required',
+        ]);
+
+        return Pago::updatePago($request, $id);
     }
 
     /**

@@ -129,6 +129,16 @@ class VentaController extends Controller
         return Venta::cargarTablaVenta(Venta::findOrFail($id));
     }
 
+    public function totalDeuda($id)
+    {
+        if (Venta::findOrFail($id)->totaldeuda()) {
+            $total = Venta::findOrFail($id)->totaldeuda();
+        }else{
+            $total = Venta::findOrFail($id)->total;
+        }
+        return response()->json($total);
+    }
+
     public function edit(Venta $id)
     {
         //

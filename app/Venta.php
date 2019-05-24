@@ -75,6 +75,11 @@ class Venta extends Model
         return $this->pagos()->orderBy("id", "DESC")->value("fecha_cancelacion");
     }
 
+    // public static function ventasAdeudadas(){
+    //     $venta = Venta::whereIn("id", Pago::all(["venta_id"]))->get();
+    //     dd($venta->pagos());
+    //     return $venta;
+    // }
     // guardar datos de la venta
     public static function saveVenta($request){
 
