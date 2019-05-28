@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Pago, Venta, TipoAbono, Letra, StatusLetra, ProtestoLetra,};
+use App\{Pago, Venta, TipoAbono, Letra, StatusLetra, ProtestoLetra};
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatePagoRequest;
 
