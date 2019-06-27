@@ -60,7 +60,7 @@
 
 							<div class="form-group col-sm-4 {{ $errors->has('departamento')?'has-error':'' }}">
 								<label class="control-label" for="departamento">Departamento: *</label>
-								<select class="form-control" name="departamento_id" id="dep" required>
+								<select class="form-control dep" name="departamento_id" required>
 										<option value="">Seleccione</option>
 										@foreach($departamentos as $depart)
 										<option value="{{ $depart->id }}">{{ $depart->departamento }}</option>
@@ -70,14 +70,14 @@
 
 							<div class="form-group col-sm-4 {{ $errors->has('provincia')?'has-error':'' }}">
 								<label class="control-label" for="provincia">Provincia: *</label>
-								<select class="form-control" name="provincia_id" id="prov" required>
+								<select class="form-control prov" name="provincia_id" required>
 
 								</select>
 							</div>
 
 							<div class="form-group col-sm-4 {{ $errors->has('distrito')?'has-error':'' }}">
 								<label class="control-label" for="distrito">Distrito: *</label>
-								<select class="form-control" name="distrito_id" id="dist" required>
+								<select class="form-control dist" name="distrito_id" required>
 
 								</select>
 							</div>
@@ -163,27 +163,7 @@
 @section("script")
 <script>
 
-	// busqueda de provincias
-	$('#dep').change(function(event) {
-		$.get("../prov/"+event.target.value+"",function(response, dep){
-			$("#prov").empty();
-			$("#dist").empty();
-			$("#prov").append("<option value=''></option>");
-			for (i = 0; i<response.length; i++) {
-				$("#prov").append("<option value='"+response[i].id+"'> "+response[i].provincia+"</option>");
-			}
-		});
-	});
 
-	// busqueda de distritos
-	$('#prov').change(function(event) {
-		$.get("../dist/"+event.target.value+"",function(response, dep){
-			$("#dist").empty();
-			for (i = 0; i<response.length; i++) {
-				$("#dist").append("<option value='"+response[i].id+"'> "+response[i].distrito+"</option>");
-			}
-		});
-	});
 
 </script>
 @endsection

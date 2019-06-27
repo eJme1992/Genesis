@@ -211,6 +211,7 @@ class MarcaController extends Controller
           $marca = Marca::findOrFail($request->id);
           $marca->observacion = $request->observacion;
           $marca->name = $request->name;
+          $marca->estuche = $request->estuche;
 
           if ($request->material_id) {
             $marca->material_id = $request->material_id;

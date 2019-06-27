@@ -100,19 +100,6 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-users"></i>
-                <span>Usuarios</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-                <li><a href="{{ route('users.roles') }}"><i class="fa fa-circle-o"></i>Roles (perfiles)</a></li>
-                <li><a href="{{ route('actividad') }}"><i class="fa fa-circle-o"></i>Actividad</a></li>
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#">
                 <i class="fa fa-database"></i>
                 <span>Inventario</span>
                 <i class="fa fa-angle-left pull-right"></i>
@@ -121,6 +108,7 @@
                 <li><a href="{{ route('proveedores.index') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
                 <li><a href="{{ route('marcas.index') }}"><i class="fa fa-circle-o"></i>Marcas</a></li>
                 <li><a href="{{ route('colecciones.index') }}"><i class="fa fa-circle-o"></i>Colecciones</a></li>
+                <li><a href="{{ route('kardex.index') }}"><i class="fa fa-circle-o"></i>Kardex</a></li>
               </ul>
             </li>
 
@@ -135,34 +123,7 @@
                 <li><a href="{{ route('indexrutas') }}"><i class="fa fa-circle-o"></i>Rutas</a></li>
               </ul>
             </li>
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-file-text-o"></i>
-                <span>Procesos</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('direcciones.index') }}"><i class="fa fa-circle-o"></i>Direcciones</a></li>
-                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
-                <li><a href="{{ route('pagos.index') }}"><i class="fa fa-circle-o"></i>Pagos</a></li>
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-file-o"></i>
-                <span>Documentos</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
-                <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
-                <li><a href="{{ route('notapedido.index') }}"><i class="fa fa-circle-o"></i>Notas de pedido</a></li>
-                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
-              </ul>
-            </li>
-
+            
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -170,41 +131,66 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
+                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
                 <li class="treeview">
                   <a href="#"><i class="fa fa-circle-o"></i> Nueva venta
                       <i class="fa fa-angle-left pull-right"></i>
                   </a>
                   <ul class="treeview-menu">
                     <li>
-                        <a href="{{ route('create_venta_directa') }}"><i class="fa fa-circle-o"></i> Venta directa</a>
+                        <a href="{{ route('create_venta_directa') }}"><i class="fa fa-circle-o"></i> Venta Oficina</a>
                     </li>
                     <li>
-                        <a href="{{ route('create_venta_asignacion') }}"><i class="fa fa-circle-o"></i> Venta por asignacion</a>
+                        <a href="{{ route('create_venta_asignacion') }}"><i class="fa fa-circle-o"></i> Venta Productos Asignados</a>
                     </li>
                     <li>
-                        <a href="{{ route('create_venta_consignacion') }}"><i class="fa fa-circle-o"></i> Venta por consignacion</a>
+                        <a href="{{ route('create_venta_consignacion') }}"><i class="fa fa-circle-o"></i> Venta Productos Consignados</a>
                     </li>
                   </ul>
                 </li>
-                <li><a href="{{ route('ventas.index') }}"><i class="fa fa-circle-o"></i>Ventas</a></li>
+                <li><a href="{{ route('consignacion.index') }}"><i class="fa fa-circle-o"></i>Consignaciones</a></li>
+                <li><a href="{{ route('pagos.index') }}"><i class="fa fa-circle-o"></i>Pagos</a></li>
                 <li><a href="{{ route('devoluciones.index') }}"><i class="fa fa-circle-o"></i>Devoluciones</a></li>
                 <li><a href="{{ route('clientes.index') }}"><i class="fa fa-circle-o"></i>Clientes</a></li>
               </ul>
-            
             </li>
-
-
+            
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-archive"></i>
-                <span>Kardex</span>
+                <i class="fa fa-file-o"></i>
+                <span>Documentos</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{ route('kardex.index') }}"><i class="fa fa-circle-o"></i>Consultas</a></li>
+                <li><a href="{{ route('notapedido.index') }}"><i class="fa fa-circle-o"></i>Notas de pedido</a></li>
+                <li><a href="{{ route('facturas.index') }}"><i class="fa fa-circle-o"></i>Facturas</a></li>
+                <li><a href="{{ route('guiaRemision.index') }}"><i class="fa fa-circle-o"></i>Guias de Remision</a></li>
+                <li><a href="{{ route('notacredito.index') }}"><i class="fa fa-circle-o"></i>Notas de credito</a></li>
               </ul>
             </li>
 
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-users"></i>
+                <span>Seguridad</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>Usuarios</a></li>
+                <li><a href="{{ route('users.roles') }}"><i class="fa fa-circle-o"></i>Perfiles (roles)</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i>Permisos</a></li>
+                <li><a href="{{ route('actividad') }}"><i class="fa fa-circle-o"></i>Actividad</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i>Auditoria</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i>Respaldo y Restauracion</a></li>
+              </ul>
+            </li>
+            
+            <li class="treeview">
+              <a href="{{ route('direcciones.index') }}">
+                <i class="fa fa-circle-o"></i>Direcciones
+              </a>
+            </li>
+            
           </ul>
         </section>
       </aside>

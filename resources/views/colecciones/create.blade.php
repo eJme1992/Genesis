@@ -109,6 +109,7 @@ $("#btn_carga_mar").click(function(e){
 // añadir mas marcas a la coleccion
 $("#btn_añadir_marca").click(function(e){
 	e.preventDefault();
+	
 
 	var contM = cont_mar++;
 
@@ -117,7 +118,6 @@ $("#btn_añadir_marca").click(function(e){
 				"<div class='form-group col-sm-4'>"+
 					"<label>Marcas</label>"+
 					"<select name='marca_id[]' class='form-control s_m' required='' id='s_m_"+contM+"'>"+
-						"<option value=''>Seleccione</option>"+cargarMarcas()+
 					"</select>"+
 				"</div>"+
 				"<div class='form-group col-sm-2'>"+
@@ -160,6 +160,8 @@ $("#btn_añadir_marca").click(function(e){
 					"</button>"+
 				"</div>"+
 			"</div>");
+			
+			$("#s_m_"+contM+"").html($("#s_m_0").html());
 
 		$('#btn_delete_marca'+contM+'').click(function(e){
 	      e.preventDefault();
