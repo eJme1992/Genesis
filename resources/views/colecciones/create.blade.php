@@ -110,7 +110,6 @@ $("#btn_carga_mar").click(function(e){
 $("#btn_añadir_marca").click(function(e){
 	e.preventDefault();
 	
-
 	var contM = cont_mar++;
 
 	$("#section_marca").append(
@@ -163,7 +162,7 @@ $("#btn_añadir_marca").click(function(e){
 			
 			$("#s_m_"+contM+"").html($("#s_m_0").html());
 
-		$('#btn_delete_marca'+contM+'').click(function(e){
+			$('#btn_delete_marca'+contM+'').click(function(e){
 	      e.preventDefault();
 
 	      $('.div_total_marcas'+contM+'').remove();
@@ -468,9 +467,9 @@ $("#form_modelos").on("submit", function(e) {
 		return false;
 	}else{
 
-		var btn = $("#btn_save_mod");
+		var btn 	= $("#btn_save_mod");
 		var token = $("#token").val();
-		var ruta = '{{ route("modelos.store") }}';
+		var ruta 	= '{{ route("modelos.store") }}';
 
 		btn.text("Espere un momento...").addClass("disabled");
 
@@ -490,6 +489,7 @@ $("#form_modelos").on("submit", function(e) {
 			mensajes("Listo!", "Modelos añadidos a la coleccion", "fa-success", "green");
 			btn.text("Guardar Modelos").removeClass("disabled").fadeOut(400);
 			cont = 0;
+			form[0].reset();
 		})
 		.fail(function(data) {
 			btn.text("Guardar").removeClass("disabled");

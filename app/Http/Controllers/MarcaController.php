@@ -231,14 +231,10 @@ class MarcaController extends Controller
 
         $modelos = Modelo::where("marca_id", $id)->where("coleccion_id", $col)->count();
 
-        if ($modelos > 0) {
-            return response()->json(["msj" => "Ya se registraron modelos a esta marca!"]);
-        }else{
-            return response()->json([
-              "coleccion" => ColeccionMarca::where("marca_id", $id)->where("coleccion_id", $col)->first(),
-              "marca" => Marca::findOrFail($id)->estuche
-            ]);
-        }
+        return response()->json([
+          "coleccion" => ColeccionMarca::where("marca_id", $id)->where("coleccion_id", $col)->first(),
+          "marca" => Marca::findOrFail($id)->estuche
+        ]);
 
     }
 
