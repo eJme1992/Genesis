@@ -25,7 +25,7 @@
 	  </div><!--row-->
 
 	<div class="row">
-  		<div class="col-md-12">
+  		<div class="col-lg-12">
     		<div class="box box-danger box-solid">
 	      		<div class="box-header with-border">
 			        <h3 class="box-title"><i class="fa fa-list-alt"></i> Guias de Remision</h3>
@@ -78,15 +78,12 @@
 									</td>
 									<td class="text-nowrap">
                                         <span class="col-lg-4" data-toggle="modal" data-target="#editar_guia">
-                                            {{-- <button type="button"
-                                                data-id="{{ $d->detalleGuia->id }}"
-                                                data-cantidad="{{ $d->detalleGuia->cantidad }}"
-                                                data-peso="{{ $d->detalleGuia->peso }}"
-                                                data-descripcion="{{ $d->detalleGuia->descripcion }}"
+                                            <button type="button"
+                                                value="{{ $d->id }}"
                                                 data-toggle="tooltip" title="Editar datos de la guia"
                                                 class="btn btn-xs bg-orange beg">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
-                                            </button>  --}}
+                                            </button> 
                                         </span>
                                         <span class="col-lg-4" data-toggle="modal" data-target="#show_guia_{{ $d->id }}">
                                             <button type="button"
@@ -126,16 +123,12 @@
 var contar_modelos = 1;
 var contar_det_guia = 2;
 
-// $(".beg").click(function(e) {
-//     ruta = '{{ route("guiaRemision.update",":value") }}';
-//     $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).data("id")));
+$(".beg").click(function(e) {
+    ruta = '{{ route("guiaRemision.update",":value") }}';
+    $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).val()));
 
-//     $("#cantidad, #peso, #descripcion").val("");
-
-//     $("#cantidad").val($(this).data("cantidad"));
-//     $("#peso").val($(this).data("peso"));
-//     $("#descripcion").val($(this).data("descripcion"));
-// });
+    // $("#cantidad, #peso, #descripcion").val("");
+});
 
 // añadir mas modelos
 $("#btn_mas_modelos").click(function(event) {
