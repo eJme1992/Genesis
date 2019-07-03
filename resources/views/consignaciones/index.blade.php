@@ -61,7 +61,9 @@
                                     </td>
                                     <td>{{ $d->detalleConsignacion->count() }}</td>
                                     <td>{{ $d->modelosConsignados($d->id) }}</td>
-                                    <td class="{{ $d->status == 1 ? 'warning' : 'success' }}">{{ $d->status == 1 ? 'En espera' : 'Consignada' }}</td>
+                                    <td class="{{ $d->status == 1 ? 'warning' : 'success' }}">
+                                        {{ $d->status == 1 ? 'En espera' : 'Consignada' }}
+                                    </td>
   									<td>
                                         <span data-toggle="tooltip" title="Detalles de la consignacion">
                                             <a href="#detalle_consig" class="btn bg-navy btn-xs btn_detalle_consig" data-toggle="modal" data-target="#detalle_consig" id="" data-id="{{ $d->id }}">
@@ -89,9 +91,9 @@
         ruta = '{{ route("consignacion.update",":value") }}';
         $("#form_edit_consig").attr("action", ruta.replace(':value', $(this).data("id")));
 
-        $("#fecha_envio").val("");
+        $("#fe_en").val("");
 
-        $("#fecha_envio").val($(this).data("fechaenvio"));
+        $("#fe_en").val($(this).data("fechaenvio"));
     });
 
     // mostrar y validar campos en consignacion y guia

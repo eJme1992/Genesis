@@ -11,7 +11,7 @@
       <div class="modal-body">
         <div class="form-group col-lg-4">
             <label>Fecha *</label>
-            <input type="text" name="fecha_envio" class="form-control fecha" id="fecha_envio" required="">
+            <input type="text" name="fecha_envio" class="form-control fecha" id="fe_en" required="">
         </div>
       </div>
       <div class="modal-footer">

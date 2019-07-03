@@ -105,10 +105,11 @@ class Consignacion extends Model
      // cargar datos de la consig
     public static function showConsig($id){
         
-        $consig      = Consignacion::with("cliente", "guia.detalleGuia.item")->findOrFail($id);
-        $data        = array();
-        $dir_llegada = ($consig->guia) ? $consig->guia->dirLLegada->full_dir() : 'vacio';
-        $dir_salida  = ($consig->guia) ? $consig->guia->dirSalida->full_dir()  : 'vacio';
+        $consig         = Consignacion::with("cliente", "guia.detalleGuia.item")->findOrFail($id);
+        $data           = array();
+        $data_det_guia  = array();
+        $dir_llegada    = ($consig->guia) ? $consig->guia->dirLLegada->full_dir() : 'vacio';
+        $dir_salida     = ($consig->guia) ? $consig->guia->dirSalida->full_dir()  : 'vacio';
 
         foreach ($consig->detalleConsignacion as $dc) {
             $data [] = "<tr>
@@ -129,9 +130,21 @@ class Consignacion extends Model
                         </tr>"; 
         }
 
+        if ($consig->guia) {
+            foreach ($consig->guia->detalleGuia as $dg) {
+                $data_det_guia [] = "<tr>
+                                        <td>".$dg->item->nombre."</td>
+                                        <td>".$dg->cantidad."</td>
+                                        <td>".$dg->peso."</td>
+                                        <td>".$dg->descripcion."</td>
+                                    </tr>"; 
+            }
+        }
+
         return response()->json([
             "consig"        => $consig,
             "data"          => $data,
+            "data_det_guia" => $data_det_guia,
             "dir_llegada"   => $dir_llegada,
             "dir_salida"    => $dir_salida,
         ]);

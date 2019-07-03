@@ -400,10 +400,7 @@
             $("#serie").text(data.consig.guia.serial);
             $("#dir_salida").text(data.dir_salida);
             $("#dir_llegada").text(data.dir_llegada);
-            $("#ref_item_id").text(data.consig.guia.detalle_guia.item.nombre);
-            $("#cantidad").text(data.consig.guia.detalle_guia.cantidad);
-            $("#peso").text(data.consig.guia.detalle_guia.peso);
-            $("#descripcion").text(data.consig.guia.detalle_guia.descripcion);
+            $("#data_detalles_guia").empty().append(data.data_det_guia);
         }
 
         // calcular restante de la venta

@@ -8,28 +8,30 @@
 						<h3><i class="fa fa-arrow-right"></i> Guia <b>Nº <span> {{ $d->serial  }} </span></b></h3>
 					</div>
 					<div class="panel-body">
-                        <div class="form-group col-lg-3">
-                            <label>Tipo de item</label>
-                            <p class="list-group-item">{{ $d->detalleGuia->item->nombre }}</p>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label>Cantidad</label>
-                            <p class="list-group-item">{{ $d->detalleGuia->cantidad }}</p>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label>Peso</label>
-                            <p class="list-group-item">{{ $d->detalleGuia->peso }} Kg</p>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <label>Motivo</label>
-                            <p class="list-group-item list-group-item-info">{{ $d->motivo_guia->nombre }}</p>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Descripcion</label>
-                            <p class="list-group-item">{{ $d->detalleGuia->descripcion == null ? 'sin detalles' : $d->detalleGuia->descripcion }}</p>
-                        </div>
+                        <table class="table table-hover table-bordered table-striped">
+                            <caption>Detalles de la guia</caption>
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th>ITEM</th>
+                                    <th>CANTIDAD</th>
+                                    <th>PESO TOTAL (Kg)</th>
+                                    <th>DESCRIPCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($d->detalleGuia as $dg)
+                                    <tr>
+                                        <td>{{ $dg->item->nombre }}</td>
+                                        <td>{{ $dg->cantidad }}</td>
+                                        <td>{{ $dg->peso }} Kg</td>
+                                        <td>{{ $dg->descripcion }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 
                         <table class="table table-bordered table-striped table-hover">
+                            <caption>Detalles de los productos</caption>
                             <thead>
                                 <tr class="bg-navy">
                                     <th>Codigo</th>

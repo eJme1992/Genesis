@@ -47,7 +47,7 @@ class GuiaRemision extends Model
 
     // detalle de guias
     public function detalleGuia(){
-        return $this->hasOne('App\DetalleGuiaRemision', 'guia_remision_id');
+        return $this->hasMany('App\DetalleGuiaRemision', 'guia_remision_id');
     }
 
     public function guias(){
@@ -67,12 +67,14 @@ class GuiaRemision extends Model
             'user_id'         => Auth::id(),
         ]);
 
-        $data->detalleGuia()->create([
-            'ref_item_id'   => $request->ref_item_id,
-            'cantidad'      => $request->cantidad,
-            'peso'          => $request->peso,
-            'descripcion'   => $request->descripcion,
-        ]);
+        for ($dg = 0; $dg < count($request->ref_item_id) ; $dg++) {
+            $data->detalleGuia()->create([
+                'ref_item_id'   => $request->ref_item_id[$dg],
+                'cantidad'      => $request->cantidad[$dg],
+                'peso'          => $request->peso[$dg],
+                'descripcion'   => $request->descripcion[$dg],
+            ]);
+        }
 
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
             if ($request->montura[$i] != 0 || $request->montura[$i] != null) {

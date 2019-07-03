@@ -78,7 +78,7 @@
 									</td>
 									<td class="text-nowrap">
                                         <span class="col-lg-4" data-toggle="modal" data-target="#editar_guia">
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 data-id="{{ $d->detalleGuia->id }}"
                                                 data-cantidad="{{ $d->detalleGuia->cantidad }}"
                                                 data-peso="{{ $d->detalleGuia->peso }}"
@@ -86,7 +86,7 @@
                                                 data-toggle="tooltip" title="Editar datos de la guia"
                                                 class="btn btn-xs bg-orange beg">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
-                                            </button> 
+                                            </button>  --}}
                                         </span>
                                         <span class="col-lg-4" data-toggle="modal" data-target="#show_guia_{{ $d->id }}">
                                             <button type="button"
@@ -116,25 +116,26 @@
     @include('direcciones.modals.modal_create')    
     @include('clientes.modals.createclientes') 
     @foreach($guias as $d)
-	@include('guia_remision.modals.modelos')
+	   @include('guia_remision.modals.modelos')
     @endforeach
 
 @endsection
 @section("script")
 <script>
 
-contar_modelos = 1;
+var contar_modelos = 1;
+var contar_det_guia = 2;
 
-$(".beg").click(function(e) {
-    ruta = '{{ route("guiaRemision.update",":value") }}';
-    $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).data("id")));
+// $(".beg").click(function(e) {
+//     ruta = '{{ route("guiaRemision.update",":value") }}';
+//     $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).data("id")));
 
-    $("#cantidad, #peso, #descripcion").val("");
+//     $("#cantidad, #peso, #descripcion").val("");
 
-    $("#cantidad").val($(this).data("cantidad"));
-    $("#peso").val($(this).data("peso"));
-    $("#descripcion").val($(this).data("descripcion"));
-});
+//     $("#cantidad").val($(this).data("cantidad"));
+//     $("#peso").val($(this).data("peso"));
+//     $("#descripcion").val($(this).data("descripcion"));
+// });
 
 // añadir mas modelos
 $("#btn_mas_modelos").click(function(event) {
@@ -192,6 +193,30 @@ $('#motivo_guia').change(function(event) {
 		$('#add_cliente').removeAttr('disabled');
 		$('#add_cliente').removeAttr('selected');	
 	}
+});
+
+// añadir mas detalles a la guia
+$("#btn_añadir_detalle_guia").click(function(e){
+    e.preventDefault();
+    
+    contar = contar_det_guia++;
+    
+    $("#section_replicar_detalle_guia").append("<section id='section_detalle_guia_"+contar+"'></section>");
+    $("#section_detalle_guia_"+contar+"").html($("#section_detalle_guia_1").html());
+
+    $("#section_detalle_guia_"+contar+"").append(
+        "<div class='form-group col-lg-1'>"+
+            "<label>---</label><br>"+
+            "<button class='btn btn-danger' type='button' id='btn_delete_det_guia"+contar+"'>"+
+                "<i class='fa fa-remove'></i>"+
+            "</button>"+
+        "</div>");
+
+    $('#btn_delete_det_guia'+contar+'').click(function(e){
+      e.preventDefault();
+      $('#section_detalle_guia_'+contar+'').remove();
+      contar--;
+    });
 });
 
 // guardar guia de remision
