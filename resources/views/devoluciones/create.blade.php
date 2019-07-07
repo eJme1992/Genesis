@@ -53,7 +53,7 @@
 @section("script")
 <script>
 
-    var totalFacturar = 0, btnGuardarTodo = $("#btn_guardar_all");
+    var totalFacturar = 0, btnGuardarTodo = $("#btn_guardar_all"), contar_det_guia = 2;
     $("#select_coleccion").val('').prop('selected', true);
     $("#checkbox_guia").prop('checked', false);
     $(".total_venta, .subtotal, #abono, #restante, #total_facturar, #user_id, #cliente_id, #direccion_id").val('');
@@ -70,6 +70,30 @@
             $("#checkbox_guia").val(0);
             $("#serial, #guia, #dir_salida, #dir_llegada, #item, #cantidad, #peso").prop('required', false);
         }
+    });
+
+    // añadir mas detalles a la guia
+    $("#btn_añadir_detalle_guia").click(function(e){
+        e.preventDefault();
+        
+        contar = contar_det_guia++;
+        
+        $("#section_replicar_detalle_guia").append("<section id='section_detalle_guia_"+contar+"'></section>");
+        $("#section_detalle_guia_"+contar+"").html($("#section_detalle_guia_1").html());
+
+        $("#section_detalle_guia_"+contar+"").append(
+            "<div class='form-group col-lg-1'>"+
+                "<label>---</label><br>"+
+                "<button class='btn btn-danger' type='button' id='btn_delete_det_guia"+contar+"'>"+
+                    "<i class='fa fa-remove'></i>"+
+                "</button>"+
+            "</div>");
+
+        $('#btn_delete_det_guia'+contar+'').click(function(e){
+          e.preventDefault();
+          $('#section_detalle_guia_'+contar+'').remove();
+          contar--;
+        });
     });
 
     // buscar y cargar la venta

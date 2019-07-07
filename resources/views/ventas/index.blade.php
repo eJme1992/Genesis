@@ -33,9 +33,9 @@
                             Nueva venta <span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu bg-red">
-                            <li><a href="{{ route('create_venta_directa') }}">Venta directa</a></li>
-                            <li><a href="{{ route('create_venta_asignacion') }}">Venta por asignacion</a></li>
-                            <li><a href="{{ route('create_venta_consignacion') }}">Venta por consignacion</a></li>
+                            <li><a href="{{ route('create_venta_directa') }}">Venta Oficina</a></li>
+                            <li><a href="{{ route('create_venta_asignacion') }}">Venta Productos Asignados</a></li>
+                            <li><a href="{{ route('create_venta_consignacion') }}">Venta Productos Consignados</a></li>
                           </ul>
                         </div>
                     </span>

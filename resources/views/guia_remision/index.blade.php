@@ -55,10 +55,7 @@
 									<td><b>{{ $d->serial }}</b></td>
 									<td>{{ $d->cliente->nombre_full ?? '' }}</td>
 									<td>
-										{{ $d->dirSalida->departamento->departamento }} |
-										{{ $d->dirSalida->provincia->provincia }} |
-										{{ $d->dirSalida->distrito->distrito }} |
-										{{ $d->dirSalida->detalle }}
+										{{ $d->dirSalida->full_dir() }}
 										@forelse($d->modeloGuias as $m)
 										<input type="hidden" class="name_mod" value="{{ $m->modelo->name }}">
 										<input type="hidden" class="montura_mod" value="{{ $m->montura }}">
@@ -66,10 +63,7 @@
 										@endforelse
 									</td>
 									<td>
-										{{ $d->dirLLegada->departamento->departamento }} |
-										{{ $d->dirLLegada->provincia->provincia }} |
-										{{ $d->dirLLegada->distrito->distrito }} |
-										{{ $d->dirLLegada->detalle }}
+										{{ $d->dirLLegada->full_dir() }}
 									</td>
 									<td class="success">{{ $d->motivo_guia->nombre }}</td>
 									<td>{{ $d->user->name ?? '' }}</td>
@@ -123,11 +117,23 @@
 var contar_modelos = 1;
 var contar_det_guia = 2;
 
+function datosGuia(id){
+    $.get("cargarGuia/"+id+"",function(res, index){
+        $("#edit_serial").empty().text(res.guia.serial);
+        $("#edit_motivoguia").val(res.guia.motivo_guia_id).prop("selected", true);
+        $("#edit_cliente").val(res.guia.cliente_id).prop("selected", true);
+        $("#edit_dirsalida").val(res.guia.dir_salida).prop("selected", true);
+        $("#edit_dirllegada").val(res.guia.dir_llegada).prop("selected", true);
+        $("#data_detalles_guia").empty().append(res.data);
+    });
+}
+
 $(".beg").click(function(e) {
     ruta = '{{ route("guiaRemision.update",":value") }}';
     $("#form_edit_guia").attr("action", ruta.replace(':value', $(this).val()));
-
-    // $("#cantidad, #peso, #descripcion").val("");
+    $("#icon-load").show();
+    datosGuia($(this).val());
+    $("#icon-load").hide();
 });
 
 // añadir mas modelos

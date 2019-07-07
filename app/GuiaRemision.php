@@ -56,6 +56,37 @@ class GuiaRemision extends Model
 
     // ------------------- funciones personalizadas ---------------------------
 
+    public static function guiaEdit($id){
+        $guia = GuiaRemision::findOrFail($id);
+        $data = array();
+
+        foreach ($guia->detalleGuia as $dg) {
+            $data [] = "<tr>
+                            <td>
+                                <input value='".$dg->id."' type='hidden' name='id_dg[]'>
+                                <select class='form-control' name='ref_item_id[]'>
+                                    ".RefItem::elegirTipoItem($dg->ref_item_id)."
+                                </select>
+                            </td>
+                            <td>
+                                <input value='".$dg->cantidad."' type='text' class='form-control numero' name='cantidad[]'>
+                            </td>
+                            <td>
+                                <input value='".$dg->peso."' type='text' class='form-control numero' name='peso[]'>
+                            </td>
+                            <td>
+                                <input value='".$dg->descripcion."' type='text' class='form-control' name='descripcion[]'>
+                            </td>
+                        </tr>"; 
+        }
+
+        return response()->json([
+            "guia"  => $guia,
+            "data"  => $data,
+        ]);
+
+    }
+
     public static function guiaStore($request, $motivo){
 
         $data = GuiaRemision::create([
@@ -108,9 +139,19 @@ class GuiaRemision extends Model
 
     // actualizar guia de remision
     public static function guiaUpdate($request, $id){
-        $guia = DetalleGuiaRemision::findOrFail($id);
+        $guia = GuiaRemision::findOrFail($id);
+        $guia->user_id = Auth::id();
         $guia->fill($request->all());
         $guia->save();
+
+        for ($dg = 0; $dg < count($request->ref_item_id) ; $dg++) {
+            $det_guia               = DetalleGuiaRemision::findOrFail($request->id_dg[$dg]);
+            $det_guia->ref_item_id  = $request->ref_item_id[$dg];
+            $det_guia->cantidad     = $request->cantidad[$dg];
+            $det_guia->peso         = $request->peso[$dg];
+            $det_guia->descripcion  = $request->descripcion[$dg];
+            $det_guia->save();
+        }
 
         BitacoraUser::saveBitacora("Guia de remision actualizada (".$guia->serial.")");
 

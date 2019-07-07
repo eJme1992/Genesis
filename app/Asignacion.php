@@ -81,9 +81,8 @@ class Asignacion extends Model
                           ->where("marca_id", $marca)
                           ->where("status_id",  1)
                           ->get()->groupBy("name");
-        $data = array();
-        $model = array();
-        $precio = array();
+
+        $data = $model = array();
 
         if ($modelos->count() > 0) {
 
@@ -91,52 +90,50 @@ class Asignacion extends Model
 
         		foreach ($m as $mod) {
 
-                    $precios = Asignacion::precioColeccionMarca($mod->marca_id, $mod->coleccion_id);
+                    $precios = ColeccionMarca::cargarPrecios($mod->coleccion_id, $mod->marca_id);
+        			$name    = $mod->name;
 
                     if ($precios->precio_almacen && $precios->precio_venta_establecido) {
-                        $precios = " <i class='fa fa-arrow-right'></i> [<b>PA</b>] S/".$precios->precio_almacen."  -  [<b>PVE</b>] S/".$precios->precio_venta_establecido."<br>";
+                        $precios = "<i class='fa fa-arrow-right'></i> 
+                                    [<b>PA</b>] S/".$precios->precio_almacen."  -  
+                                    [<b>PVE</b>] S/".$precios->precio_venta_establecido." <br>";
                     }else{
                         $precios = "<b>N/A</b><br>";
                     }
 
-        			$name = $mod->name;
-        			$montura = $mod->montura;
-        			$id = $mod->id;
-
-        			if (!$mod->precio_montura) {
-        				$precio_montura = "vacio";
-        			}else{
-        				$precio_montura = $mod->precio_montura;
-        			}
-
                     $data [] = "<tr>
-                          <td>".$id."<input type='hidden' value='".$id."' id='modelo_id_".$id."' name='modelo_id[]'></td>
-                          <td>".$name."<input type='hidden' value='".$name."' id='name_".$id."' name='name[]'></td>
-                          <td>".$montura."</td>
-                          <td>".$mod->estuche."<input type='hidden' value='".$mod->estuche."' name='estuche[]'></td>
-                          <td>
-                              <select class='form-control' name='montura[]' id='monturas_".$id."'>
-                              <option value=''>...</option>
-                              ".Asignacion::Monturas($montura)."
-                              </select>
-                          </td>
-                      </tr>"; 
+                                    <td>
+                                        ".$mod->id."<input type='hidden' value='".$mod->id."' id='modelo_id_".$mod->id."' name='modelo_id[]'>
+                                    </td>
+                                    <td>
+                                        ".$name."<input type='hidden' value='".$name."' id='name_".$mod->id."' name='name[]'>
+                                    </td>
+                                    <td>
+                                        <select class='form-control montura_modelo' name='montura[]'>
+                                            <option value=''>...</option>
+                                            ".Asignacion::Monturas($mod->montura)."
+                                        </select>
+                                    </td>
+                                    <td>
+                                        ".$mod->estuche."<input type='hidden' value='".$mod->estuche."' name='estuche[]'>
+                                    </td>
+                                    <td>
+                                        <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($mod->coleccion_id, $mod->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo'>
+                                    </td>
+                                    <td>
+                                        <input type='text' class='form-control preciototal' readonly=''>
+                                    </td>
+                                </tr>"; 
         		}
 
-            $model [] = $name."<br>";
-            $precio [] = $precios;
+            $model []   = "<button type='button' class='btn-link btn_nm' value='".$name."'>".$name."</button>".$precios."";
           }
           
-        }else{
-            $data [] = "";
-            $model [] = "";
-            $precio [] = "";
-        }                  
+        }                
 
         return response()->json([
-            "data" => $data, 
-            "model" => str_replace(",", "  ", join(",", $model)), 
-            "precio" => str_replace(",", "  ", join(",", $precio)), 
+            "data"  => $data, 
+            "model" => $model,
         ]);
     }
 

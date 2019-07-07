@@ -26,7 +26,7 @@
 @section("script")
 <script>
 
-    var total = 0; var error_cal = false;
+    var total = 0; var error_cal = false; var contar_det_guia = 2;
     $("#checkbox_factura, #checkbox_guia, #checkbox_pago").prop('checked', false);
     $("#tipo_abono_id").val(0).prop('selected', true);
     $("#btn_guardar_all").attr('disabled', 'disabled');
@@ -69,6 +69,30 @@
             $("#checkbox_factura").val(0);
             $("#num_factura, #item, #status_av, #subtotal, #impuesto, #total_neto").prop('required', false);
         }
+    });
+
+    // añadir mas detalles a la guia
+    $("#btn_añadir_detalle_guia").click(function(e){
+        e.preventDefault();
+        
+        contar = contar_det_guia++;
+        
+        $("#section_replicar_detalle_guia").append("<section id='section_detalle_guia_"+contar+"'></section>");
+        $("#section_detalle_guia_"+contar+"").html($("#section_detalle_guia_1").html());
+
+        $("#section_detalle_guia_"+contar+"").append(
+            "<div class='form-group col-lg-1'>"+
+                "<label>---</label><br>"+
+                "<button class='btn btn-danger' type='button' id='btn_delete_det_guia"+contar+"'>"+
+                    "<i class='fa fa-remove'></i>"+
+                "</button>"+
+            "</div>");
+
+        $('#btn_delete_det_guia'+contar+'').click(function(e){
+          e.preventDefault();
+          $('#section_detalle_guia_'+contar+'').remove();
+          contar--;
+        });
     });
 
     // busqueda de marcas en la coleccion

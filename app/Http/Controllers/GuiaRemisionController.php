@@ -50,15 +50,18 @@ class GuiaRemisionController extends Controller
 
     public function edit($id)
     {
-        //
+        return GuiaRemision::guiaEdit($id);
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'cantidad'    => 'required',
-            'peso'        => 'required',
-            'descripcion' => 'required',
+            'serial'         => '',
+            'guia'           => '',
+            'cliente_id'     => '',
+            'dir_salida'     => 'required',
+            'dir_llegada'    => 'required',
+            'motivo_guia_id' => 'required',
         ]);
 
         return GuiaRemision::guiaUpdate($request, $id);

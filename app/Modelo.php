@@ -194,8 +194,6 @@ class Modelo extends Model
         return $data;
     }
 
-    //------------------------------------------- metodos propios --------------------------------------------------------------
-
     // eliminar varios modelo a la vez
     public static function deleteAll($request){
         $modelos = Modelo::with("marca","status")

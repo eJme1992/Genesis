@@ -281,14 +281,14 @@
         // cargar clientes
         function viewCliente(){
           $.get("{{ route('viewClientes') }}", function(res){
-              $("#add_cliente").empty().append(res);
+              $("#add_cliente, #edit_cliente").empty().append(res);
           });
         }
 
         // cargar direcciones
         function allDir(){
             $.get('{{ route("allDireccion") }}', function(response, dir){
-                    $(".dir_asig").empty().append(response);
+                $(".dir_asig").empty().append(response);
             });
         }
 
@@ -398,6 +398,8 @@
         function cargarGuia(data){
             $("#id_guia").val(data.consig.guia.id);
             $("#serie").text(data.consig.guia.serial);
+            $("#motivo_guia").text(data.consig.guia.motivo_guia.nombre);
+            $("#cliente_guia").text(data.consig.guia.cliente.nombre_full);
             $("#dir_salida").text(data.dir_salida);
             $("#dir_llegada").text(data.dir_llegada);
             $("#data_detalles_guia").empty().append(data.data_det_guia);

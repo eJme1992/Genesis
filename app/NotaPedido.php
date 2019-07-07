@@ -36,6 +36,10 @@ class NotaPedido extends Model
         return $this->hasMany("App\MovNotaPedido", "notapedido_id");
     }
 
+    public function consignaciones(){
+        return $this->hasMany("App\Consignacion", "notapedido_id");
+    }
+
     public function createF(){
         return $this->created_at->format("d-m-Y");
     }

@@ -9,7 +9,10 @@ use Auth;
 class Consignacion extends Model
 {
     protected $table    = "consignaciones";
-    protected $fillable = ["cliente_id", "user_id", "fecha_envio", "total", "guia_id", "status"];
+    protected $fillable = [
+        "cliente_id", "user_id", "fecha_envio", "total", 
+        "guia_id", "notapedido_id", "status"
+    ];
     
     public function cliente(){
       return $this->belongsTo("App\Cliente", "cliente_id");
@@ -17,6 +20,10 @@ class Consignacion extends Model
 
     public function guia(){
       return $this->belongsTo("App\GuiaRemision", "guia_id");
+    }
+
+    public function notapedido(){
+      return $this->belongsTo("App\NotaPedido", "notapedido_id");
     }
     
     public function user(){
@@ -36,14 +43,16 @@ class Consignacion extends Model
     }
 
     // guardar consignacion
-    public static function saveConsignacionAndDetalle($request, $guia){
+    public static function saveConsignacionAndDetalle($request, $guia, $nota){
 
         $consignacion = Consignacion::create([
-            'cliente_id'  => $request->cliente_id,
-            'fecha_envio' => $request->fecha_envio,
-            'user_id'     => Auth::id(),
-            'guia_id'     => ($guia == 1) ? GuiaRemision::orderBy("id", "DESC")->value("id") : null,
-            'status'      => 1,
+            'cliente_id'    => $request->cliente_id,
+            'fecha_envio'   => $request->fecha_envio,
+            'user_id'       => Auth::id(),
+            'guia_id'       => ($guia == 1) ? GuiaRemision::orderBy("id", "DESC")->value("id") : null,
+            'notapedido_id' => $nota,
+            'total'         => $request->total,
+            'status'        => 1,
         ]);
 
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
@@ -62,15 +71,14 @@ class Consignacion extends Model
     // validar si la consignacion tiene o no guia
     public static function consigStore($request){
 
+        $nota = NotaPedido::saveNotaPedido($request, $motivo = 3); // guardar nota pedido
+        Consignacion::saveConsignacionAndDetalle($request, $guia = 1, $nota->id); // guardar consignacion y detalle
         if ($request->checkbox == 1) {
             if (GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count() > 0) {
                 return response()->json(1);
             }else{
                 GuiaRemision::guiaStore($request, $motivo = 3); // guardar guia
-                Consignacion::saveConsignacionAndDetalle($request, $guia = 1); // guardar consignacion y detalle
             }
-        }else{ 
-            Consignacion::saveConsignacionAndDetalle($request, $guia = 0); // consignacion    
         }
 
         return response()->json("ok");
@@ -95,6 +103,59 @@ class Consignacion extends Model
         }
     }
 
+    // añadir mas modelos a la consignacion
+    public static function añadirModelos($request, $id){
+
+        $db = DB::transaction(function() use ($request, $id) {
+            $consig             = Consignacion::findOrFail($id);
+            $consig->total      = $request->total + $consig->total;
+            $consig->user_id    = Auth::id();
+            $consig->save();
+
+            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+                if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+                    $consig->detalleConsignacion()->create([
+                        'modelo_id'   => $request->modelo_id[$i],
+                        'montura'     => $request->montura[$i],
+                        'estuche'     => $request->estuche[$i],
+                        'status'      => 1,
+                    ]);
+                    Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+                }   
+            }
+
+            if ($consig->notapedido_id) {
+                $nt             = NotaPedido::findorFail($consig->notapedido_id);
+                $nt->total      = $request->total + $nt->total;
+                $nt->user_id    = Auth::id();
+                $nt->save();
+
+                for ($j = 0; $j < count($request->modelo_id) ; $j++) {
+                    if ($request->montura[$j] != 0 || $request->montura[$j] != null) {
+                        $nt->movNotaPedido()->create([
+                            'modelo_id' => $request->modelo_id[$j],
+                            'monturas'  => $request->montura[$j],
+                            'estuches'  => $request->estuche[$j]
+                        ]);
+                    }
+                }
+            }
+
+            BitacoraUser::saveBitacora("Consignacion [".$id."] actualizada  correctamente");
+        });
+
+        if (is_null($db)) { // fue todo correcto
+            if ($request->ajax()) {
+                return response()->json("1");
+            }else{
+                return back()->with([
+                    'flash_message' => 'Consignacion actualizada.',
+                    'flash_class'   => 'alert-success'
+                ]);
+            }
+        }
+    }
+
     //actualizar status en consig;
     public static function updateStatusConsignacion($id, $status){
         $consig = Consignacion::findOrFail($id);
@@ -105,7 +166,7 @@ class Consignacion extends Model
      // cargar datos de la consig
     public static function showConsig($id){
         
-        $consig         = Consignacion::with("cliente", "guia.detalleGuia.item")->findOrFail($id);
+        $consig         = Consignacion::with("cliente", "guia.detalleGuia.item", "guia.motivo_guia", "guia.cliente")->findOrFail($id);
         $data           = array();
         $data_det_guia  = array();
         $dir_llegada    = ($consig->guia) ? $consig->guia->dirLLegada->full_dir() : 'vacio';

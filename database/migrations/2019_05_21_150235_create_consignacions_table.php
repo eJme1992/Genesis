@@ -18,6 +18,7 @@ class CreateConsignacionsTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('cliente_id')->nullable();
             $table->unsignedInteger('guia_id')->nullable();
+            $table->unsignedInteger('notapedido_id')->nullable();
             $table->unsignedInteger('status')->nullable();
             $table->string('fecha_envio')->nullable();
             $table->decimal('total', 12, 2)->nullable();// monto total de venta
@@ -32,6 +33,10 @@ class CreateConsignacionsTable extends Migration
 
             $table->foreign('guia_id')->references('id')
                                         ->on('guia_remision')
+                                        ->onDelete('cascade');
+
+            $table->foreign('notapedido_id')->references('id')
+                                        ->on('nota_pedidos')
                                         ->onDelete('cascade');
             $table->timestamps();
         });

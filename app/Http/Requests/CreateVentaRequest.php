@@ -47,7 +47,7 @@ class CreateVentaRequest extends FormRequest
             'guia'                  => 'required_if:checkbox_guia, 1',
             'dir_salida'            => 'required_if:checkbox_guia, 1',
             'dir_llegada'           => 'required_if:checkbox_guia, 1',
-            'ref_item_id'           => 'required_if:checkbox_guia, 1|in:1,2,3,4',
+            'ref_item_id'           => 'required_if:checkbox_guia, 1',
             'cantidad'              => 'required_if:checkbox_guia, 1',
             'peso'                  => 'required_if:checkbox_guia, 1',
             'descripcion'           => '',

@@ -15,7 +15,8 @@ class ConsignacionController extends Controller
     public function index()
     {
         return view('consignaciones.index',[
-            "consignaciones" => Consignacion::all()
+            "consignaciones" => Consignacion::all(),
+            "colecciones"    => Coleccion::all(),
         ]);
     }
 
@@ -56,6 +57,7 @@ class ConsignacionController extends Controller
             'modelo_id'      => 'required',
             'montura'        => 'required',
             'estuche'        => '',
+            'total'          => 'required',
         ]);
 
         return Consignacion::consigStore($request);
@@ -108,5 +110,14 @@ class ConsignacionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function añadirModelos(Request $request, $id)
+    {
+        $this->validate($request, [
+            'fecha_envio'    => '',
+        ]);
+
+        return Consignacion::añadirModelos($request, $id);
     }
 }

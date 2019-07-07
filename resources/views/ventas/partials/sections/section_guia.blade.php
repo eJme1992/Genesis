@@ -4,19 +4,14 @@
     <p class="list-group-item" id="serie"></p>
 </div>
 <div class="col-lg-3">
-    <label>Tipo de iTem</label> 
-    <p class="list-group-item" id="ref_item_id"></p>
+    <label>Motivo</label> 
+    <p class="list-group-item" id="motivo_guia"></p>
 </div>
-<div class="col-lg-3">
-    <label>Cantidad</label> 
-    <p class="list-group-item" id="cantidad"></p>
-</div>
-<div class="col-lg-3">
-    <label>Peso</label> 
-    <p class="list-group-item"><span id="peso"></span> KG.</p>
+<div class="col-lg-6">
+    <label>Cliente</label> 
+    <p class="list-group-item" id="cliente_guia"></p>
     <br>
 </div>
-
 <div class="col-lg-6">
     <label>Direccion de salida</label> 
     <p class="list-group-item" id="dir_salida"></p>
@@ -26,9 +21,18 @@
     <p class="list-group-item" id="dir_llegada"></p>
     <br>
 </div>
-
 <div class="col-lg-12">
-    <label>Descripcion</label> 
-    <p class="list-group-item" id="descripcion"></p>
-    <br>
+    <table class="table table-bordered table-striped">
+        <caption>Detalles de la guia</caption>
+        <thead class="bg-primary">
+            <tr>
+                <th>ITEM</th>
+                <th>CANTIDAD</th>
+                <th>PESO TOTAL (Kg)</th>
+                <th>DESCRIPCION</th>
+            </tr>
+        </thead>
+        <tbody id="data_detalles_guia">
+        </tbody>
+    </table>
 </div>

@@ -9,8 +9,7 @@ class MovNotaPedido extends Model
     protected $table = "mov_nota_pedidos";
 
     protected $fillable = [
-        "notapedido_id", "modelo_id", "monturas", 
-        "estuches"
+        "notapedido_id", "modelo_id", "monturas", "estuches"
     ];
 
     public function modelo(){
