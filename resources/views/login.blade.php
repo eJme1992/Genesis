@@ -27,7 +27,6 @@
 	    }
 	</style>
 	<body class="">
-		@include('partials.flash')
 	  <div class="login-box">
 	    <div class="login-logo">
 	    <center>

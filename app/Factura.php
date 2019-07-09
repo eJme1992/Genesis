@@ -20,7 +20,7 @@ class Factura extends Model
     }
 
     public function adicionalFactura(){
-        return $this->hasOne("App\AdicionalVenta");
+        return $this->hasOne("App\AdicionalVenta", "venta_id");
     }
 
     public function createF(){

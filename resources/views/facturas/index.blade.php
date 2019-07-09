@@ -44,6 +44,7 @@
                                 <th class="text-center">Subtotal</th>
                                 <th class="text-center">Impuesto</th>
                                 <th class="text-center">Total</th>
+                                <th class="text-center">Venta</th>
                                 <th class="text-center bg-navy"><i class="fa fa-cogs"></i></th>
                             </tr>
                         </thead>
@@ -55,6 +56,15 @@
                                     <td>{{ $d->subtotal }}</td>
                                     <td>{{ $d->impuesto }}</td>
                                     <td>{{ $d->total }}</td>
+                                    <td>
+                                        @if($d->adicionalFactura)
+                                        <span data-toggle="modal" data-target="#ver_venta_{{ $d->id }}">
+                                            <button type="button" class="btn bg-primary btn-xs" data-toggle="tooltip" title="Ver venta">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                        @endif
+                                    </td>
                                     <td>
 
                                         {{-- editar devolucion --}}
@@ -75,6 +85,11 @@
     </div>
     @include("facturas.modals.edit_factura")
     @include('facturas.modals.create_factura') 
+    @foreach($facturas as $d)
+        @if($d->adicionalFactura)
+            @include("facturas.modals.verventa")
+        @endif
+    @endforeach
 @endsection
 
 @section("script")
