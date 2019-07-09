@@ -119,6 +119,12 @@ class VentaController extends Controller
         ]);
     }
 
+    public function cargarVenta($id)
+    {
+        $venta = Venta::with("cliente")->findOrFail($id);
+        return response()->json($venta);
+    }
+
     public function showVentaJson($id)
     {
         return Venta::showVentaJson($id);

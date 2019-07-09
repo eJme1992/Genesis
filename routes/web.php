@@ -138,6 +138,8 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
     Route::post('updateEstadoFactura',      'VentaController@updateEstadoFactura')->name('ventas.updateEstadoFactura');
     Route::post('updateEstadoEstuche',      'VentaController@updateEstadoEstuche')->name('ventas.updateEstadoEstuche');
 
+    Route::get('cargarVenta/{id}', 'VentaController@cargarVenta')->name('cargarVenta');
+
   	// foto del usuario
   	Route::get('images/{filename}',function($filename){
   		

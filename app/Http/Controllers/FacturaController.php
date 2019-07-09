@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Factura, RefItem, StatusAdicionalVenta, Cliente};
+use App\{Factura, RefItem, StatusAdicionalVenta, Cliente, Venta};
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
@@ -17,6 +17,7 @@ class FacturaController extends Controller
         return view("facturas.index",[
             "facturas"  => Factura::all(),
             "clientes"  => Cliente::all(),
+            "ventas"    => Venta::all(),
         ]);
     }
 
@@ -38,6 +39,7 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validate($request, [
             'cliente_id'            => 'required',
             'num_factura'           => 'required|unique:facturas',

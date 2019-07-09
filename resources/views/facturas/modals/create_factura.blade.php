@@ -9,21 +9,31 @@
         <h4 class="modal-title"><i class="fa fa-arrow-right"></i> Nueva factura</h4>
       </div>
       <div class="modal-body">
-        <div class="form-group col-lg-4">
-            <label0>Nº Cliente *</label>
-            <select class="form-control item" name="cliente_id" id="cliente_id" required="">
-                @foreach($clientes as $m)
-                <option value="{{ $m->id }}">{{ $m->nombre_full }}</option>
+        <div class="form-group col-lg-8">
+            <label0>Venta *</label><br>
+            <select class="select2" name="venta_id" id="venta_id_id" required="" style="width: 100%">
+                @foreach($ventas as $m)
+                <option value="{{ $m->id }}">{{ 'Codigo ['.$m->id.'] - Fecha ['.$m->fecha.']' }}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group col-lg-4">
-            <label0>Nº Factura *</label>
+            <label>---</label><br>
+            <button type="button" id="buscar_venta" class="btn btn-primary">Buscar</button>
+        </div>
+        
+        <div class="form-group col-lg-4">
+            <label0>Cliente *</label>
+            <input type="text" class="form-control" id="cliente_id" required="" readonly="">
+            <input type="hidden" name="cliente_id" id="cliente_id_id" required="">
+        </div>
+        <div class="form-group col-lg-8">
+            <label0>Nº Factura *</label> 
             <input type="text" name="num_factura" class="form-control" id="num_factura" required="">
         </div>
         <div class="form-group col-lg-4">
             <label0>Sub-Total *</label>
-            <input type="number" step="0.01" min="1" max="99999999999" name="subtotal" class="form-control subtotal" id="subtotal_c" required="">
+            <input type="number" step="0.01" min="1" max="99999999999" name="subtotal" class="form-control subtotal" id="subtotal_c" required="" readonly="">
         </div>
         <div class="form-group col-lg-4">
             <label0>IGV * (%)</label>

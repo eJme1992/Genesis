@@ -20,7 +20,7 @@ class Factura extends Model
     }
 
     public function adicionalFactura(){
-        return $this->hasOne("App\AdicionalVenta", "venta_id");
+        return $this->hasOne("App\AdicionalVenta");
     }
 
     public function createF(){
@@ -36,7 +36,8 @@ class Factura extends Model
 
         $db = DB::transaction(function() use ($request) {
             $fact = Factura::saveFactura($request);
-
+            $request->ref_item_id_factura = 1;
+            $request->ref_estadic_id = 1;
             if ($request->venta_id) {
                 AdicionalVenta::saveAV($request->venta_id, $fact->id, $request);
             }
