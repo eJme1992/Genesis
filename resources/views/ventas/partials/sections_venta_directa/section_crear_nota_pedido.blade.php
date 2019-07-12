@@ -8,7 +8,7 @@
     <button type="button" data-toggle="modal" data-target="#create_cliente" class="btn btn-link btn-xs">
         [Nuevo cliente]
     </button>
-    <select class="form-control" name="cliente_id" required="" id="add_cliente">
+    <select class="select2" name="cliente_id" required="" id="add_cliente" style="width: 100%">
         <option value="">seleccione...</option>
         @foreach($clientes as $m)
         <option value="{{ $m->id }}">
@@ -23,7 +23,7 @@
     <button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-xs">
         [Nueva direccion]
     </button>
-    <select class="form-control dir_asig" name="direccion_id" id="direccion_id" required="">
+    <select class="select2 dir_asig" name="direccion_id" id="direccion_id" required="" style="width: 100%">
         @foreach($direcciones as $m)
         @php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
         <option value="{{ $m->id }}">

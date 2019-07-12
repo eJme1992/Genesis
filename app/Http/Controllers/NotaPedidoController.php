@@ -16,7 +16,7 @@ class NotaPedidoController extends Controller
     {
         return view("notapedido.index",[
             "notapedidos"       => NotaPedido::all(),
-            "motivos"           => MotivoGuia::all(),
+            "motivos"           => MotivoGuia::where("id", "<>", 2)->where("id", "<>", 5)->get(),
             "clientes"          => Cliente::all(),
             "direcciones"       => Direccion::all(),
             "colecciones"       => Coleccion::all(),

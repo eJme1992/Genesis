@@ -27,11 +27,9 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-arrow-right"></i> Notas de Credito</h3>
                     <span class="pull-right">
-                        <span data-toggle="modal" data-target="#create_notacredito">
-                            <button type="button" class="btn btn-danger btn_realizar_nc" data-toggle="tooltip" title="Realizar factura">
-                                <i class="fa fa-plus"></i> Nueva
-                            </button>
-                        </span>
+                        <a href="{{ route('notacredito.create') }}" class="btn btn-danger" data-toggle="tooltip" title="Realizar factura">
+                            <i class="fa fa-plus"></i> Nueva
+                        </a>
                     </span>
                 </div>
                 <div class="box-body">

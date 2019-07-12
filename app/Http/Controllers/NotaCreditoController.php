@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{NotaCredito, Factura};
+use App\{Devolucion, Venta, Factura, Cliente, GuiaRemision, Coleccion, Direccion, Departamento, RefItem, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra, NotaCredito, MovDevolucion};
 use Illuminate\Http\Request;
 
 class NotaCreditoController extends Controller
@@ -27,7 +27,19 @@ class NotaCreditoController extends Controller
      */
     public function create()
     {
-        //
+        return view("notacredito.create",[
+            "notacreditos"   => NotaCredito::all(),
+            "facturas"       => Factura::all(),
+            "ventas"         => Venta::all(),
+            "colecciones"    => Coleccion::all(),
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
+        ]);
     }
 
     /**
@@ -105,5 +117,10 @@ class NotaCreditoController extends Controller
     public function destroy(NotaCredito $notaCredito)
     {
         //
+    }
+
+    public function cargarTablaDesdeFactura($id)
+    {
+        return NotaCredito::cargarTablaDesdeFactura(Factura::findOrFail($id));
     }
 }

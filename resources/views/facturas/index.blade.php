@@ -105,6 +105,7 @@
 
     $("#buscar_venta").click(function(e) {
         $("#cliente_id, #cliente_id_id, #num_factura, #subtotal_c, #impuesto, #total_neto_c").val("");
+        $(".icon-load").show();
         $.get("cargarVenta/"+$("#venta_id_id").val()+"",function(response, dep){
             if (response != null) {
                 $("#cliente_id_id").val(response.cliente_id);
@@ -113,6 +114,7 @@
             }else{
                 mensajes("Alerta!", "Sin datos", "fa-warning", "red");
             }
+            $(".icon-load").hide();
         });
     });
 

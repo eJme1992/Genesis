@@ -57,4 +57,53 @@ class NotaCredito extends Model
             ]);
         }
     }
+
+     // cargar tabla para manipula los datos
+    public static function cargarTablaDesdeFactura($factura){
+        
+        $data = array();
+        $user = $cliente = $direccion = $dir = $tf = "";
+        
+        if ($factura->adicionalFactura->venta->movimientoVenta->count() > 0) {
+            $user       = $factura->adicionalFactura->venta->user;
+            $cliente    = $factura->adicionalFactura->venta->cliente;
+            $direccion  = $factura->adicionalFactura->venta->direccion_id;
+            $dir        = $factura->adicionalFactura->venta->direccion->full_dir();
+            $tf         = array_sum($factura->adicionalFactura->venta->movimientoVenta->pluck("precio_modelo")->toArray());
+
+            foreach ($factura->adicionalFactura->venta->movimientoVenta as $m) {
+
+                $data [] = "<tr>
+                    <td>
+                        ".$m->modelo_id."
+                        <input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'>
+                        <input type='hidden' value='".$m->id."' name='mov_venta_id[]'>
+                    </td>
+                    <td>".$m->modelo->name."</td>
+                    <td>
+                        <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>
+                            <option value=''>...</option>
+                            ".Asignacion::Monturas($m->monturas)."
+                        </select>
+                    </td>
+                    <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' class='venta_estuches'></td>
+                    <td>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."'  class='form-control venta_precio_montura' readonly='' data-valor='".$m->precio_montura."'>
+                    </td>
+                    <td>
+                        <input type='number' class='form-control venta_preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
+                    </td>
+                </tr>"; 
+            }
+        }                
+
+        return response()->json([
+            "data"      => $data,
+            "user"      => $user,
+            "cliente"   => $cliente,
+            "direccion" => $direccion,
+            "dir"       => $dir,
+            "tf"        => $tf,
+        ]);
+    }
 }

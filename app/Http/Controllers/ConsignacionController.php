@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Consignacion, Cliente, Modelo, Direccion, Departamento, RefItem, Coleccion};
+use App\{Consignacion, Cliente, Modelo, Direccion, Departamento, RefItem, Coleccion, StatusAdicionalVenta, TipoAbono, StatusLetra, ProtestoLetra};
 
 class ConsignacionController extends Controller
 {
@@ -119,5 +119,19 @@ class ConsignacionController extends Controller
         ]);
 
         return Consignacion::añadirModelos($request, $id);
+    }
+
+    public function procesarVentaConsig($id)
+    {
+        return view("ventas.procesar.ventaConsignacion", [
+            "id"             => $id,
+            "direcciones"    => Direccion::all(),
+            "departamentos"  => Departamento::all(),
+            "items"          => RefItem::all(),
+            "status_av"      => StatusAdicionalVenta::all(),
+            "tipo_abono"     => TipoAbono::all(),
+            "status_letra"   => StatusLetra::all(),
+            "protesto_letra" => ProtestoLetra::all(),
+        ]);
     }
 }

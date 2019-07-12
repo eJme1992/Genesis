@@ -88,6 +88,13 @@
                                             </a>
                                         </span>
                                         @endif
+                                        @if($d->status == 1)
+                                        <span data-toggle="tooltip" title="Procesar venta">
+                                            <a href="{{ route('procesarVentaConsig', $d->id) }}" class="btn btn-success btn-xs">
+                                                <i class="fa fa-arrow-right"></i> venta
+                                            </a>
+                                        </span>
+                                        @endif
                                         <input type="hidden" data-v="{{ ($d->guia != null) ? $d->guia->dirSalida->full_dir() : 'vacio' }}" id="val_salida{{ $d->id }}"> 
                                         <input type="hidden" data-v="{{ ($d->guia != null) ? $d->guia->dirLLegada->full_dir() : 'vacio' }}" id="val_llegada{{ $d->id }}">                         
                                     </td>

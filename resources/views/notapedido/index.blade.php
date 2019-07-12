@@ -38,6 +38,7 @@
                     <table class="table data-table table-bordered table-hover text-center">
                         <thead class="label-danger">
                             <tr>
+                                <th>Codigo</th>
                                 <th>Nº Pedido</th>
                                 <th>Motivo</th>
                                 <th>Cliente</th>
@@ -50,6 +51,7 @@
                         <tbody>
                             @foreach($notapedidos as $d)
                                 <tr>
+                                    <td>{{ $d->id }}</td>
                                     <td>{{ $d->n_pedido }}</td>
                                     <td>{{ $d->motivo->nombre }}</td>
                                     <td>{{ $d->cliente->nombre_full }}</td>

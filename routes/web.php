@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 
     // consignaciones
     Route::get('detalleConsig/{id}', 'ConsignacionController@show');
+    Route::get('procesarVentaConsig/{id}', 'ConsignacionController@procesarVentaConsig')->name('procesarVentaConsig');
     Route::put('añadirModelos/{id}', 'ConsignacionController@añadirModelos')->name('añadirModelos');
 
     // Guia de remision
@@ -48,6 +49,9 @@ Route::group(['middleware' => ['auth', 'web']], function() { //middleware auth
 	
 	// dashboard
 	Route::get('dashboard', 'LoginController@index')->name('dashboard');
+
+    // nota de credito
+    Route::get('cargarTablaDesdeFactura/{id}',     'NotaCreditoController@cargarTablaDesdeFactura')->name('cargarTablaDesdeFactura');
 
 	/* --- Usuarios ---*/
 	Route::get('roles',           'UserController@roles')->name("users.roles");
