@@ -34,7 +34,7 @@
         <div class="row">
             <div class="form-group col-lg-8">
                 <label>Direccion *</label>
-                <select name="direccion_id" class="select2" required="" id="direccion_id" style="width: 100%;">
+                <select name="direccion_id" class="select2" id="direccion_id" style="width: 100%;" required="">
                     @foreach($direcciones as $d)
                     <option value="{{ $d->id }}">{{ $d->full_dir() }}</option>
                     @endforeach

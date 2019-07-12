@@ -14,11 +14,10 @@
         <button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-xs">
             [Nueva direccion]
         </button>
-        <select class="form-control dir_asig" name="dir_salida" id="dir_salida">
+        <select class="select2 dir_asig" name="dir_salida" id="dir_salida" style="width: 100%;">
             @foreach($direcciones as $m)
-            @php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
             <option value="{{ $m->id }}">
-                {{ $m->departamento->departamento.' | '.$m->provincia->provincia.' | '.$distrito.' | '.$m->detalle }}
+                {{ $m->full_dir() }}
             </option>
             @endforeach
         </select>
@@ -26,11 +25,10 @@
         
     <div class="form-group col-lg-6">
         <label for="">Direccion de llegada *</label> 
-        <select class="form-control dir_asig" name="dir_llegada" id="dir_llegada">
+        <select class="select2 dir_asig" name="dir_llegada" id="dir_llegada" style="width: 100%;">
             @foreach($direcciones as $m)
-            @php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
             <option value="{{ $m->id }}">
-                {{ $m->departamento->departamento.' | '.$m->provincia->provincia.' | '.$distrito.' | '.$m->detalle }}
+                {{ $m->full_dir() }}
             </option>
             @endforeach
         </select>
