@@ -190,7 +190,7 @@
         $('.data-table').DataTable().search($(this).val()).draw();    
     });
 
-    // guardar direccion
+    // guardar consignacion
     $("#form_create_consig").on('submit', function(e) {
         e.preventDefault();
         btn = $(".btn_save_consig");

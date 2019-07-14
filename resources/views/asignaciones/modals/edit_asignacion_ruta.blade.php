@@ -38,11 +38,10 @@
 							<button type="button" data-toggle="modal" data-target="#modal_create" aria-expanded="false" aria-controls="modal_create" class="btn btn-link btn-sm">
 								<i class="fa fa-plus" aria-hidden="true"></i> Nueva direccion
 							</button>
-							<select class="form-control dir_asig" name="direccion_id" required="" id="direccion_id">
+							<select class="select2 dir_asig" name="direccion_id" required="" id="direccion_id" style="width: 100%;">
 								@foreach($direcciones as $m)
-								@php $distrito = ""; if($m->distrito){$distrito = $m->distrito->distrito;} @endphp
 								<option value="{{ $m->id }}">
-									{{ $m->departamento->departamento.' | '.$m->provincia->provincia.' | '.$distrito.' | '.$m->detalle }}
+									{{ $m->full_dir() }}
 								</option>
 								@endforeach
 							</select>

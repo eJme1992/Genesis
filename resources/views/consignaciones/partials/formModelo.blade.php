@@ -1,6 +1,6 @@
 <div class="form-group col-lg-3">
     <label for="">Coleccion </label>
-    <select class="form-control" name="coleccion" id="coleccion" required="">
+    <select class="select2" name="coleccion" id="coleccion" required="" style="width: 100%;">
         <option>Seleccione..</option>
         @foreach($colecciones as $c)
         <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -10,7 +10,7 @@
 
 <div class="form-group col-lg-3">
     <label for="">Marcas </label>
-    <select class="form-control" name="marcas" id="marcas" required="">
+    <select class="select2" name="marcas" id="marcas" required="" style="width: 100%;">
     </select>
 </div>
 

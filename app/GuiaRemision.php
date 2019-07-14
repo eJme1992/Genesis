@@ -118,6 +118,8 @@ class GuiaRemision extends Model
         }
 
         BitacoraUser::saveBitacora("Guia de remision (".$data->serial.") creada");
+
+        return $data;
     }
 
     public static function storeGuiaRemision($request){

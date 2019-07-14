@@ -28,7 +28,7 @@
 
 							<div class="form-group col-sm-3">
 								<label for="">Vendedor (usuario) </label>
-								<select class="form-control" name="user_id" required="">
+								<select class="select2" name="user_id" required="" style="width: 100%;">
 									@foreach($users as $user)
 									<option value="{{ $user->id }}">{{ $user->name }}</option>
 									@endforeach
@@ -37,7 +37,7 @@
 
 							<div class="form-group col-sm-3">
 								<label for="">Coleccion </label>
-								<select class="form-control" name="coleccion" id="coleccion" required="">
+								<select class="select2" name="coleccion" id="coleccion" required="" style="width: 100%;">
 									<option>Seleccione..</option>
 									@foreach($colecciones as $c)
 									<option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -47,7 +47,7 @@
 
 							<div class="form-group col-sm-3">
 								<label for="">Marcas </label>
-								<select class="form-control" name="marcas" id="marcas" required="">
+								<select class="select2" name="marcas" id="marcas" required="" style="width: 100%;">
 								</select>
 							</div>
 
@@ -59,26 +59,38 @@
 								<hr>
 							</div>
 
-							<div class="col-sm-12">
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td style="width: 150px"><span id="name_modelos"></span></td>
-										<td><span id="precio_modelos"></span></td>
-									</tr>
-								</table>
-								<table class="table data-table table-bordered table-striped">
-									<thead class="label-danger">
-										<tr>
-											<th>[Codigo]</th>
-											<th>Nombre</th>
-											<th>Monturas disponibles</th>
-											<th>Estuches disponibles</th>
-											<th>Asignacion (monturas)</th>
-										</tr>
-									</thead>
-									<tbody id="data_modelos"></tbody>
-								</table>
+							<div class="col-lg-12 div_tablas_modelos">
+							    <table class="table table-bordered table-striped">
+							        <tr>
+							            <td><span id="name_modelos"></span></td>
+							        </tr>
+							    </table>
+							    <table class="table data-table table-bordered table-hover ok" width="100%">
+							        <thead class="bg-primary">
+							            <tr>
+							                <th>[Codigo]</th>
+							                <th>Nombre</th>
+							                <th>Monturas disponibles</th>
+							                <th>Estuches disponibles</th>
+							                <th>Precio S/</th>
+							                <th>Total S/</th>
+							            </tr>
+							        </thead>
+							        <tbody id="data_modelos"></tbody>
+							    </table>
+							    <hr>
 							</div>
+
+							<div class="form-group col-lg-12 form-inline text-right">
+							    <p class="text-uppercase pull-left text-info">
+							        <i class="fa fa-info-circle"></i> Seleccione solo las monturas a asignar.
+							    </p>    
+							    <label class="">Total S/</label>
+							    <input type="text" class="form-control total_consig" readonly="" name="total">
+							    <button type="button" class="btn btn-flat btn-primary" data-toggle="tooltip" title="Calcular total por modelo y total definitivo" onclick="calcularMontoTotal();">
+							        <i class="fa fa-arrow-right"></i> Calcular
+							    </button>
+							</div> 
 
 							@if (count($errors) > 0)
         						<div class="col-sm-12">	
@@ -153,6 +165,52 @@
 			mensajes("Alerta!", "Nada para mostrar, debe llenar todos los campos", "fa-warning", "red");
 		}
 	});
+
+	// copiar y pegar modelo en buscador de la tabla y aplicar la busqueda
+    $(".div_tablas_modelos").on("click", ".btn_nm", function(e) {
+        e.preventDefault();
+        $("table.data-table.ok input[type='search']").empty().val($(this).val());
+        $('table.data-table.ok').DataTable().search($(this).val()).draw();    
+    });
+
+    // Calcular monto y total
+    function calcularMontoTotal(){
+        total = 0; error = false;
+        $.each($("#data_modelos > tr"), function(index, val) {
+            montura = parseInt($(this).find('.montura_modelo').val());
+            precio  = parseFloat($(this).find('.costo_modelo').val());
+
+            if (!Number(montura)) {
+                costo = 0;
+                $(this).find('.costo_modelo').val(0);
+                $(this).find('.preciototal').val(0);
+            }else{
+                costo = montura * precio;
+                if (!Number(costo)) { 
+                    error = true;
+                }else{
+                    $(this).find('.preciototal').val(costo);
+                }
+            }
+
+            total += costo;
+        });
+
+        if (error) {
+            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+            $(".btn_save_consig").prop("disabled", true);
+            return false;
+        }else{
+            if (Number(total) || total > 0) {
+                $(".btn_save_consig").removeAttr("disabled");
+            }else{
+                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                $(".btn_save_consig").prop("disabled", true);
+            }
+        }
+
+        $(".total_consig").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+    }
 
 </script>
 @endsection

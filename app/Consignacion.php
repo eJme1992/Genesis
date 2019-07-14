@@ -49,7 +49,7 @@ class Consignacion extends Model
             'cliente_id'    => $request->cliente_id,
             'fecha_envio'   => $request->fecha_envio,
             'user_id'       => Auth::id(),
-            'guia_id'       => ($guia == 1) ? GuiaRemision::orderBy("id", "DESC")->value("id") : null,
+            'guia_id'       => $guia != null ? $guia->id : null,
             'notapedido_id' => $nota,
             'total'         => $request->total,
             'status'        => 1,
@@ -70,16 +70,16 @@ class Consignacion extends Model
 
     // validar si la consignacion tiene o no guia
     public static function consigStore($request){
-
-        $nota = NotaPedido::saveNotaPedido($request, $motivo = 3); // guardar nota pedido
-        Consignacion::saveConsignacionAndDetalle($request, $guia = 1, $nota->id); // guardar consignacion y detalle
+        $guia = '';
         if ($request->checkbox == 1) {
             if (GuiaRemision::where("serial", $request->serial.'-'.$request->guia)->count() > 0) {
                 return response()->json(1);
             }else{
-                GuiaRemision::guiaStore($request, $motivo = 3); // guardar guia
+                $guia = GuiaRemision::guiaStore($request, $motivo = 3); // guardar guia
             }
         }
+        $nota = NotaPedido::saveNotaPedido($request, $motivo = 3); // guardar nota pedido
+        Consignacion::saveConsignacionAndDetalle($request, $guia, $nota->id); // guardar consignacion y detalle
 
         return response()->json("ok");
     }

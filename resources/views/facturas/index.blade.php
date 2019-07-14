@@ -105,17 +105,22 @@
 
     $("#buscar_venta").click(function(e) {
         $("#cliente_id, #cliente_id_id, #num_factura, #subtotal_c, #impuesto, #total_neto_c").val("");
-        $(".icon-load").show();
-        $.get("cargarVenta/"+$("#venta_id_id").val()+"",function(response, dep){
-            if (response != null) {
-                $("#cliente_id_id").val(response.cliente_id);
-                $("#cliente_id").val(response.cliente.nombre_full);
-                $("#subtotal_c").val(response.total);
-            }else{
-                mensajes("Alerta!", "Sin datos", "fa-warning", "red");
-            }
-            $(".icon-load").hide();
-        });
+        if ($("#venta_id_id").val() != null) {
+            $(".icon-load").show();
+            $.get("cargarVenta/"+$("#venta_id_id").val()+"",function(response, dep){
+                if (response != null) {
+                    $("#cliente_id_id").val(response.cliente_id);
+                    $("#cliente_id").val(response.cliente.nombre_full);
+                    $("#subtotal_c").val(response.total);
+                }else{
+                    mensajes("Alerta!", "Sin datos", "fa-warning", "red");
+                }
+                $(".icon-load").hide();
+                $(".icon-load").hide();
+            });
+        }else{
+            mensajes("Alerta!", "Ninguna venta disponible", "fa-warning", "red");
+        }
     });
 
     $(".bf").click(function(e) {

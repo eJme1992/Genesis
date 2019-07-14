@@ -54,7 +54,7 @@
 									<td class="text-capitalize"><strong>{{ $d->user->name }} {{ $d->user->ape }}</strong></td>
 									<td>{{ $d->modelo->name.' - ['.$d->modelo->id.']' }}</td>
 									<td>{{ $d->monturas }}</td>
-                                    <td>{{ $d->estuche }}</td>
+                                    <td>{{ $d->estuches }}</td>
                                     <td>{{ $d->fecha }}</td>
 									<td @if($d->status == 1) class='warning' @elseif($d->status == 2) class='info' @else class='success' @endif>
                                         {{ $d->status() }}

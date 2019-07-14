@@ -200,6 +200,13 @@
         saveNotaPedido.prop("disabled", true);
     });
 
+    // copiar y pegar modelo en buscador de la tabla y aplicar la busqueda
+    $(".div_tablas_modelos").on("click", ".btn_nm", function(e) {
+        e.preventDefault();
+        $("table.data-table.ok input[type='search']").empty().val($(this).val());
+        $('table.data-table.ok').DataTable().search($(this).val()).draw();    
+    });
+
     $(".benp").click(function(e) {
         ruta = '{{ route("notapedido.update",":value") }}';
         $("#form_edit_notapedido").attr("action", ruta.replace(':value', $(this).data("id")));
@@ -209,7 +216,7 @@
         $("#n_pedido").val($(this).data("npedido"));
         $("#motivo_nota_id").val($(this).data("motivo")).attr("selected",true);
         $("#cliente_id").val($(this).data("cliente")).attr("selected",true);
-        $("#direccion_id").val($(this).data("direccion")).attr("selected",true);
+        $("#direccion_edit").val($(this).data("direccion")).attr("selected",true);
         $("#total").val($(this).data("total"));
     });
 

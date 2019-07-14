@@ -293,7 +293,11 @@ class Modelo extends Model
                 $data [] = "
                     <tr>
                         <td>".$m->id."<input type='hidden' value='".$m->id."' id='modelo_id_".$m->id."' name='modelo_id[]'></td>
-                        <td>".$m->name."</td>
+                        <td>
+                            <button type='button' class='btn-link btn_nm' value='".$m->name."'>
+                                ".$m->name."
+                            </button>
+                        </td>
                         <td>
                             <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->id."'>
                                 <option value=''>...</option>

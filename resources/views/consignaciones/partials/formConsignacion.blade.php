@@ -3,7 +3,7 @@
     <button type="button" data-toggle="modal" data-target="#create_cliente" class="btn btn-link btn-xs">
         [Nuevo cliente]
     </button>
-    <select class="form-control" name="cliente_id" required="" id="add_cliente">
+    <select class="select2" name="cliente_id" required="" id="add_cliente" style="width: 100%;">
         <option value="">seleccione...</option>
         @foreach($clientes as $m)
         <option value="{{ $m->id }}">

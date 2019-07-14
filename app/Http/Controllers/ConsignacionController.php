@@ -59,7 +59,6 @@ class ConsignacionController extends Controller
             'estuche'        => '',
             'total'          => 'required',
         ]);
-
         return Consignacion::consigStore($request);
     }
 

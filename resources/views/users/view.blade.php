@@ -23,7 +23,7 @@
     		<h2 class="page-header text-capitalize" style="margin-top:0!important">
           <i class="fa fa-user" aria-hidden="true"></i>
           {{ $user->usuario }}
-          <small class="pull-right">Registrado: {{ $user->created_at }}</small>
+          <small class="pull-right">Registrado: {{ $user->createF() }}</small>
           <span class="clearfix"></span>
         </h2>
     	</div>

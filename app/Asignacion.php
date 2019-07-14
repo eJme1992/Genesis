@@ -12,7 +12,7 @@ class Asignacion extends Model
 
     protected $fillable = [
       "modelo_id", "user_id", "fecha", 
-      "monturas", "estuche", "status"
+      "monturas", "estuches", "status"
     ];
 
     public function modelo(){
@@ -160,7 +160,7 @@ class Asignacion extends Model
     		
             return redirect("asignaciones")->with([
                 'flash_message' => 'No se selecciono ninguna montura.',
-                'flash_class' => 'alert-danger'
+                'flash_class'   => 'alert-danger'
             ]);
 
         }else{
@@ -169,13 +169,13 @@ class Asignacion extends Model
             for ($i=0; $i < count($request->montura); $i++) { 
 
                 if ($request->montura[$i] != null) {
-                    $asignacion = new Asignacion;
-                    $asignacion->modelo_id = $request->modelo_id[$i];   
-                    $asignacion->user_id = $request->user_id;   
-                    $asignacion->monturas = $request->montura[$i];   
-                    $asignacion->estuche = $request->estuche[$i];   
-                    $asignacion->fecha = date("d-m-Y");
-                    $asignacion->save();
+                    $asig               = new Asignacion;
+                    $asig->modelo_id    = $request->modelo_id[$i];   
+                    $asig->user_id      = $request->user_id;   
+                    $asig->monturas     = $request->montura[$i];   
+                    $asig->estuches     = $request->estuche[$i];   
+                    $asig->fecha        = date("d-m-Y");
+                    $asig->save();
 
                     Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
                 }
@@ -183,7 +183,7 @@ class Asignacion extends Model
 
             return redirect("asignaciones")->with([
                 'flash_message' => 'Modelos asignados correctamente.',
-                'flash_class' => 'alert-success'
+                'flash_class'   => 'alert-success'
             ]);
         }   
     }

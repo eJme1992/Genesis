@@ -8,7 +8,7 @@
     <button type="button" data-toggle="modal" data-target="#modal_create" class="btn btn-link btn-xs">
         [Nueva direccion]
     </button>
-    <select class="form-control dir_asig" name="direccion_id" id="direccion_id" required="">
+    <select class="select2 dir_asig" name="direccion_id" id="direccion_id" required="" style="width: 100%;">
         @foreach($direcciones as $m)
         <option value="{{ $m->id }}">
             {{ $m->full_dir() }}

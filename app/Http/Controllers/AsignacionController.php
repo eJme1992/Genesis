@@ -40,7 +40,7 @@ class AsignacionController extends Controller
             'user_id'   => 'required',
             'montura'   => 'required|array',
         ]);
-
+        
         return Asignacion::saveAsignacion($request);        
     }
 

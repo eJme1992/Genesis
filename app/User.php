@@ -71,4 +71,12 @@ class User extends Authenticatable
     public function modelos(){
       return $this->belongsToMany('App\Modelo','asignaciones');
     }
+
+    public function createF(){
+        return $this->created_at ? $this->created_at->format("d-m-Y") : 'sin detalles';
+    }
+
+    public function updateF(){
+        return $this->updated_at ? $this->updated_at->format("d-m-Y") : 'sin detalles';
+    }
 }
