@@ -281,39 +281,37 @@ class Modelo extends Model
     // cargar tabla para manipula los datos
     public static function cargarTabla($coleccion, $marca){
         
-        $data = array();
-        $modelos = Modelo::where("coleccion_id", $coleccion)
-                          ->where("marca_id", $marca)
-                          ->where("status_id",  1)
-                          ->get();
+        $data   = array();
+        $mod    = Modelo::where("coleccion_id", $coleccion)
+                        ->where("marca_id", $marca)
+                        ->where("status_id",  1)
+                        ->get();
 
-        if ($modelos->count() > 0) {
-            foreach ($modelos as $m) {
+        foreach ($mod as $m) {
 
-                $data [] = "
-                    <tr>
-                        <td>".$m->id."<input type='hidden' value='".$m->id."' id='modelo_id_".$m->id."' name='modelo_id[]'></td>
-                        <td>
-                            <button type='button' class='btn-link btn_nm' value='".$m->name."'>
-                                ".$m->name."
-                            </button>
-                        </td>
-                        <td>
-                            <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->id."'>
-                                <option value=''>...</option>
-                                ".Asignacion::Monturas($m->montura)."
-                            </select>
-                        </td>
-                        <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
-                        <td id='td_precio'>
-                            <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
-                        </td>
-                        <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
-                    </tr>"; 
-          }
-        }else{
-            $data [] = "";
-        }                  
+            $data [] = "
+                <tr>
+                    <td>".$m->id."<input type='hidden' value='".$m->id."' id='modelo_id_".$m->id."' name='modelo_id[]'></td>
+                    <td>
+                        <button type='button' class='btn-link btn_nm' value='".$m->name."'>
+                            ".$m->name."
+                        </button>
+                    </td>
+                    <td>
+                        <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->id."'>
+                            <option value=''>...</option>
+                            ".Asignacion::Monturas($m->montura)."
+                        </select>
+                    </td>
+                    <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
+                    <td id='td_precio'>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
+                    </td>
+                    <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
+                    <td><input type='checkbox' name='check_model[]' value='0' class='check_model'></td>
+                </tr>"; 
+        }
+                 
 
         return response()->json($data);
     }

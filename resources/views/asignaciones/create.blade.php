@@ -128,7 +128,10 @@
 			$("#marcas").empty();
 			if (response.length > 0) {
 				for (i = 0; i<response.length; i++) {
-						$("#marcas").append("<option value='"+response[i].marca.id+"'> "+response[i].marca.material.name+' | '+response[i].marca.name+"</option>");
+						$("#marcas").append(
+							"<option value='"+response[i].marca.id+"'> "
+								+response[i].marca.name+' | '+response[i].marca.material.name+
+							"</option>");
 				}
 			}else{
 				mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");

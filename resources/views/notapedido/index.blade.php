@@ -95,6 +95,21 @@
     var saveNotaPedido = $(".btn_save_np").attr("disabled", "disabled");
 
     $("#select_coleccion").val('').prop('selected', true);
+
+    $(".div_tablas_modelos").on('click', '.check_model', function(e) {
+        var check = $(this).val();
+    });
+
+    $("#check_all_model").click(function(e) {
+        var bool = $(".check_model").checked;
+        if (bool.length) {
+            if (bool === false) {
+                bool.checked;
+            }else{
+                bool.checked == false;
+            }
+        }
+    });
     
     // cargar modelos en la tabla para calcular
     function cargarModelos(){

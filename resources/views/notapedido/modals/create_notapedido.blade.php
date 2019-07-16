@@ -17,7 +17,7 @@
         </div>
 
         <div class="row">
-            <div class="form-group col-lg-3">
+            <div class="col-lg-3">
                 <label0><b>Motivo *</b></label>
                 <select class="form-control" name="motivo_nota_id" id="motivo_nota_id" required="">
                     @foreach($motivos as $m)

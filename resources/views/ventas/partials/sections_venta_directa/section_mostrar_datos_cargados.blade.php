@@ -8,7 +8,7 @@
                 <th>Estuches</th>
                 <th class="text-nowrap">Precio <strong data-toggle="tooltip" title="Precio de venta establecido en la marca y coleccion">(PVE)</strong></th>
                 <th class="bg-navy"><strong data-toggle="tooltip" title="Total a cancela por modelo">Total (S/)</strong></th>
-                <th><input type="checkbox" name="check_model" value="1" id="check_all_model"></th>
+                <th><input type="checkbox" name="check_all_model" value="0" id="check_all_model"></th>
             </tr>
         </thead>
         <tbody id="data_modelos_venta_directa"></tbody>
