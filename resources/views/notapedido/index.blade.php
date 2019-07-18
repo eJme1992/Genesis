@@ -95,21 +95,7 @@
     var saveNotaPedido = $(".btn_save_np").attr("disabled", "disabled");
 
     $("#select_coleccion").val('').prop('selected', true);
-
-    $(".div_tablas_modelos").on('click', '.check_model', function(e) {
-        var check = $(this).val();
-    });
-
-    $("#check_all_model").click(function(e) {
-        var bool = $(".check_model").checked;
-        if (bool.length) {
-            if (bool === false) {
-                bool.checked;
-            }else{
-                bool.checked == false;
-            }
-        }
-    });
+    $("#check_all_model").prop('checked', false);
     
     // cargar modelos en la tabla para calcular
     function cargarModelos(){
@@ -193,6 +179,7 @@
     // busqueda de marcas en la coleccion
     $('#select_coleccion').change(function(event) {
         $("#select_marca").empty();
+        $("#icon-load-marcas").show();
         $.get("marcasAll/"+event.target.value+"",function(response, dep){
             if (response.length > 0) {
                 for (i = 0; i<response.length; i++) {
@@ -205,6 +192,7 @@
             }else{
                 mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");
             }
+            $("#icon-load-marcas").hide();
             $("#data_modelos_venta_directa").empty();
         });
     });
@@ -240,6 +228,8 @@
             mensajes("Alerta!", "El total no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
             return false;
         }
+        
+        comprobarCheckModelo();
 
         e.preventDefault();
         saveNotaPedido.attr("disabled", 'disabled');

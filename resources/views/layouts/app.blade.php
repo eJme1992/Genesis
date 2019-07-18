@@ -435,6 +435,36 @@
             $(".total_venta, .subtotal, #abono, #restante, #monto_inicial, #monto_inicial, #fecha_inicial, #fecha_final, #fecha_pago").val('');
         }
 
+        // checkear unico modelo
+        function checkModelo(valor){
+            if (valor.checked === true) {
+                valor.value = 1;
+            }else{
+                valor.value = 0;
+            }
+        }
+
+        // checkear todos los modelos
+        function checkAllModelos(){
+            if ($(".check_model").length > 0) {
+                if ($("#check_all_model").prop('checked') === true) {
+                    $(".check_model").prop('checked', true).val(1);
+                }else{
+                    $(".check_model").prop('checked', false).val(0);
+                }
+            }
+        }
+
+        // validar modelos seleccionados
+        function comprobarCheckModelo(){
+              
+            console.log($("input[name='check_model[]']:checked").length);
+            if ($("input[name='check_model[]']").is(':checked') == false) {
+                mensajes("Alerta!", "Debe selecionar al menos un modelo", "fa-warning", "red");
+                return false;
+            }
+        }
+
     </script>
     
   </body>

@@ -9,7 +9,7 @@
 </div>
 
 <div class="form-group col-lg-3">
-    <label for="">Marcas </label>
+    <label for="">Marcas </label> <i class="fa fa-spinner fa-pulse" id="icon-load-marcas" style="display: none;"></i>
     <select class="select2" name="marca" id="select_marca" required="" style="width: 100%">
     </select>
 </div>

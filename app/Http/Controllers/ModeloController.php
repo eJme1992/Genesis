@@ -15,8 +15,8 @@ class ModeloController extends Controller
     public function index()
     {
         return view("modelos.index", [
-            "modelos" => Modelo::all(),
-            "marcas" => Marca::all()
+            "modelos"   => Modelo::all(),
+            "marcas"    => Marca::all()
         ]);
     }
 
@@ -28,8 +28,8 @@ class ModeloController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:modelos',
-            'montura' => 'required'
+            'name'      => 'required|unique:modelos',
+            'montura'   => 'required'
         ]);
 
        return Modelo::store($request);
@@ -66,8 +66,8 @@ class ModeloController extends Controller
     {
 
         $this->validate($request, [
-            'name' => 'required',
-            'montura' => 'required'
+            'name'      => 'required',
+            'montura'   => 'required'
         ]);
 
         return Modelo::updateAll($request);
@@ -83,46 +83,53 @@ class ModeloController extends Controller
         ]);
     }
 
-    public function busMol($id){
+    public function busMol($id)
+    {
         $col = Modelo::with("marca","coleccion","status")->where("id", $id)->first();
         return response()->json($col);
     }
 
-    public function modelosActivos($coleccion, $marca){
-        $m = Modelo::with("status")->where("coleccion_id", $coleccion)
-                                     ->where("marca_id", $marca)
-                                     ->get();
+    public function modelosActivos($coleccion, $marca)
+    {
+        $m = Modelo::with("status")
+                   ->where("coleccion_id", $coleccion)
+                   ->where("marca_id", $marca)
+                   ->get();
+        
         return response()->json($m);
     }
 
-    public function eliminarModelo($coleccion, $marca){
+    public function eliminarModelo($coleccion, $marca)
+    {
         $modelos = Modelo::with("marca.material","status")
-                           ->where("coleccion_id", $coleccion)
-                           ->where("marca_id", $marca)
-                           ->where("status_id", "<>", 5)
-                           ->get()
-                           ->groupBy("name");
-        // dd($modelos);
+                         ->where("coleccion_id", $coleccion)
+                         ->where("marca_id", $marca)
+                         ->where("status_id", "<>", 5)
+                         ->get()
+                         ->groupBy("name");
+
         return response()->json($modelos);
     }
 
-    public function actualizarModelo($coleccion, $marca){
+    public function actualizarModelo($coleccion, $marca)
+    {
         $modelos = Modelo::with("marca.material","status")
-                           ->where("coleccion_id", $coleccion)
-                           ->where("marca_id", $marca)
-                           ->where("status_id", "<>", 5)
-                           ->get()
-                           ->groupBy("name");
-        // dd($modelos);
-        return response()->json($modelos);
-    }
-
-    public function delete(Request $request){
+                         ->where("coleccion_id", $coleccion)
+                         ->where("marca_id", $marca)
+                         ->where("status_id", "<>", 5)
+                         ->get()
+                         ->groupBy("name");
         
+        return response()->json($modelos);
+    }
+
+    public function delete(Request $request)
+    {
         return Modelo::deleteAll($request);
     }
 
-    public function cargarTabla($coleccion, $marca){
+    public function cargarTabla($coleccion, $marca)
+    {
         return Modelo::cargarTabla($coleccion, $marca);
     }
 

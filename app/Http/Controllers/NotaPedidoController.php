@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{NotaPedido, MotivoGuia, Cliente, Direccion, Coleccion, Departamento, Modelo};
+use App\Http\Requests\CreateNotaPedidoRequest;
 use Illuminate\Http\Request;
 
 class NotaPedidoController extends Controller
@@ -40,22 +41,13 @@ class NotaPedidoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateNotaPedidoRequest $request)
     {
-        $this->validate($request, [
-            'n_pedido'              => 'required|unique:nota_pedidos',
-            'cliente_id'            => 'required',
-            'direccion_id'          => 'required',
-            'status_estuche'        => '',
-            'total'                 => 'required|numeric|between:1,999999999999.99',
-            'modelo_id'             => 'required',
-            'montura'               => '',
-            'estuche'               => '',
-        ]);
-
-        $nc = NotaPedido::saveNotaPedido($request, $request->motivo_nota_id);
+        dd($request->all());
+        NotaPedido::saveNotaPedido($request, $request->motivo_nota_id);
+        
         for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+            if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {
                 Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
             }
         }

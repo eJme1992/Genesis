@@ -308,7 +308,10 @@ class Modelo extends Model
                         <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->coleccion_id, $m->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->id."'>
                     </td>
                     <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
-                    <td><input type='checkbox' name='check_model[]' value='0' class='check_model'></td>
+                    <td>
+                        <input type='hidden' name='check_model[]' value='0'>
+                        <input type='checkbox' name='check_model[]' value='0' class='check_model' onclick='checkModelo(this)'>
+                    </td>
                 </tr>"; 
         }
                  
