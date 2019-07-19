@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title','Ventas - Directa '.config('app.name'))
+@section('title','Ventas - Oficina '.config('app.name'))
 @section('header','Nueva Venta')
 @section('breadcrumb')
     <ol class="breadcrumb">
       <li><a href="{{ route('dashboard') }}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
-      <li class="active"> Ventas / Venta directa </li>
+      <li class="active"> Ventas / Venta Oficina </li>
     </ol>
 @endsection
 @section('content')
@@ -98,6 +98,7 @@
     // busqueda de marcas en la coleccion
     $('#select_coleccion').change(function(event) {
         $("#select_marca").empty();
+        $("#icon-load-marcas").show();
         $.get("marcasAll/"+event.target.value+"",function(response, dep){
             if (response.length > 0) {
                 for (i = 0; i<response.length; i++) {
@@ -111,6 +112,7 @@
                 mensajes("Alerta!", "No posee marcas asociadas", "fa-warning", "red");
             }
             $("#data_modelos_venta_directa").empty();
+            $("#icon-load-marcas").hide();
         });
     });
 
@@ -126,6 +128,13 @@
         $("#span_select_estuche, #span_info_estuche").hide(400);
         $("#status_estuche").removeAttr('required').prop('name', '');
         reiniciarMontoTotal();
+    });
+
+    // copiar y pegar modelo en buscador de la tabla y aplicar la busqueda
+    $(".div_tablas_modelos").on("click", ".btn_nm", function(e) {
+        e.preventDefault();
+        $("table.data-table.ok input[type='search']").empty().val($(this).val());
+        $('table.data-table.ok').DataTable().search($(this).val()).draw();    
     });
 
     //-------------------------------------------------------- funciones ---------------------------------------------------------
@@ -212,43 +221,49 @@
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------
     // guardar direccion
     $("#form_venta_directa").on('submit', function(e) {
+        e.preventDefault();
         
         if ($('#restante').val() < 0) {
             mensajes("Alerta!", "El restante no puede ser negativo, verifique", "fa-warning", "red");
             return false;
         }
 
-        e.preventDefault();
-        btn = $("#btn_guardar_all"); btn.attr("disabled", 'disabled');
+        btn = $("#btn_guardar_all"); 
+        btn.attr("disabled", 'disabled');
         $("#icon-guardar-all").removeClass("fa-save").addClass('fa-spinner fa-pulse');
         var form = $(this);
 
-        $.ajax({
-            url: "{{ route('ventas.storeVentaDirecta') }}",
-            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
-            type: 'POST',
-            dataType: 'JSON',
-            data: form.serialize(),
-        })
-        .done(function(data) {
-            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-            if (data == 1) {
-                mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-                setTimeout(window.location = "ventas", 2000);
-            }else if(data == 2){
-                mensajes('Alerta!', "Este serial ya ha sido tomado, verifique", 'fa-warning', 'red');
-            }else if (data == 0){
-                mensajes('Alerta!', "Ocurrio un error en el servidor, recargue la pgina e intente de nuevo", 'fa-warning', 'red');
-            }
-        })
-        .fail(function(data) {
+        if (comprobarCheckModelo() === true) {
+            $.ajax({
+                url: "{{ route('ventas.storeVentaDirecta') }}",
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+                if (data == 1) {
+                    mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+                    setTimeout(window.location = "ventas", 2000);
+                }else if(data == 2){
+                    mensajes('Alerta!', "Este serial ya ha sido tomado, verifique", 'fa-warning', 'red');
+                }else if (data == 0){
+                    mensajes('Alerta!', "Ocurrio un error en el servidor, recargue la pgina e intente de nuevo", 'fa-warning', 'red');
+                }
+            })
+            .fail(function(data) {
+                btn.removeAttr("disabled");
+                $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+        }else{
             btn.removeAttr("disabled");
             $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-        })
-        .always(function() {
-            console.log("complete");
-        });
+        }
         
     });
 </script>

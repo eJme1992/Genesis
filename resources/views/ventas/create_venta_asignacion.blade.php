@@ -4,7 +4,7 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
       <li><a href="{{ route('dashboard') }}"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a></li>
-      <li class="active"> Ventas / Venta de asignacion </li>
+      <li class="active"> Ventas / Venta de productos asignados </li>
     </ol>
 @endsection
 @section('content')

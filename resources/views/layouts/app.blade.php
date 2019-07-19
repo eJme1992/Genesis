@@ -438,9 +438,9 @@
         // checkear unico modelo
         function checkModelo(valor){
             if (valor.checked === true) {
-                valor.value = 1;
+                $("#hidden_"+valor.value+"").val(1);
             }else{
-                valor.value = 0;
+                $("#hidden_"+valor.value+"").val(0);
             }
         }
 
@@ -448,20 +448,24 @@
         function checkAllModelos(){
             if ($(".check_model").length > 0) {
                 if ($("#check_all_model").prop('checked') === true) {
-                    $(".check_model").prop('checked', true).val(1);
+                    $(".check_model").prop('checked', true);
+                    $(".hidden_model").val(1);
                 }else{
-                    $(".check_model").prop('checked', false).val(0);
+                    $(".check_model").prop('checked', false);
+                    $(".hidden_model").val(0);
                 }
+            }else{
+                mensajes("Alerta!", "No exiten modelos para seleccionar", "fa-warning", "red");
             }
         }
 
         // validar modelos seleccionados
         function comprobarCheckModelo(){
-              
-            console.log($("input[name='check_model[]']:checked").length);
-            if ($("input[name='check_model[]']").is(':checked') == false) {
-                mensajes("Alerta!", "Debe selecionar al menos un modelo", "fa-warning", "red");
+            if ($(".check_model").is(':checked') == false) {
+                mensajes("Alerta!", "Debe seleccionar al menos un modelo", "fa-warning", "red");
                 return false;
+            }else{
+                return true;
             }
         }
 

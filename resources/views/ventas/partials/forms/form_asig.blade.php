@@ -3,7 +3,7 @@
 
     <section id="section_vendedor" class="container-fluid">
         <div class="col-lg-12">
-            <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos para la venta de asignacion</h4>
+            <h4 class="padding_1em bg-navy"><i class="fa fa-arrow-right"></i> Datos para la venta de productos asignados</h4>
         </div>
 
         <div class="col-lg-4">

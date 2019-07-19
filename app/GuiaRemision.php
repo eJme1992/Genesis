@@ -107,8 +107,8 @@ class GuiaRemision extends Model
             ]);
         }
 
-        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+        for ($i = 0; $i < count($request->check_model) ; $i++) {
+            if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {    
                 $data->modeloGuias()->create([
                     'modelo_id'   => $request->modelo_id[$i],
                     'montura'     => $request->montura[$i],

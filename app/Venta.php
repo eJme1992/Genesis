@@ -92,8 +92,8 @@ class Venta extends Model
             'fecha'                     => date("d-m-Y"),
         ]);
 
-        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+        for ($i = 0; $i < count($request->check_model) ; $i++) {
+            if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {    
                 $v->movimientoVenta()->create([
                     'modelo_id'         => $request->modelo_id[$i],
                     'monturas'          => $request->montura[$i],
@@ -118,7 +118,7 @@ class Venta extends Model
             $v = Venta::saveVenta($request); // guardar venta
             $n = NotaPedido::saveNotaPedido($request, $motivo = 1); // guardar nota pedido
 
-            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+            for ($i = 0; $i < count($request->check_model) ; $i++) {
                 Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]); // descontar modelos vendidos
             }
             

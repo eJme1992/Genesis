@@ -309,8 +309,8 @@ class Modelo extends Model
                     </td>
                     <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
                     <td>
-                        <input type='hidden' name='check_model[]' value='0'>
-                        <input type='checkbox' name='check_model[]' value='0' class='check_model' onclick='checkModelo(this)'>
+                        <input type='hidden' name='check_model[]' value='0' class='hidden_model' id='hidden_".$m->id."'>
+                        <input type='checkbox' onclick='checkModelo(this)' class='check_model' value='".$m->id."'>
                     </td>
                 </tr>"; 
         }

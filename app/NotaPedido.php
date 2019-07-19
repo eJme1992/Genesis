@@ -60,7 +60,7 @@ class NotaPedido extends Model
             'total'             => $request->total,
         ]);
 
-        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
+        for ($i = 0; $i < count($request->check_model) ; $i++) {
             if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {
                 $n->movNotaPedido()->create([
                     'modelo_id' => $request->modelo_id[$i],

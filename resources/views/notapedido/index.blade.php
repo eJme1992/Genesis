@@ -224,35 +224,36 @@
     });
 
     $("#form_create_notapedido").submit(function(e){
+        e.preventDefault();
+
         if ($('.total_venta').val() == 'NaN' || $('.total_venta').val() < 0) {
             mensajes("Alerta!", "El total no puede ser negativo ni pueden ser letras, verifique", "fa-warning", "red");
             return false;
         }
         
-        comprobarCheckModelo();
+        if (comprobarCheckModelo() === true) {
+            saveNotaPedido.attr("disabled", 'disabled');
+            form = $(this);
 
-        e.preventDefault();
-        saveNotaPedido.attr("disabled", 'disabled');
-        form = $(this);
-
-        $.ajax({
-            url: "{{ route('notapedido.store') }}",
-            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
-            type: 'POST',
-            dataType: 'JSON',
-            data: form.serialize(),
-        })
-        .done(function(data) {
-            mensajes('Listo!', 'Nota de pedido procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-            setTimeout(window.location = "notapedido", 3000);
-        })
-        .fail(function(data) {
-            saveNotaPedido.removeAttr("disabled");
-            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-        })
-        .always(function() {
-            console.log("complete");
-        });
+            $.ajax({
+                url: "{{ route('notapedido.store') }}",
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                mensajes('Listo!', 'Nota de pedido procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+                setTimeout(window.location = "notapedido", 3000);
+            })
+            .fail(function(data) {
+                saveNotaPedido.removeAttr("disabled");
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+        }
         
     });
 </script>
