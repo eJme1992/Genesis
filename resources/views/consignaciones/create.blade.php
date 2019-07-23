@@ -81,43 +81,55 @@
         }
     });
 
+    // evitar el consignar
+    $('.div_tablas_modelos').on("change", ".montura_modelo, .costo_modelo, .check_model", function(e) {
+        $(".btn_save_consig").attr("disabled", "disabled");
+    });
+
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = false;
-        $.each($("#data_modelos > tr"), function(index, val) {
-            montura = parseInt($(this).find('.montura_modelo').val());
-            precio  = parseFloat($(this).find('.costo_modelo').val());
 
-            if (!Number(montura)) {
-                costo = 0;
-                $(this).find('.costo_modelo').val(0);
-                $(this).find('.preciototal').val(0);
-            }else{
-                costo = montura * precio;
-                if (!Number(costo)) { 
-                    error = true;
+        if (comprobarCheckModelo() === true) {
+            $.each($("#data_modelos > tr"), function(index, val) {
+                montura = parseInt($(this).find('.montura_modelo').val());
+                precio  = parseFloat($(this).find('.costo_modelo').val());
+                check   = $(this).find('.hidden_model').val();
+
+                if (check == 1) {
+                    if (!Number(montura)) {
+                        costo = 0;
+                        $(this).find('.costo_modelo').val(0);
+                        $(this).find('.preciototal').val(0);
+                    }else{
+                        costo = montura * precio;
+                        if (!Number(costo)) { 
+                            error = true;
+                        }else{
+                            $(this).find('.preciototal').val(costo);
+                        }
+                    }
+                    total += costo;
                 }else{
-                    $(this).find('.preciototal').val(costo);
+                    $(this).find('.preciototal').val('');
+                }
+            });
+
+            if (error) {
+                mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+                $(".btn_save_consig").prop("disabled", true);
+                return false;
+            }else{
+                if (Number(total) || total > 0) {
+                    $(".btn_save_consig").removeAttr("disabled");
+                }else{
+                    mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                    $(".btn_save_consig").prop("disabled", true);
                 }
             }
 
-            total += costo;
-        });
-
-        if (error) {
-            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
-            $(".btn_save_consig").prop("disabled", true);
-            return false;
-        }else{
-            if (Number(total) || total > 0) {
-                $(".btn_save_consig").removeAttr("disabled");
-            }else{
-                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
-                $(".btn_save_consig").prop("disabled", true);
-            }
+            $(".total_consig").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
         }
-
-        $(".total_consig").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
     }
 
     // añadir mas detalles a la guia
@@ -197,31 +209,33 @@
         btn.attr("disabled", 'disabled');
         var form = $(this);
 
-        $.ajax({
-            url: "{{ route('consignacion.store') }}",
-            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
-            type: 'POST',
-            dataType: 'JSON',
-            data: form.serialize(),
-        })
-        .done(function(data) {
-            if (data == 1) {
-                mensajes('Alerta!', 'Serial de guia repetido, verifique', 'fa-warning', 'red');
+        if (comprobarCheckModelo() === true) {
+            $.ajax({
+                url: "{{ route('consignacion.store') }}",
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                if (data == 1) {
+                    mensajes('Alerta!', 'Serial de guia repetido, verifique', 'fa-warning', 'red');
+                    btn.removeAttr("disabled");
+                    return false;
+                }else{
+                    mensajes('Listo!', 'Consignacion generada con exito, espere mientras es redireccionado...', 'fa-check', 'green');  
+                    form[0].reset();
+                    setTimeout(window.location = "../consignacion", 2000);
+                }
+            })
+            .fail(function(data) {
                 btn.removeAttr("disabled");
-                return false;
-            }else{
-                mensajes('Listo!', 'Consignacion generada con exito, espere mientras es redireccionado...', 'fa-check', 'green');  
-                form[0].reset();
-                setTimeout(window.location = "../consignacion", 2000);
-            }
-        })
-        .fail(function(data) {
-            btn.removeAttr("disabled");
-            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-        })
-        .always(function() {
-            console.log("complete");
-        });
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+        }
         
     });
     

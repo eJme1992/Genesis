@@ -51,6 +51,7 @@
                             <th>Estuches disponibles</th>
                             <th>Precio S/</th>
                             <th>Total S/</th>
+                            <th><input type="checkbox" name="check_all_model" value="0" id="check_all_model" onclick="checkAllModelos()"></th>
                         </tr>
                     </thead>
                     <tbody id="data_añadir_modelos"></tbody>

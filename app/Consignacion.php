@@ -112,8 +112,8 @@ class Consignacion extends Model
             $consig->user_id    = Auth::id();
             $consig->save();
 
-            for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-                if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+            for ($i = 0; $i < count($request->check_model) ; $i++) {
+                if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {
                     $consig->detalleConsignacion()->create([
                         'modelo_id'   => $request->modelo_id[$i],
                         'montura'     => $request->montura[$i],
@@ -130,8 +130,8 @@ class Consignacion extends Model
                 $nt->user_id    = Auth::id();
                 $nt->save();
 
-                for ($j = 0; $j < count($request->modelo_id) ; $j++) {
-                    if ($request->montura[$j] != 0 || $request->montura[$j] != null) {
+                for ($j = 0; $j < count($request->check_model) ; $j++) {
+                    if ($request->check_model[$j] == 1 && $request->montura[$j] > 0) {
                         $nt->movNotaPedido()->create([
                             'modelo_id' => $request->modelo_id[$j],
                             'monturas'  => $request->montura[$j],
@@ -188,6 +188,10 @@ class Consignacion extends Model
                             </td>
                             <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
                             <td>".Consignacion::validarStatusDeModeloEnConsignacion($dc)."</td>
+                            <td>
+                                <input type='hidden' name='check_model[]' value='0' class='hidden_model' id='hidden_".$dc->modelo_id."'>
+                                <input type='checkbox' onclick='checkModelo(this)' class='check_model' value='".$dc->modelo_id."'>
+                            </td>
                         </tr>"; 
         }
 

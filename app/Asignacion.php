@@ -123,6 +123,10 @@ class Asignacion extends Model
                                     <td>
                                         <input type='text' class='form-control preciototal' readonly=''>
                                     </td>
+                                    <td>
+                                        <input type='hidden' name='check_model[]' value='0' class='hidden_model' id='hidden_".$mod->id."'>
+                                        <input type='checkbox' onclick='checkModelo(this)' class='check_model' value='".$mod->id."'>
+                                    </td>
                                 </tr>"; 
         		}
 
@@ -217,38 +221,46 @@ class Asignacion extends Model
     }
 
     public static function cargarAsigModelosToUser($user){
-        $modelos = Asignacion::where("user_id", $user)
-                                ->where("status", 1)
-                                ->get();
-        $data = array();
+        $model  = Asignacion::where("user_id", $user)
+                             ->where("status", 1)
+                             ->get();
+        $data   = array();
 
-        if ($modelos->count() > 0) {
-            foreach ($modelos as $m) {
+        foreach ($model as $m) {
 
-                $data [] = "
-                    <tr>
-                        <td>".$m->modelo_id."
-                            <input type='hidden' value='".$m->modelo_id."' id='modelo_id_".$m->modelo_id."' name='modelo_id[]'>
-                            <input type='hidden' value='".$m->id."' name='asignacion_id[]'>
-                        </td>
-                        <td>".$m->modelo->name."</td>
-                        <td>
-                            <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->modelo_id."'>
-                                <option value=''>...</option>
-                                ".Asignacion::Monturas($m->monturas)."
-                            </select>
-                        </td>
-                        <td>".$m->estuche."<input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'></td>
-                        <td>
-                            <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->modelo->coleccion_id, $m->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->modelo_id."'>
-                        </td>
-                        <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
-                    </tr>"; 
-          }
-        }else{
-            $data [] = "";
-        }                  
-
+            $data [] = "
+                <tr>
+                    <td>
+                        ".$m->modelo_id."
+                        <input type='hidden' value='".$m->modelo_id."' id='modelo_id_".$m->modelo_id."' name='modelo_id[]'>
+                        <input type='hidden' value='".$m->id."' name='asignacion_id[]'>
+                    </td>
+                    <td>
+                        <button type='button' class='btn-link btn_nm' value='".$m->modelo->name."'>
+                            ".$m->modelo->name."
+                        </button>
+                    </td>
+                    <td>
+                        <select class='form-control montura_modelo' name='montura[]' id='montura_".$m->modelo_id."'>
+                            <option value=''>...</option>
+                            ".Asignacion::Monturas($m->monturas)."
+                        </select>
+                    </td>
+                    <td>
+                        ".$m->estuche."
+                        <input type='hidden' value='".$m->estuche."' name='estuche[]' class='estuches'>
+                    </td>
+                    <td>
+                        <input type='number' step='0.01' max='999999999999' min='0' value='".ColeccionMarca::cargarPrecios($m->modelo->coleccion_id, $m->modelo->marca_id)->precio_venta_establecido."' name='precio_montura[]' class='form-control numero costo_modelo' id='costo_".$m->modelo_id."'>
+                    </td>
+                    <td><input type='text' name='precio_modelo[]' class='preciototal' readonly=''></td>
+                    <td>
+                        <input type='hidden' name='check_model[]' value='0' class='hidden_model' id='hidden_".$m->modelo_id."'>
+                        <input type='checkbox' onclick='checkModelo(this)' class='check_model' value='".$m->modelo_id."'>
+                    </td>
+                </tr>"; 
+        }
+        
         return response()->json($data);
     }
 
@@ -257,7 +269,7 @@ class Asignacion extends Model
         for ($i = 0; $i < count($request->asignacion_id) ; $i++) {
             $data = Asignacion::findOrFail($request->asignacion_id[$i]);                            
             
-            if ($request->montura[$i] != 0 || $request->montura[$i] != null) {
+            if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {  
                 Modelo::descontarMonturaToModelosToAsignacion($request->modelo_id[$i], $data->monturas - $request->montura[$i]);
                 $data->monturas  = 0; // calcular modelos restantes para ser devueltos;
                 $data->status    = 3;

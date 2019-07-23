@@ -104,9 +104,17 @@
     });
 
     // evitar el siguiente si se cambia cualquier valor en los modelos - consignacion
-    $('#section_detalle_consig').on("change", ".montura_modelo, .costo_modelo", function(e) {
+    $('#section_detalle_consig').on("change", ".montura_modelo, .costo_modelo, .hidden_model", function(e) {
         $(".btn_siguiente").attr("disabled", "disabled");
     });
+
+    // copiar y pegar modelo en buscador de la tabla y aplicar la busqueda
+    $(".div_tablas_modelos").on("click", ".btn_nm", function(e) {
+        e.preventDefault();
+        $("table.data-table.ok input[type='search']").empty().val($(this).val());
+        $('table.data-table.ok').DataTable().search($(this).val()).draw();    
+    });
+
 
     // procesar venta por consignacion y pasar a la factura
     $(".btn_siguiente").click(function(e){
@@ -131,34 +139,46 @@
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = error_cal;
-        $.each($(".table > tbody > tr"), function(index, val) {
-            montura = parseInt($(this).find('.montura_modelo').val());
-            precio  = parseFloat($(this).find('.costo_modelo').val());
+        if (comprobarCheckModelo() === true) {
+            $.each($(".table > tbody > tr"), function(index, val) {
+                montura = parseInt($(this).find('.montura_modelo').val());
+                precio  = parseFloat($(this).find('.costo_modelo').val());
+                check   = $(this).find('.hidden_model').val();
 
-            if (!Number(montura)) {
-                costo = 0;
-                $(this).find('.costo_modelo').val(0);
-                $(this).find('.preciototal').val(0);
-            }else{
-                costo = montura * precio;
-                if (!Number(costo)) { 
-                    error = true;
+                if (check == 1) {
+                    if (!Number(montura)) {
+                        costo = 0;
+                        $(this).find('.costo_modelo').val(0);
+                        $(this).find('.preciototal').val(0);
+                    }else{
+                        costo = montura * precio;
+                        if (!Number(costo)) { 
+                            error = true;
+                        }else{
+                            $(this).find('.preciototal').val(costo);
+                        }
+                    }
+                    total += costo;
                 }else{
-                    $(this).find('.preciototal').val(costo);
+                    $(this).find('.preciototal').val('');
+                }
+            });
+
+            if (error) {
+                mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+                $(".btn_siguiente").attr("disabled", "disabled");
+                return false;
+            }else{
+                if (Number(total) || total > 0) {
+                    $(".btn_siguiente").removeAttr("disabled");
+                }else{
+                    mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                    $(".btn_siguiente").prop("disabled", true);
                 }
             }
-            total += costo;
-        });
 
-        if (error) {
-            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
-            $(".btn_siguiente").attr("disabled", "disabled");
-            return false;
-        }else{
-            $(".btn_siguiente").removeAttr("disabled");
+            $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
         }
-
-        $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
     }
 
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------
@@ -175,30 +195,35 @@
         $("#icon-guardar-all").removeClass("fa-save").addClass('fa-spinner fa-pulse');
         var form = $(this);
 
-        $.ajax({
-            url: "{{ route('ventas.storeVentaConsignacion') }}",
-            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
-            type: 'POST',
-            dataType: 'JSON',
-            data: form.serialize(),
-        })
-        .done(function(data) {
-            if (data == 1) {
+        if (comprobarCheckModelo() === true) {
+            $.ajax({
+                url: "{{ route('ventas.storeVentaConsignacion') }}",
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                type: 'POST',
+                dataType: 'JSON',
+                data: form.serialize(),
+            })
+            .done(function(data) {
+                if (data == 1) {
+                    $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+                    mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+                    setTimeout(window.location = "ventas", 2000);
+                }else{
+                    mensajes('Alerta!', "ocurrio un error en el servidor, recargue la pagina e intente de nuevo", 'fa-warning', 'red');
+                }
+            })
+            .fail(function(data) {
+                btn.removeAttr("disabled");
                 $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-                mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-                setTimeout(window.location = "ventas", 2000);
-            }else{
-                mensajes('Alerta!', "ocurrio un error en el servidor, recargue la pagina e intente de nuevo", 'fa-warning', 'red');
-            }
-        })
-        .fail(function(data) {
+                mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+            })
+            .always(function() {
+                console.log("complete");
+            });
+        }else{
             btn.removeAttr("disabled");
             $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-        })
-        .always(function() {
-            console.log("complete");
-        });
+        }
         
     });
 </script>

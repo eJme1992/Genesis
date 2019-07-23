@@ -183,39 +183,46 @@
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = error_cal;
-        $.each($(".table > tbody > tr"), function(index, val) {
-            montura = parseInt($(this).find('.montura_modelo').val());
-            precio  = parseFloat($(this).find('.costo_modelo').val());
+        if (comprobarCheckModelo() === true) {
+            $.each($(".table > tbody > tr"), function(index, val) {
+                montura = parseInt($(this).find('.montura_modelo').val());
+                precio  = parseFloat($(this).find('.costo_modelo').val());
+                check   = $(this).find('.hidden_model').val();
 
-            if (!Number(montura)) {
-                costo = 0;
-                $(this).find('.costo_modelo').val(0);
-                $(this).find('.preciototal').val(0);
-            }else{
-                costo = montura * precio;
-                if (!Number(costo)) { 
-                    error = true;
+                if (check == 1) {
+                    if (!Number(montura)) {
+                        costo = 0;
+                        $(this).find('.costo_modelo').val(0);
+                        $(this).find('.preciototal').val(0);
+                    }else{
+                        costo = montura * precio;
+                        if (!Number(costo)) { 
+                            error = true;
+                        }else{
+                            $(this).find('.preciototal').val(costo);
+                        }
+                    }
+                    total += costo;
                 }else{
-                    $(this).find('.preciototal').val(costo);
+                    $(this).find('.preciototal').val('');
+                }
+            });
+
+            if (error) {
+                mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+                $("#btn_guardar_all").prop("disabled", true);
+                return false;
+            }else{
+                if (Number(total) || total > 0) {
+                    $("#btn_guardar_all").removeAttr("disabled");
+                }else{
+                    mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+                    $("#btn_guardar_all").prop("disabled", true);
                 }
             }
-            total += costo;
-        });
 
-        if (error) {
-            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
-            $("#btn_guardar_all").prop("disabled", true);
-            return false;
-        }else{
-            if (Number(total) || total > 0) {
-                $("#btn_guardar_all").removeAttr("disabled");
-            }else{
-                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
-                $("#btn_guardar_all").prop("disabled", true);
-            }
+            $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
         }
-
-        $(".total_venta, .subtotal, #total_deuda").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
     }
 
     //-----------------------------------------guardar nota de peido y factura -----------------------------------------------

@@ -239,7 +239,7 @@ class Venta extends Model
         }
     }
 
-     // cargar tabla para manipula los datos
+     // cargar tabla para manipular los datos
     public static function cargarTablaVenta($venta){
         
         $data       = array();
