@@ -192,7 +192,7 @@
                 for (i = 0; i<response.length; i++) {
                     $("#select_marca").append(
                         "<option value='"+response[i].marca.id+"'>"
-                        +response[i].marca.material.name+' | '+response[i].marca.name+
+                        +response[i].marca.name+' | '+response[i].marca.material.name+
                         "</option>"
                     );
                 }

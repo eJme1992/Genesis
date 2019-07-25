@@ -55,14 +55,16 @@ class Consignacion extends Model
             'status'        => 1,
         ]);
 
-        for ($i = 0; $i < count($request->modelo_id) ; $i++) {
-            $consignacion->detalleConsignacion()->create([
-                'modelo_id'   => $request->modelo_id[$i],
-                'montura'     => $request->montura[$i],
-                'estuche'     => $request->estuche[$i],
-                'status'      => 1,
-            ]);
-            Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+        for ($i = 0; $i < count($request->check_model) ; $i++) {
+            if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {
+                $consignacion->detalleConsignacion()->create([
+                    'modelo_id'   => $request->modelo_id[$i],
+                    'montura'     => $request->montura[$i],
+                    'estuche'     => $request->estuche[$i],
+                    'status'      => 1,
+                ]);
+                Modelo::descontarMonturaToModelos($request->modelo_id[$i], $request->montura[$i]);
+            }
         }
 
         BitacoraUser::saveBitacora("Consignacion creada");
