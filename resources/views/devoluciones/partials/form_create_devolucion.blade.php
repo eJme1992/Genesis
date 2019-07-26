@@ -1,6 +1,8 @@
 <form id="form_save_devolucion">
     <section id="section_venta">
-        <h3 class="padding_05em bg-green col-lg-12"><i class="fa fa-arrow-right"></i> Datos de la venta</h3>
+        <h3 class="padding_05em bg-green col-lg-12">
+            <i class="fa fa-arrow-right"></i> Datos de la venta
+        </h3>
         @include("devoluciones.partials.section_venta")
         @include("devoluciones.partials.tabla_modelos_venta")
 
@@ -8,6 +10,13 @@
             <label>Total a facturar</label>
             <input type="number" name="total_facturar" class="form-control" readonly="" id="total_facturar" step='0.01' max='999999999999' min='1'>
         </div>
+    </section>
+
+    <section id="section_factura_venta">
+        <h3 class="padding_05em bg-green col-lg-12">
+            <i class="fa fa-arrow-right"></i> Datos de la Factura - Venta
+        </h3>
+        @include("ventas.partials.sections.section_factura_venta")
     </section>
     
     <section id="section_coleccion_marca">

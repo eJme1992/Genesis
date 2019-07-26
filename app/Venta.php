@@ -242,50 +242,41 @@ class Venta extends Model
      // cargar tabla para manipular los datos
     public static function cargarTablaVenta($venta){
         
-        $data       = array();
-        $user       = "";
-        $cliente    = "";
-        $direccion  = "";
-        
-        if ($venta->movimientoVenta->count() > 0) {
-            $user       = $venta->user;
-            $cliente    = $venta->cliente;
-            $direccion  = $venta->direccion_id;
-            $dir        = $venta->direccion->full_dir();
-            $tf         = array_sum($venta->movimientoVenta->pluck("precio_modelo")->toArray());
+        $data   = array();
+        $user = $cliente = $direccion = $dir = $tf = $factura = $adicional = "";
 
-            foreach ($venta->movimientoVenta as $m) {
+        $user       = $venta->user;
+        $cliente    = $venta->cliente;
+        $direccion  = $venta->direccion_id;
+        $dir        = $venta->direccion->full_dir();
+        $tf         = array_sum($venta->movimientoVenta->pluck("precio_modelo")->toArray());
+        $factura    = $venta->adicionalVenta->factura;
+        $adicional  = $venta->adicionalVenta;
 
-                $data [] = "<tr>
-                    <td>
-                        ".$m->modelo_id."
-                        <input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'>
-                        <input type='hidden' value='".$m->id."' name='mov_venta_id[]'>
-                    </td>
-                    <td>".$m->modelo->name."</td>
-                    <td>
-                        <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>
-                            <option value=''>...</option>
-                            ".Asignacion::Monturas($m->monturas)."
-                        </select>
-                    </td>
-                    <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' class='venta_estuches'></td>
-                    <td>
-                        <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."'  class='form-control venta_precio_montura' readonly='' data-valor='".$m->precio_montura."'>
-                    </td>
-                    <td>
-                        <input type='number' class='form-control venta_preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
-                    </td>
-                </tr>"; 
-            }
-        }else{
-            $data []    = "";
-            $user       = "";
-            $cliente    = "";
-            $direccion  = "";
-            $dir        = "";
-            $tf         = "";
-        }                  
+        foreach ($venta->movimientoVenta as $m) {
+
+            $data [] = "<tr>
+                <td>
+                    ".$m->modelo_id."
+                    <input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'>
+                    <input type='hidden' value='".$m->id."' name='mov_venta_id[]'>
+                </td>
+                <td>".$m->modelo->name."</td>
+                <td>
+                    <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>
+                        <option value=''>...</option>
+                        ".Asignacion::Monturas($m->monturas)."
+                    </select>
+                </td>
+                <td>".$m->estuches."<input type='hidden' value='".$m->estuches."' class='venta_estuches'></td>
+                <td>
+                    <input type='number' step='0.01' max='999999999999' min='0' value='".$m->precio_montura."'  class='form-control venta_precio_montura' readonly='' data-valor='".$m->precio_montura."'>
+                </td>
+                <td>
+                    <input type='number' class='form-control venta_preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
+                </td>
+            </tr>"; 
+        }         
 
         return response()->json([
             "data"      => $data,
@@ -294,6 +285,8 @@ class Venta extends Model
             "direccion" => $direccion,
             "dir"       => $dir,
             "tf"        => $tf,
+            "factura"   => $factura,
+            "adicional" => $adicional,
         ]);
     }
 
@@ -323,6 +316,11 @@ class Venta extends Model
             "status_estuche"    => $venta->estatusEstuche(),
             "total"             => array_sum($venta->movimientoVenta->pluck("precio_modelo")->toArray()),
         ]);
+    }
+
+    // cargar factura relacionada con la venta (en desarrollo...)
+    public static function cargarFacturaVenta($venta){
+
     }
 
 }

@@ -22,7 +22,11 @@
                     <label>Codigo + Fecha venta</label>
                     <select name="venta_id" class="form-control select2" id="venta">
                         @foreach($ventas as $v)
+                        @if($v->adicionalVenta)
+                        @if($v->adicionalVenta->factura)
                         <option value="{{ $v->id }}">{{ 'Codigo ['.$v->id.'] - Fecha ['.$v->fecha.']' }}</option>
+                        @endif
+                        @endif
                         @endforeach
                     </select><hr>
 
@@ -107,9 +111,10 @@
 
             $.get('../cargarTablaVenta/'+$("#venta").val()+'', function(data) {
 
+                // venta
                 $('.data-table').DataTable().destroy();
-
                 $("#data_modelos_venta").empty().append(data.data);
+                $('.data-table').DataTable({responsive: true});
                 $("#user_id").val(data.user.name+' '+data.user.ape);
                 $("#user").val(data.user.id);
                 $("#cliente_id").val(data.cliente.nombre_full);
@@ -118,8 +123,14 @@
                 $("#direccion").val(data.direccion);
                 $("#venta_id").val($("#venta").val());
                 $("#total_facturar").val(0);
-                
-                $('.data-table').DataTable({responsive: true});
+
+                // factura
+                $("#num_factura_fv").val(data.factura.num_factura);
+                $("#subtotal_fv").val(data.factura.subtotal);
+                $("#impuesto_fv").val(data.factura.impuesto);
+                $("#total_neto_fv").val(data.factura.total);
+                $("#item_fv").val(data.adicional.ref_item_id).attr("selected",true);
+                $("#status_av_fv").val(data.adicional.ref_estadic_id).attr("selected",true);
                 
                 $("#icon-buscar-venta").hide();
                 $("#btn_buscar_venta").removeAttr('disabled');
