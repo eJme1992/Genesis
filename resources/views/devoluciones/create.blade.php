@@ -159,28 +159,35 @@
 
     // escuchar el evento cuando cambie la monturas
     $('.div_modelos').on("change", ".check_model", function(e) {
-        montura         = parseInt($(this).parents("tr").find('.venta_montura_modelo').val());
-        precio_montura  = parseFloat($(this).parents("tr").find('.venta_precio_montura').val());
-        precio_total    = parseFloat($(this).parents("tr").find('.venta_preciototal').val());
-        check   		= $(this).parents("tr").find('.hidden_model').val();
-        console.log(montura)
-        if (check == 1) {
-	        if (!Number(montura)) {
-	            totalFacturar = parseFloat($("#total_facturar").val()) + precio_total;
-	            $(this).parents("tr").find('.venta_preciototal').val(0);
+        montura         = $(this).parents("tr").find('.venta_montura_modelo'); 
+        precio_montura  = $(this).parents("tr").find('.venta_precio_montura'); 
+        precio_total    = $(this).parents("tr").find('.venta_preciototal');
+        hidden   		= $(this).parents("tr").find('.hidden_model').val();
+        check   		= $(this).parents("tr").find('.check_model');
+        total   		= $("#total_facturar");
+
+        if (hidden == 1) {
+
+	        if (Number(montura.val())) {
+	        	calculo 		= parseFloat(montura.val()) * parseFloat(precio_montura.val());
+	            totalFacturar 	= parseFloat(total.val()) + calculo;
+	            precio_total.val(calculo);
+	        	validarTotal(totalFacturar);
+	        	total.val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
 	        }else{
-	            totalFacturar = parseFloat($("#total_facturar").val()) + (precio_total - (montura * precio_montura));
-	            parseFloat($(this).parents("tr").find('.venta_preciototal').val(montura * precio_montura));
+	        	mensajes("Alerta!", "La montura debe ser mayor a 0, verifique", "fa-remove", "red");
+	        	hidden = 0; 
+	        	check.prop('checked', false);
 	        }
 
-	        if (!Number(totalFacturar) || !totalFacturar > 0) {
-	            mensajes("Alerta!", "El total a facturar es incorrecto, verifique", "fa-remove", "red");
-	            btnGuardarTodo.prop("disabled", true);
-	        }else{
-	            btnGuardarTodo.removeAttr("disabled");
-	        }
+        }else{
 
-	        $("#total_facturar").val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
+        	calculo 	  = parseFloat(montura.val()) * parseFloat(precio_montura.val());
+        	totalFacturar = parseFloat(total.val()) - calculo;
+	        precio_total.val(calculo);
+	        validarTotal(totalFacturar);
+	        total.val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
+        
         }
     });
 
@@ -193,6 +200,15 @@
 
     //--------------------------------------------------------funciones ---------------------------------------------------------------------
 
+    // validar total 
+    function validarTotal(total){
+    	if (!Number(total) || !total > 0) {
+	        mensajes("Alerta!", "El total a facturar es incorrecto, verifique", "fa-remove", "red");
+	        btnGuardarTodo.prop("disabled", true);
+	    }else{
+	        btnGuardarTodo.removeAttr("disabled");
+	    }
+    }
     // cargar modelos en la tabla para calcular
     function cargarModelos(){
         $("#btn_cargar_modelos").attr('disabled', 'disabled');
