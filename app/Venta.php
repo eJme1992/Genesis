@@ -242,7 +242,7 @@ class Venta extends Model
      // cargar tabla para manipular los datos
     public static function cargarTablaVenta($venta){
         
-        $data   = array();
+        $data = array();
         $user = $cliente = $direccion = $dir = $tf = $factura = $adicional = "";
 
         $user       = $venta->user;
@@ -274,6 +274,10 @@ class Venta extends Model
                 </td>
                 <td>
                     <input type='number' class='form-control venta_preciototal' readonly='' value='".$m->precio_modelo."' step='0.01' max='999999999999' min='0'>
+                </td>
+                <td>
+                    <input type='hidden' name='check_model[]' value='0' class='hidden_model' id='hidden_".$m->modelo_id."'>
+                    <input type='checkbox' onclick='checkModelo(this)' class='check_model' value='".$m->modelo_id."'>
                 </td>
             </tr>"; 
         }         

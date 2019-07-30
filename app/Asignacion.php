@@ -170,9 +170,9 @@ class Asignacion extends Model
         }else{
 
         	// recorremos la cantidad seleccionada de monturas
-            for ($i=0; $i < count($request->montura); $i++) { 
+            for ($i=0; $i < count($request->check_model); $i++) { 
 
-                if ($request->montura[$i] != null) {
+                if ($request->check_model[$i] == 1 && $request->montura[$i] > 0) {	
                     $asig               = new Asignacion;
                     $asig->modelo_id    = $request->modelo_id[$i];   
                     $asig->user_id      = $request->user_id;   

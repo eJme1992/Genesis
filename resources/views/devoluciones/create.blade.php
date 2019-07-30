@@ -22,17 +22,17 @@
                     <label>Codigo + Fecha venta</label>
                     <select name="venta_id" class="form-control select2" id="venta">
                         @foreach($ventas as $v)
-                        @if($v->adicionalVenta)
-                        @if($v->adicionalVenta->factura)
-                        <option value="{{ $v->id }}">{{ 'Codigo ['.$v->id.'] - Fecha ['.$v->fecha.']' }}</option>
-                        @endif
-                        @endif
+	                        @if($v->adicionalVenta)
+		                        @if($v->adicionalVenta->factura)
+		                        <option value="{{ $v->id }}">{{ 'Codigo ['.$v->id.'] - Fecha ['.$v->fecha.']' }}</option>
+		                        @endif
+	                        @endif
                         @endforeach
                     </select><hr>
 
                     <span class="pull-right">
                         <button type="button" class="btn btn-success" id="btn_buscar_venta">
-                            <i class="fa fa-spinner fa-pulse" id="icon-buscar-venta" style="display: none"></i> Buscar
+                            <i class="fa fa-spinner fa-pulse" id="icon-buscar-venta" style="display: none;"></i> Buscar
                         </button>
                     </span>
                 </div>
@@ -158,27 +158,30 @@
     });
 
     // escuchar el evento cuando cambie la monturas
-    $('#section_venta').on("change", ".venta_montura_modelo", function(e) {
+    $('.div_modelos').on("change", ".check_model", function(e) {
         montura         = parseInt($(this).parents("tr").find('.venta_montura_modelo').val());
         precio_montura  = parseFloat($(this).parents("tr").find('.venta_precio_montura').val());
         precio_total    = parseFloat($(this).parents("tr").find('.venta_preciototal').val());
+        check   		= $(this).parents("tr").find('.hidden_model').val();
+        console.log(montura)
+        if (check == 1) {
+	        if (!Number(montura)) {
+	            totalFacturar = parseFloat($("#total_facturar").val()) + precio_total;
+	            $(this).parents("tr").find('.venta_preciototal').val(0);
+	        }else{
+	            totalFacturar = parseFloat($("#total_facturar").val()) + (precio_total - (montura * precio_montura));
+	            parseFloat($(this).parents("tr").find('.venta_preciototal').val(montura * precio_montura));
+	        }
 
-        if (!Number(montura)) {
-            totalFacturar = parseFloat($("#total_facturar").val()) + precio_total;
-            $(this).parents("tr").find('.venta_preciototal').val(0);
-        }else{
-            totalFacturar = parseFloat($("#total_facturar").val()) + (precio_total - (montura * precio_montura));
-            parseFloat($(this).parents("tr").find('.venta_preciototal').val(montura * precio_montura));
+	        if (!Number(totalFacturar) || !totalFacturar > 0) {
+	            mensajes("Alerta!", "El total a facturar es incorrecto, verifique", "fa-remove", "red");
+	            btnGuardarTodo.prop("disabled", true);
+	        }else{
+	            btnGuardarTodo.removeAttr("disabled");
+	        }
+
+	        $("#total_facturar").val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
         }
-
-        if (!Number(totalFacturar) || !totalFacturar > 0) {
-            mensajes("Alerta!", "El total a facturar es incorrecto, verifique", "fa-remove", "red");
-            btnGuardarTodo.prop("disabled", true);
-        }else{
-            btnGuardarTodo.removeAttr("disabled");
-        }
-
-        $("#total_facturar").val(totalFacturar).animate({opacity: "0.2"}, 400).animate({opacity: "1"}, 800);
     });
 
     // evitar el siguiente si se cambia cualquier valor en la carga de modelos
