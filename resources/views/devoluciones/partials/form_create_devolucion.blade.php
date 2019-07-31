@@ -14,16 +14,11 @@
 
     <section id="section_factura_venta">
         <h3 class="padding_05em bg-green col-lg-12">
-            <i class="fa fa-arrow-right"></i> Datos de la Factura - Venta
+            <i class="fa fa-arrow-right"></i> Datos de la Factura (Venta)
         </h3>
         @include("ventas.partials.sections.section_factura_venta")
     </section>
     
-    <section id="section_coleccion_marca">
-        <h3 class="padding_05em bg-primary col-lg-12"><i class="fa fa-arrow-right"></i> Cargar modelos a facturar</h3>
-        @include("ventas.partials.sections_venta_directa.section_cargar_modelos")
-        @include("ventas.partials.sections_venta_directa.section_mostrar_datos_cargados") 
-    </section>
 
     <section id="section_devolucion">
         <h3 class="padding_05em bg-primary col-lg-12"><i class="fa fa-arrow-right"></i> Nota de credito</h3>
@@ -33,6 +28,12 @@
     <section id="section_factura">
         <h3 class="padding_05em bg-primary col-lg-12"><i class="fa fa-arrow-right"></i> Factura</h3>
         @include("ventas.partials.sections.section_factura")
+    </section>
+    
+    <section id="section_coleccion_marca">
+        <h3 class="padding_05em bg-primary col-lg-12"><i class="fa fa-arrow-right"></i> Cargar modelos a facturar</h3>
+        @include("ventas.partials.sections_venta_directa.section_cargar_modelos")
+        @include("ventas.partials.sections_venta_directa.section_mostrar_datos_cargados") 
     </section>
 
     <div class="form-group col-lg-12 text-uppercase">

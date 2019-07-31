@@ -261,7 +261,11 @@ class Venta extends Model
                     <input type='hidden' value='".$m->modelo_id."' name='venta_modelo_id[]'>
                     <input type='hidden' value='".$m->id."' name='mov_venta_id[]'>
                 </td>
-                <td>".$m->modelo->name."</td>
+                <td>
+                	<button type='button' class='btn-link btn_nm' value='".$m->modelo->name."'>
+                        ".$m->modelo->name."
+                    </button>
+                </td>
                 <td>
                     <select class='form-control venta_montura_modelo' name='venta_montura_modelo[]'>
                         <option value=''>...</option>

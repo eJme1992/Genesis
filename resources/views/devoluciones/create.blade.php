@@ -198,6 +198,13 @@
         reiniciarMontoTotal();
     });
 
+    // copiar y pegar modelo en buscador de la tabla y aplicar la busqueda
+    $(".div_modelos").on("click", ".btn_nm", function(e) {
+        e.preventDefault();
+        $("input[type='search']").empty().val($(this).val());
+        $('.data-table').DataTable().search($(this).val()).draw();    
+    });
+
     //--------------------------------------------------------funciones ---------------------------------------------------------------------
 
     // validar total 
@@ -233,39 +240,46 @@
     // Calcular monto y total
     function calcularMontoTotal(){
         total = 0; error = false;
-        $.each($("#data_modelos_venta_directa > tr"), function(index, val) {
-            montura = parseInt($(this).find('.montura_modelo').val());
-            precio  = parseFloat($(this).find('.costo_modelo').val());
+        if (comprobarCheckModelo() === true) {
+	        $.each($("#data_modelos_venta_directa > tr"), function(index, val) {
+	            montura = parseInt($(this).find('.montura_modelo').val());
+	            precio  = parseFloat($(this).find('.costo_modelo').val());
+	            check   = $(this).find('.hidden_model').val();
 
-            if (!Number(montura)) {
-                costo = 0;
-                $(this).find('.costo_modelo').val(0);
-                $(this).find('.preciototal').val(0);
-            }else{
-                costo = montura * precio;
-                if (!Number(costo)) { 
-                    error = true;
-                }else{
-                    $(this).find('.preciototal').val(costo);
+	            if (check == 1) {
+		            if (!Number(montura)) {
+		                costo = 0;
+		                $(this).find('.costo_modelo').val(0);
+		                $(this).find('.preciototal').val(0);
+		            }else{
+		                costo = montura * precio;
+		                if (!Number(costo)) { 
+		                    error = true;
+		                }else{
+		                    $(this).find('.preciototal').val(costo);
+		                }
+		            }
+		            total += costo;
+	            }else{
+                    $(this).find('.preciototal').val('');
                 }
-            }
-            total += costo;
-        });
+	        });
 
-        if (error) {
-            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
-            $("#btn_guardar_all").prop("disabled", true);
-            return false;
-        }else{
-            if (Number(total) || total > 0) {
-                $("#btn_guardar_all").removeAttr("disabled");
-            }else{
-                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
-                $("#btn_guardar_all").prop("disabled", true);
-            }
-        }
+	        if (error) {
+	            mensajes("Alerta!", "El precio o la montura es incorrecta, deben ser solo numeros, verifique", "fa-remove", "red");
+	            $("#btn_guardar_all").prop("disabled", true);
+	            return false;
+	        }else{
+	            if (Number(total) || total > 0) {
+	                $("#btn_guardar_all").removeAttr("disabled");
+	            }else{
+	                mensajes("Alerta!", "El total es incorrecto, verifique", "fa-remove", "red");
+	                $("#btn_guardar_all").prop("disabled", true);
+	            }
+	        }
 
-        $(".total_venta, .subtotal").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+	        $(".total_venta, .subtotal").val(total).animate({opacity: "0.5"}, 400).animate({opacity: "1"}, 400);
+    	}
     }
 
     // guardar direccion
@@ -281,30 +295,35 @@
         $("#icon-guardar-all").removeClass("fa-save").addClass('fa-spinner fa-pulse');
         var form = $(this);
 
-        $.ajax({
-            url: "{{ route('devoluciones.store') }}",
-            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
-            type: 'POST',
-            dataType: 'JSON',
-            data: form.serialize(),
-        })
-        .done(function(data) {
-            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-            if (data == 1) {
-                mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
-                setTimeout(window.location = "../devoluciones", 2000);
-            }else if(data == 2){
-                mensajes('Alerta!', 'Serial de la guia repetido, verifique', 'fa-warning', 'red');
-            }
-        })
-        .fail(function(data) {
-            btnGuardarTodo.removeAttr("disabled");
-            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
-            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
-        })
-        .always(function() {
-            console.log("complete");
-        });
+        if (comprobarCheckModelo() === true) {
+	        $.ajax({
+	            url: "{{ route('devoluciones.store') }}",
+	            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+	            type: 'POST',
+	            dataType: 'JSON',
+	            data: form.serialize(),
+	        })
+	        .done(function(data) {
+	            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+	            if (data == 1) {
+	                mensajes('Listo!', 'Venta procesada, espere mientras es redireccionado...', 'fa-check', 'green');
+	                setTimeout(window.location = "../devoluciones", 2000);
+	            }else if(data == 2){
+	                mensajes('Alerta!', 'Serial de la guia repetido, verifique', 'fa-warning', 'red');
+	            }
+	        })
+	        .fail(function(data) {
+	            btnGuardarTodo.removeAttr("disabled");
+	            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+	            mensajes('Alerta!', eachErrors(data), 'fa-warning', 'red');
+	        })
+	        .always(function() {
+	            console.log("complete");
+	        });
+    	}else{
+	            btnGuardarTodo.removeAttr("disabled");
+	            $("#icon-guardar-all").removeClass("fa-spinner fa-pulse").addClass('fa-save');
+    	}
         
     });
 </script>

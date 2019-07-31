@@ -40,10 +40,10 @@ class Devolucion extends Model
 
     public static function storeDev($request){
         $db = DB::transaction(function() use ($request) {
-            $f  = Factura::saveFactura($request);
             $d  = Devolucion::saveDevolucion($request);
             $nc = NotaCredito::saveNotaCredito($request, $f->id);
             $md = MovDevolucion::saveMovDevolucion($request, $d->id, $nc->id);
+            $f  = Factura::saveFactura($request);
             
             if ($request->checkbox_guia) {
                 if ($request->checkbox_guia == 1) {
